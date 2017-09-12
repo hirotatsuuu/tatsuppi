@@ -1,0 +1,6 @@
+node_modules
+.vscode
+public
+yarn-error.log
+npm-debug.log
+firebase-debug.log

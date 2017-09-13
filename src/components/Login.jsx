@@ -20,11 +20,6 @@ const styles = {
 export default class Login extends Component {
   state = {
     loginFormFlag: true,
-    email: '',
-    password: '',
-    message: '',
-    emailErrorMessage: '',
-    passwordErrorMessage: '',
     buttonFlag: true,
   }
 
@@ -66,6 +61,9 @@ export default class Login extends Component {
     })
   }
 
+  /**
+   * ログイン画面以外に遷移した時の表示制御
+   */
   changeHash = () => {
     console.log('changeHash', location.hash.slice(2))
     if (location.hash.slice(2) === '') {
@@ -83,13 +81,13 @@ export default class Login extends Component {
    * ボタン活性制御
    */
   checkForm = (emailErrorMessage, passwordErrorMessage) => {
-    if (emailErrorMessage !== '' || passwordErrorMessage !== '') {
+    if (emailErrorMessage === '' && passwordErrorMessage === '') {
       this.setState({
-        buttonFlag: true,
+        buttonFlag: false,
       })
     } else {
       this.setState({
-        buttonFlag: false,
+        buttonFlag: true,
       })
     }
     this.setState({
@@ -108,7 +106,7 @@ export default class Login extends Component {
     } else if (value.indexOf('@') === -1 || value.indexOf('.') === -1) {
       message = 'メールアドレスの形式が不適切です'
     }
-    this.checkForm(message, this.state.passwordErrorMessage),
+    this.checkForm(message, this.state.passwordErrorMessage)
     this.setState({
       emailErrorMessage: message,
     })
@@ -125,7 +123,7 @@ export default class Login extends Component {
     } else if (value.length < 6) {
       message = 'パスワードは6文字以上で入力してください'
     }
-    this.checkForm(this.state.emailErrorMessage, message),
+    this.checkForm(this.state.emailErrorMessage, message)
     this.setState({
       passwordErrorMessage: message,
     })
@@ -164,7 +162,7 @@ export default class Login extends Component {
           <br /><br />
           <RaisedButton
             label='login'
-            onTouchTap={this.loginAuth}
+            onTouchTap={() => this.loginAuth}
             disabled={this.state.buttonFlag}
           />
           <br />

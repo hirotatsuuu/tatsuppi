@@ -30,8 +30,8 @@ export default class Routes extends Component {
             <Route component={NoMatch}/>
           </Switch> : 
           <Switch>
-            <Route exact path='/forgotpassword' component={ForgotPassword} />
-            <Route exact path='/createaccount' component={CreateAccount} />
+            <Route path='/forgotpassword' component={ForgotPassword} />
+            <Route path='/createaccount' component={CreateAccount} />
           </Switch>}
       </div>
     )

@@ -3,7 +3,7 @@ import firebase from 'firebase'
 
 const styles = {
   root: {
-    padding: '10px',
+    padding: '70px 10px 10px',
     width: '100%',
   },
 }

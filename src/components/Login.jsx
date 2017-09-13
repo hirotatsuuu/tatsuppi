@@ -29,6 +29,13 @@ export default class Login extends Component {
     super(props)
   }
 
+  componentWillMount = () => {
+    this.setState({
+      email: 'jjj@jjj.jj',
+      password: 'jjjjjj',
+    })
+  }
+
   /**
    * ログイン処理
    */

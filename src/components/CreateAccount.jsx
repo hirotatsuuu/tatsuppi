@@ -18,14 +18,12 @@ const styles = {
 
 export default class CreateAccount extends Component {
   state = {
-    email: '',
-    password: '',
-    message: '',
-    emailErrorMessage: '',
-    passwordErrorMessage: '',
     buttonFlag: true,
   }
 
+  /**
+   * アカウント作成
+   */
   createUser = () => {
     const [email, password] = [
       this.state.email,
@@ -42,26 +40,31 @@ export default class CreateAccount extends Component {
         location.href='#'
       })
     }, err => {
-      let message = ''
       switch (err.code) {
         case 'auth/email-already-in-use':
-          message = '入力されたメールアドレスは既に使われています'
+          this.setState({
+            emailErrorMessage: '入力されたメールアドレスは既に使われています'
+          })
           break
         case 'auth/invalid-email':
-          message = '入力されたメールアドレスは使用できません'
+          this.setState({
+            emailErrorMessage: '入力されたメールアドレスは使用できません'
+          })
           break
         case 'auth/operation-not-allowed':
-          message = '入力されたメールアドレスは有効ではありません'
+          this.setState({
+            emailErrorMessage: '入力されたメールアドレスは有効ではありません'
+          })
           break
         case 'auth/weak-password':
+          this.setState({
+            passwordErrorMessage: 'パスワードが弱すぎます'
+          })
           message = 'パスワードが弱すぎます'
           break
         default:
           break
       }
-      this.setState({
-        message: message,
-      })
     })
   }
 
@@ -69,18 +72,15 @@ export default class CreateAccount extends Component {
    * ボタン活性制御
    */
   checkForm = (emailErrorMessage, passwordErrorMessage) => {
-    if (emailErrorMessage !== '' || passwordErrorMessage !== '') {
-      this.setState({
-        buttonFlag: true,
-      })
-    } else {
+    if (emailErrorMessage === '' && passwordErrorMessage === '') {
       this.setState({
         buttonFlag: false,
       })
+    } else {
+      this.setState({
+        buttonFlag: true,
+      })
     }
-    this.setState({
-      message: '',
-    })
   }
 
   /**
@@ -121,7 +121,6 @@ export default class CreateAccount extends Component {
     return (
       <div style={styles.root}>
         <div>CreateAccount</div>
-        {this.state.message !== '' ? <div style={styles.error}>{this.state.message}</div> : null}
         <TextField
           hintText='email'
           floatingLabelText='email'
@@ -153,7 +152,7 @@ export default class CreateAccount extends Component {
         />
         <RaisedButton
           label='enter'
-          onTouchTap={this.createUser}
+          onTouchTap={() => this.createUser()}
           disabled={this.state.buttonFlag}
         />
       </div>

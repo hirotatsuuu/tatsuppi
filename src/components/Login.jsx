@@ -162,7 +162,7 @@ export default class Login extends Component {
           <br /><br />
           <RaisedButton
             label='login'
-            onTouchTap={() => this.loginAuth}
+            onTouchTap={() => this.loginAuth()}
             disabled={this.state.buttonFlag}
           />
           <br />

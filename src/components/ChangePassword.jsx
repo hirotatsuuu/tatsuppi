@@ -1,71 +1,82 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
 
+import {
+  TextField,
+  RaisedButton,
+  FlatButton,
+} from 'material-ui'
+
+const styles = {
+  root: {
+    padding: '70px 10px 10px',
+    width: '100%',
+  },
+}
+
 export default class ChangePassword extends Component {
   state = {
     password: '',
-    rePassword: '',
-    message: '',
+    againPassword: '',
     passwordErrorMessage: '',
-    rePasswordErrorMessage: '',
-    buttonFlag: true,
-  }
-
-  /**
-   * ボタン活性制御
-   */
-  checkForm = (passwordErrorMessage, rePasswordErrorMessage) => {
-    if (passwordErrorMessage !== '' || rePasswordErrorMessage !== '') {
-      this.setState({
-        buttonFlag: true,
-      })
-    } else {
-      this.setState({
-        buttonFlag: false,
-      })
-    }
-    this.setState({
-      message: '',
-    })
+    againPasswordErrorMessage: '',
   }
 
   /**
    * パスワードチェック
    */
-  checkPassword = event => {
-    const value = event.target.value
+  checkPassword = value => {
     let message = ''
     if (value === '') {
       message = 'パスワードが未入力です'
     } else if (value.length < 6) {
       message = 'パスワードは6文字以上で入力してください'
     }
-    this.checkForm(this.state.emailErrorMessage, message),
     this.setState({
       passwordErrorMessage: message,
+      message: '',
     })
   }
 
   render() {
+    const {
+      password,
+      againPassword,
+      passwordErrorMessage,
+      againPasswordErrorMessage,
+    } = this.state
+    const disabled = !(passwordErrorMessage === '' && againPasswordErrorMessage === '') || password === '' || againPassword === ''
+
     return (
-      <div>
-        <div>ChangePassword</div>
+      <div style={styles.root}>
         <TextField
           hintText='password'
           floatingLabelText='password'
           type='password'
           value={this.state.password}
-          onChange={event => {
-            this.checkPassword(event),
-            this.setState({password: event.target.value})
+          onChange={e => {
+            this.checkPassword(e.target.value),
+            this.setState({password: e.target.value})
           }}
           errorText={this.state.passwordErrorMessage !== '' ? this.state.passwordErrorMessage : null}
         />
+        <br />
+        <TextField
+          hintText='againPassword'
+          floatingLabelText='againPassword'
+          type='password'
+          value={this.state.againPassword}
+          onChange={e => {
+            this.checkPassword(e.target.value),
+            this.setState({againPassword: e.target.value})
+          }}
+          errorText={this.state.againPasswordErrorMessage !== '' ? this.state.againPasswordErrorMessage : null}
+        />
         <br /><br />
         <RaisedButton
-          label='enter'
+          label='OK'
           onTouchTap={() => location.href='#'}
-          disabled={this.state.buttonFlag}
+          disabled={disabled}
         />
       </div>
     )

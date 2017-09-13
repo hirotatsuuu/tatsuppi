@@ -17,6 +17,11 @@ export default class App extends Component {
           loginFlag: false,
         })
         location.href='#'
+      } else {
+        this.setState({
+          loginFlag: true,
+        })
+        location.href='#home'
       }
     })
   }

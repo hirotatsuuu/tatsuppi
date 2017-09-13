@@ -65,11 +65,8 @@ export default class Main extends Component {
       case 'home':
         title = 'HOME'
         break
-      case 'createaccount':
-        title = 'Create Account'
-        break
-      case 'forgotpassword':
-        title = 'Forgot Password'
+      case 'input':
+        title = 'Input'
         break
       case 'changepassword':
         title = 'Change Password'
@@ -112,17 +109,17 @@ export default class Main extends Component {
           onRequestChange={() => this.setState({menuFlag: !this.state.menuFlag})}
         >
           <MenuItem
-            onTouchTap={() => (this.setState({menuFlag: false}), location.href='#createaccount')}
-          >CreateAccount</MenuItem>
+            onTouchTap={() => (this.setState({menuFlag: false}), location.href='#home')}
+          >HOME</MenuItem>
           <MenuItem
-            onTouchTap={() => (this.setState({menuFlag: false}), location.href='#forgotpassword')}
-          >ForgotPassword</MenuItem>
+            onTouchTap={() => (this.setState({menuFlag: false}), location.href='#input')}
+          >INPUT</MenuItem>
           <MenuItem
             onTouchTap={() => (this.setState({menuFlag: false}), location.href='#changepassword')}
-          >ChangePassword</MenuItem>
+          >CHANGE PASSWORD</MenuItem>
           <MenuItem
             onTouchTap={() => this.setState({logoutDialogFlag: true})}
-          >Logout</MenuItem>
+          >LOGOUT</MenuItem>
         </Drawer>
         <Dialog
           title='LOGOUT'

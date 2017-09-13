@@ -88,12 +88,12 @@ export default class Main extends Component {
   render() {
     const logoutActions = [
       <FlatButton
-        label='cansel'
+        label='CANCEL'
         onTouchTap={() => this.setState({logoutDialogFlag: false,})}
       />,
       <FlatButton
-        label='logout'
-        onTouchTap={this.logout}
+        label='OK'
+        onTouchTap={() => this.logout()}
       />
     ]
     return (
@@ -125,12 +125,11 @@ export default class Main extends Component {
           >Logout</MenuItem>
         </Drawer>
         <Dialog
-          title='logout'
+          title='LOGOUT'
           modal={false}
           open={this.state.logoutDialogFlag}
-          onRequestClose={() => this.setState({logoutDialogFlag: false})}
           actions={logoutActions}
-        >Do you logout? really?
+        >ログアウトしてよろしいですか？
         </Dialog>
       </div>
     )

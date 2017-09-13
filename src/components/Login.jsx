@@ -95,7 +95,7 @@ export default class Login extends Component {
     return (
       <div style={styles.root}>
         {loginFormFlag ? <div>
-          <div>Login</div>
+          <div>LOGIN</div>
           {this.state.message !== '' ? <div style={styles.error}>{this.state.message}</div> : null}
           <TextField
             hintText='email'
@@ -122,8 +122,8 @@ export default class Login extends Component {
           />
           <br /><br />
           <RaisedButton
-            label='login'
-            onClick={() => this.loginAuth()}
+            label='LOGIN'
+            onTouchTap={() => this.loginAuth()}
             disabled={disabled}
           />
           <br />

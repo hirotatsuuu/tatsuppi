@@ -4,6 +4,7 @@ import firebase from 'firebase'
 import {
   TextField,
   RaisedButton,
+  FlatButton,
 } from 'material-ui'
 
 const styles = {
@@ -64,11 +65,12 @@ export default class ForgotPassword extends Component {
           errorText={this.state.emailErrorMessage !== '' ? this.state.emailErrorMessage : null}
         />
         <br /><br />
-        <RaisedButton
+        <FlatButton
           label='return'
           onTouchTap={() => location.href = '#'}
-            
+          secondary={true}
         />
+        <span> </span>
         <RaisedButton
           label='enter'
           onTouchTap={() => location.href='#'}

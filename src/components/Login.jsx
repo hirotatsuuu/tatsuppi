@@ -19,8 +19,10 @@ const styles = {
 
 export default class Login extends Component {
   state = {
-    loginFormFlag: true,
-    buttonFlag: true,
+    email: '',
+    password: '',
+    emailErrorMessage: '',
+    passwordErrorMessage: '',
   }
 
   constructor(props) {
@@ -31,109 +33,61 @@ export default class Login extends Component {
    * ログイン処理
    */
   loginAuth = () => {
-    const [email, password] = [
-      this.state.email,
-      this.state.password,
-    ]
+    const { email, password } = this.state
     firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
       this.props.loginAuth()
-    }, err => {
-      let message = ''
-      switch (err.code) {
-        case 'auth/invalid-email':
-          message = '入力されたメールアドレスは有効ではありません'
-          break
-        case 'auth/user-disabled':
-          message = '入力されたメールアドレスは有効ではありません'
-          break
-        case 'auth/user-not-found':
-          message = 'メールアドレスが間違っています'
-          break
-        case 'auth/wrong-password':
-          message = 'パスワードが間違っています'
-          break
-        default:
-          break
-      }
+    }, () => {
       this.setState({
-        message: message,
+        message: 'ログインに失敗しました',
       })
-    })
-  }
-
-  /**
-   * ログイン画面以外に遷移した時の表示制御
-   */
-  changeHash = () => {
-    console.log('changeHash', location.hash.slice(2))
-    if (location.hash.slice(2) === '') {
-      this.setState({
-        loginFormFlag: true,
-      })
-    } else {
-      this.setState({
-        loginFormFlag: false,
-      })
-    }
-  }
-
-  /**
-   * ボタン活性制御
-   */
-  checkForm = (emailErrorMessage, passwordErrorMessage) => {
-    if (emailErrorMessage === '' && passwordErrorMessage === '') {
-      this.setState({
-        buttonFlag: false,
-      })
-    } else {
-      this.setState({
-        buttonFlag: true,
-      })
-    }
-    this.setState({
-      message: '',
     })
   }
 
   /**
    * メールアドレスチェック
    */
-  checkEmail = event => {
-    const value = event.target.value
+  checkEmail = value => {
     let message = ''
     if (value === '') {
       message = 'メールアドレスが未入力です'
     } else if (value.indexOf('@') === -1 || value.indexOf('.') === -1) {
       message = 'メールアドレスの形式が不適切です'
     }
-    this.checkForm(message, this.state.passwordErrorMessage)
     this.setState({
       emailErrorMessage: message,
+      message: '',
     })
   }
 
   /**
    * パスワードチェック
    */
-  checkPassword = event => {
-    const value = event.target.value
+  checkPassword = value => {
     let message = ''
     if (value === '') {
       message = 'パスワードが未入力です'
     } else if (value.length < 6) {
       message = 'パスワードは6文字以上で入力してください'
     }
-    this.checkForm(this.state.emailErrorMessage, message)
     this.setState({
       passwordErrorMessage: message,
+      message: '',
     })
   }
 
-  render () {
+  render() {
+    const loginFormFlag = location.hash.slice(2) === ''
+    const {
+      email,
+      password,
+      emailErrorMessage,
+      passwordErrorMessage,
+    } = this.state
+    const disabled = !(emailErrorMessage === '' && passwordErrorMessage === '') || email === '' || password === ''
+
     return (
       <div style={styles.root}>
-        {window.onhashchange = this.changeHash}
-        {this.state.loginFormFlag ? <div>
+        {loginFormFlag ? <div>
           <div>Login</div>
           {this.state.message !== '' ? <div style={styles.error}>{this.state.message}</div> : null}
           <TextField
@@ -141,9 +95,9 @@ export default class Login extends Component {
             floatingLabelText='email'
             type='email'
             value={this.state.email}
-            onChange={event => {
-              this.checkEmail(event),
-              this.setState({email: event.target.value})
+            onChange={e => {
+              this.checkEmail(e.target.value),
+              this.setState({email: e.target.value})
             }}
             errorText={this.state.emailErrorMessage !== '' ? this.state.emailErrorMessage : null}
           />
@@ -153,17 +107,17 @@ export default class Login extends Component {
             floatingLabelText='password'
             type='password'
             value={this.state.password}
-            onChange={event => {
-              this.checkPassword(event),
-              this.setState({password: event.target.value})
+            onChange={e => {
+              this.checkPassword(e.target.value),
+              this.setState({password: e.target.value})
             }}
             errorText={this.state.passwordErrorMessage !== '' ? this.state.passwordErrorMessage : null}
           />
           <br /><br />
           <RaisedButton
             label='login'
-            onTouchTap={() => this.loginAuth()}
-            disabled={this.state.buttonFlag}
+            onClick={() => this.loginAuth()}
+            disabled={disabled}
           />
           <br />
           <FlatButton

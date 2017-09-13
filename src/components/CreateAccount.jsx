@@ -4,6 +4,7 @@ import firebase from 'firebase'
 import {
   TextField,
   RaisedButton,
+  FlatButton,
 } from 'material-ui'
 
 const styles = {
@@ -25,15 +26,12 @@ export default class CreateAccount extends Component {
    * アカウント作成
    */
   createUser = () => {
-    const [email, password] = [
-      this.state.email,
-      this.state.password,
-    ]
-    console.log('createUesr', email, password)
+    console.log('createUser')
+    const { email, password } = this.state
     firebase.auth().createUserWithEmailAndPassword(email, password).then(user => {
-      console.log(user)
       const newUser = {
-        mail_address: this.state.email,
+        name: this.state.name,
+        email: this.state.email,
         enter_datetime: firebase.database.ServerValue.TIMESTAMP,
       }
       firebase.database().ref('users/' + user.uid).set(newUser).then(() => {
@@ -60,7 +58,6 @@ export default class CreateAccount extends Component {
           this.setState({
             passwordErrorMessage: 'パスワードが弱すぎます'
           })
-          message = 'パスワードが弱すぎます'
           break
         default:
           break
@@ -69,16 +66,16 @@ export default class CreateAccount extends Component {
   }
 
   /**
-   * ボタン活性制御
+   * 名前チェック
    */
-  checkForm = (emailErrorMessage, passwordErrorMessage) => {
-    if (emailErrorMessage === '' && passwordErrorMessage === '') {
+  checkName = value => {
+    if (value === '') {
       this.setState({
-        buttonFlag: false,
+        nameErrorMessage: '名前が未入力です'
       })
     } else {
       this.setState({
-        buttonFlag: true,
+        nameErrorMessage: ''
       })
     }
   }
@@ -86,15 +83,13 @@ export default class CreateAccount extends Component {
   /**
    * メールアドレスチェック
    */
-  checkEmail = event => {
-    const value = event.target.value
+  checkEmail = value => {
     let message = ''
     if (value === '') {
       message = 'メールアドレスが未入力です'
     } else if (value.indexOf('@') === -1 || value.indexOf('.') === -1) {
       message = 'メールアドレスの形式が不適切です'
     }
-    this.checkForm(message, this.state.passwordErrorMessage),
     this.setState({
       emailErrorMessage: message,
     })
@@ -103,32 +98,51 @@ export default class CreateAccount extends Component {
   /**
    * パスワードチェック
    */
-  checkPassword = event => {
-    const value = event.target.value
+  checkPassword = value => {
     let message = ''
     if (value === '') {
       message = 'パスワードが未入力です'
     } else if (value.length < 6) {
       message = 'パスワードは6文字以上で入力してください'
     }
-    this.checkForm(this.state.emailErrorMessage, message),
     this.setState({
       passwordErrorMessage: message,
     })
   }
 
   render() {
+    const {
+      emailErrorMessage,
+      passwordErrorMessage,
+      nameErrorMessage
+    } = this.state
+    const disabled = !(
+      emailErrorMessage === '' &&
+      passwordErrorMessage === '' &&
+      nameErrorMessage === '')
+
     return (
       <div style={styles.root}>
         <div>CreateAccount</div>
+        <TextField
+          hintText='name'
+          floatingLabelText='name'
+          value={this.state.name}
+          onChange={e => {
+            this.checkName(e.target.value),
+            this.setState({name: e.target.value})
+          }}
+          errorText={this.state.nameErrorMessage !== '' ? this.state.nameErrorMessage : null}
+        />
+        <br />
         <TextField
           hintText='email'
           floatingLabelText='email'
           type='email'
           value={this.state.email}
-          onChange={event => {
-            this.checkEmail(event),
-            this.setState({email: event.target.value})
+          onChange={e => {
+            this.checkEmail(e.target.value),
+            this.setState({email: e.target.value})
           }}
           errorText={this.state.emailErrorMessage !== '' ? this.state.emailErrorMessage : null}
         />
@@ -138,22 +152,23 @@ export default class CreateAccount extends Component {
           floatingLabelText='password'
           type='password'
           value={this.state.password}
-          onChange={event => {
-            this.checkPassword(event),
-            this.setState({password: event.target.value})
+          onChange={e => {
+            this.checkPassword(e.target.value),
+            this.setState({ password: e.target.value })
           }}
           errorText={this.state.passwordErrorMessage !== '' ? this.state.passwordErrorMessage : null}
         />
         <br /><br />
-        <RaisedButton
+        <FlatButton
           label='return'
           onTouchTap={() => location.href = '#'}
           secondary={true}
         />
+        <span> </span>
         <RaisedButton
           label='enter'
-          onTouchTap={() => this.createUser()}
-          disabled={this.state.buttonFlag}
+          onClick={() => this.createUser()}
+          disabled={disabled}
         />
       </div>
     )

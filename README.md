@@ -45,3 +45,9 @@ yarn build
 ```
 yarn host
 ```
+
+- `https://tatsuppi-417ae.firebaseapp.com`にアクセス出来るようにする
+
+```
+yarn deploy
+```

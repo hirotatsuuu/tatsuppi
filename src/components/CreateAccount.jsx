@@ -160,14 +160,14 @@ export default class CreateAccount extends Component {
         />
         <br /><br />
         <FlatButton
-          label='return'
+          label='RETURN'
           onTouchTap={() => location.href = '#'}
           secondary={true}
         />
         <span> </span>
         <RaisedButton
-          label='enter'
-          onClick={() => this.createUser()}
+          label='OK'
+          onTouchTap={() => this.createUser()}
           disabled={disabled}
         />
       </div>

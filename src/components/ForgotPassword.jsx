@@ -66,13 +66,13 @@ export default class ForgotPassword extends Component {
         />
         <br /><br />
         <FlatButton
-          label='return'
+          label='RETURN'
           onTouchTap={() => location.href = '#'}
           secondary={true}
         />
         <span> </span>
         <RaisedButton
-          label='enter'
+          label='OK'
           onTouchTap={() => location.href='#'}
           disabled={this.state.buttonFlag}
         />

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import Home from './Home'
+import Input from './Input'
 import ForgotPassword from './ForgotPassword'
 import CreateAccount from './CreateAccount'
 import ChangePassword from './ChangePassword'
@@ -24,8 +25,7 @@ export default class Routes extends Component {
         {this.props.loginFlag ? 
           <Switch>
             <Route path='/home' component={Home} />
-            <Route path='/forgotpassword' component={ForgotPassword} />
-            <Route path='/createaccount' component={CreateAccount} />
+            <Route path='/input' component={Input} />
             <Route path='/changepassword' component={ChangePassword} />
             <Route component={NoMatch}/>
           </Switch> : 

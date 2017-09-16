@@ -52,7 +52,7 @@ export default class ForgotPassword extends Component {
   render() {
     return (
       <div style={styles.root}>
-        <div>ForgotPassword</div>
+        <div>ForgotPassword(未実装)</div>
         <TextField
           hintText='email'
           floatingLabelText='email'

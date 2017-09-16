@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Link } from 'react-router-dom'
 
 import Home from './Home'
 import Input from './Input'
@@ -27,11 +27,12 @@ export default class Routes extends Component {
             <Route path='/home' component={Home} />
             <Route path='/input' component={Input} />
             <Route path='/changepassword' component={ChangePassword} />
-            <Route component={NoMatch}/>
+            <Route component={NoMatch} />
           </Switch> : 
           <Switch>
             <Route path='/forgotpassword' component={ForgotPassword} />
             <Route path='/createaccount' component={CreateAccount} />
+            <Route render={() => (<Link to='#' />)} />
           </Switch>}
       </div>
     )

@@ -7,6 +7,7 @@ import {
   RaisedButton,
   Dialog,
   FlatButton,
+  DatePicker,
 } from 'material-ui'
 
 const styles = {
@@ -18,17 +19,18 @@ const styles = {
 
 export default class Input extends Component {
   state = {
-    useMoney: '',
     target: '',
+    useMoney: '',
+    date: new Date(moment()),
     dialogFlag: false,
   }
 
   addUse = () => {
-    const { target, useMoney } = this.state
+    const { target, useMoney, date } = this.state
     const useMoneyObj = {
       target: target,
       use_money: useMoney,
-      enter_date: moment().format('YYYY-MM-DD'),
+      enter_date: moment(date).format('YYYY-MM-DD'),
       enter_datetime: firebase.database.ServerValue.TIMESTAMP,
     }
     firebase.database().ref('use/' + firebase.auth().currentUser.uid).push(useMoneyObj).then(() => {
@@ -40,12 +42,25 @@ export default class Input extends Component {
     })
   }
 
+  change = date => {
+    this.setState({
+      date: date,
+    })
+  }
+
   render() {
-    const { target, useMoney } = this.state
-    const disabled = target === '' || useMoney === ''
+    const { target, useMoney, date } = this.state
+    const disabled = useMoney === ''
 
     return (
       <div style={styles.root}>
+        <DatePicker
+          hintText='select date'
+          floatingLabelText='select date'
+          autoOk={true}
+          value={date}
+          onChange={(a, date) => this.change(date)}
+        />
         <TextField
           hintText='target'
           floatingLabelText='target'

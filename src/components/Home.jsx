@@ -127,15 +127,16 @@ export default class Home extends Component {
 
     return (
       <div style={styles.root}>
-        <div>
-          {todayMonth === setMonth ? '今月' : moment(date).format('M月')}の合計金額: {this.state.totalMoneyByMonth}円 / 月
-        </div>
         <DatePicker
           hintText='import date'
+          floatingLabelText='import date'
           autoOk={true}
           value={date}
           onChange={(a, date) => this.change(date)}
         />
+        <div>
+          {todayMonth === setMonth ? '今月' : moment(date).format('M月')}の合計金額: {this.state.totalMoneyByMonth}円 / 月
+        </div>
         <div>
           {todayDate === setDate ? '本日' : moment(date).format('D日')}の合計金額: {this.state.totalMoneyByDate}円 / 日
         </div>

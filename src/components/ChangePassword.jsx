@@ -49,6 +49,7 @@ export default class ChangePassword extends Component {
 
     return (
       <div style={styles.root}>
+        (未実装)
         <TextField
           hintText='password'
           floatingLabelText='password'

@@ -10,7 +10,6 @@ import {
   TableHeaderColumn,
   TableRow,
   TableRowColumn,
-
 } from 'material-ui'
 
 const styles = {
@@ -20,7 +19,7 @@ const styles = {
   },
 }
 
-export default class Home extends Component {
+export default class Month extends Component {
   state = {
     date: new Date(moment()),
     useArray: [],
@@ -79,7 +78,6 @@ export default class Home extends Component {
       <div style={styles.root}>
         <DatePicker
           hintText='import date'
-          autoOk={true}
           value={this.state.date}
           onChange={(a, date) => this.change(date)}
         />

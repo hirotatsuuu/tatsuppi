@@ -31,7 +31,7 @@ export default class Input extends Component {
       enter_date: moment().format('YYYY-MM-DD'),
       enter_datetime: firebase.database.ServerValue.TIMESTAMP,
     }
-    firebase.database().ref('use').push(useMoneyObj).then(() => {
+    firebase.database().ref('use/' + firebase.auth().currentUser.uid).push(useMoneyObj).then(() => {
       this.setState({
         dialogFlag: true,
         target: '',
@@ -61,15 +61,15 @@ export default class Input extends Component {
         />
         <br />
         <RaisedButton
-        label='ADD'
-        disabled={disabled}
-        onTouchTap={this.addUse}
+          label='ADD'
+          disabled={disabled}
+          onTouchTap={() => this.addUse()}
         />
         <Dialog
           actions={
             <FlatButton
               label='OK'
-              onTouchTap={() => this.setState({dialogFlag: false})}
+              onTouchTap={() => (this.setState({dialogFlag: false}), location.href='#home')}
             />
           }
           modal={false}

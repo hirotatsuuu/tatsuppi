@@ -30,10 +30,10 @@ export default class Login extends Component {
   }
 
   componentWillMount = () => {
-    // this.setState({
-    //   email: 'jjj@jjj.jj',
-    //   password: 'jjjjjj',
-    // })
+    this.setState({
+      email: 'jjj@jjj.jj',
+      password: 'jjjjjj',
+    })
   }
 
   /**

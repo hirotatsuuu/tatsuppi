@@ -9,8 +9,8 @@ import {
 
 const styles = {
   root: {
-    padding: '10px',
-    width: '100%',
+    padding: '3vh 3vw',
+    width: '94vw',
   },
   error: {
     color: 'red',
@@ -21,6 +21,7 @@ export default class Login extends Component {
   state = {
     email: '',
     password: '',
+    message: '',
   }
 
   constructor(props) {

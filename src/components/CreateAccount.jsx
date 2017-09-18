@@ -10,8 +10,8 @@ import {
 
 const styles = {
   root: {
-    padding: '5vh 5vw',
-    width: '90vw',
+    padding: '0 3vw',
+    width: '94vw',
   },
   error: {
     color: 'red',
@@ -24,6 +24,7 @@ export default class CreateAccount extends Component {
     email: '',
     password: '',
     dialogFlag: false,
+    message: '',
   }
 
   /**
@@ -139,7 +140,7 @@ export default class CreateAccount extends Component {
 
     return (
       <div style={styles.root}>
-        <div>CreateAccount</div>
+        <div>CREATE ACCOUNT</div>
         {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
         <TextField
           hintText='name'

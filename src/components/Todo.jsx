@@ -169,8 +169,8 @@ export default class Todo extends Component {
       <div>
         {addFlag ? <div>Add Todo</div> : editFlag ? <div>Edit Todo</div> : null}
         <TextField
-          hintText='Title'
-          floatingLabelText='Title'
+          hintText='title'
+          floatingLabelText='title'
           value={title}
           onChange={e => {
             const value = e.target.value
@@ -181,8 +181,11 @@ export default class Todo extends Component {
         />
         <br />
         <TextField
-          hintText='Text'
-          floatingLabelText='Text'
+          hintText='text'
+          floatingLabelText='text'
+          multiLine={true}
+          rows={3}
+          fullWidth={true}
           value={text}
           onChange={e => {
             const value = e.target.value

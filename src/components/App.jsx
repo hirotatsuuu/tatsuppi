@@ -26,6 +26,9 @@ export default class App extends Component {
     })
   }
 
+  /**
+   * ログイン処理
+   */
   loginAuth = () => {
     this.setState({
       loginFlag: true,
@@ -33,6 +36,9 @@ export default class App extends Component {
     location.href='#home'
   }
 
+  /**
+   * ログイアウト処理
+   */
   logoutAuth = () => {
     this.setState({
       loginFlag: false,
@@ -41,12 +47,13 @@ export default class App extends Component {
   }
 
   render() {
+    const { loginFlag } = this.state
     return (
       <div>
-        {this.state.loginFlag ?
+        {loginFlag ?
           <Main logoutAuth={this.logoutAuth} /> :
           <Login loginAuth={this.loginAuth} />}
-        <Routes loginFlag={this.state.loginFlag} />
+        <Routes loginFlag={loginFlag} />
       </div>
     )
   }

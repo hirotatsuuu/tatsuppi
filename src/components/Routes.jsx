@@ -3,6 +3,7 @@ import { Route, Switch, Link } from 'react-router-dom'
 
 import Home from './Home'
 import Input from './Input'
+import Todo from './Todo'
 import ForgotPassword from './ForgotPassword'
 import CreateAccount from './CreateAccount'
 import ChangePassword from './ChangePassword'
@@ -14,21 +15,30 @@ const styles = {
   }
 }
 
+const NoMatch = location => (
+  <div style={styles.root}>
+    <span>{location.pathname}というURLは見つかりません</span>
+  </div>
+)
+
 export default class Routes extends Component {
   constructor(props) {
     super(props)
   }
 
   render() {
+    const { loginFlag } = this.props
+
     return (
       <div>
-        {this.props.loginFlag ? 
+        {loginFlag ?
           <Switch>
             <Route path='/home' component={Home} />
             <Route path='/input' component={Input} />
+            <Route path='/todo' component={Todo} />
             <Route path='/changepassword' component={ChangePassword} />
             <Route component={NoMatch} />
-          </Switch> : 
+          </Switch> :
           <Switch>
             <Route path='/forgotpassword' component={ForgotPassword} />
             <Route path='/createaccount' component={CreateAccount} />
@@ -38,9 +48,3 @@ export default class Routes extends Component {
     )
   }
 }
-
-const NoMatch = ({location}) => (
-  <div style={styles.root}>
-    <span>{location.pathname}というURLは見つかりません</span>
-  </div>
-)

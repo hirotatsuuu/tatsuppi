@@ -12,8 +12,8 @@ import {
 
 const styles = {
   root: {
-    padding: '70px 10px 10px',
-    width: '100%',
+    padding: '60px 10px 10px',
+    width: '100vw',
   },
 }
 

@@ -97,7 +97,7 @@ export default class Home extends Component {
   removeUse = () => {
     firebase.database().ref('use/' + firebase.auth().currentUser.uid + '/' + this.state.removeId).remove().then(() => {
       this.setState({
-        removeFlag: false
+        removeFlag: false,
       })
     }, err => {
       console.log(err)
@@ -179,7 +179,7 @@ export default class Home extends Component {
           open={this.state.removeFlag}
           onRequestClose={() => this.setState({removeFlag: false})}
         >
-          Are you OK ?
+          削除してよろしいですか？
         </Dialog>
       </div>
     )

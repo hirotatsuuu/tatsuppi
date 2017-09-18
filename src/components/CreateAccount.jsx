@@ -5,6 +5,7 @@ import {
   TextField,
   RaisedButton,
   FlatButton,
+  Dialog,
 } from 'material-ui'
 
 const styles = {
@@ -19,65 +20,79 @@ const styles = {
 
 export default class CreateAccount extends Component {
   state = {
-    buttonFlag: true,
+    name: '',
+    email: '',
+    password: '',
+    dialogFlag
   }
 
   /**
    * アカウント作成
    */
   createUser = () => {
-    console.log('createUser')
-    const { email, password } = this.state
+    const { name, email, password } = this.state
     firebase.auth().createUserWithEmailAndPassword(email, password).then(user => {
       const newUser = {
-        name: this.state.name,
-        email: this.state.email,
+        name: name,
+        email: email,
         enter_datetime: firebase.database.ServerValue.TIMESTAMP,
       }
       firebase.database().ref('users/' + user.uid).set(newUser).then(() => {
-        location.href='#'
+        this.setState({
+          dialogFlag: true,
+        })
       })
     }, err => {
-      switch (err.code) {
-        case 'auth/email-already-in-use':
-          this.setState({
-            emailErrorMessage: '入力されたメールアドレスは既に使われています'
-          })
-          break
-        case 'auth/invalid-email':
-          this.setState({
-            emailErrorMessage: '入力されたメールアドレスは使用できません'
-          })
-          break
-        case 'auth/operation-not-allowed':
-          this.setState({
-            emailErrorMessage: '入力されたメールアドレスは有効ではありません'
-          })
-          break
-        case 'auth/weak-password':
-          this.setState({
-            passwordErrorMessage: 'パスワードが弱すぎます'
-          })
-          break
-        default:
-          break
-      }
+      this.setState({
+        message: this.checkErrorCode(err.code),
+      })
     })
+  }
+
+  /**
+   * ダイアログを閉じたときの処理
+   */
+  closeDialog = () => {
+    this.setState({
+      dialogFlag: false,
+    })
+    location.href='#'
+  }
+
+  /**
+   * エラーコードチェック
+   */
+  checkErrorCode = code => {
+    switch (code) {
+      case 'auth/email-already-in-use':
+        return '入力されたメールアドレスは既に使われています'
+        break
+      case 'auth/invalid-email':
+        return '入力されたメールアドレスは使用できません'
+        break
+      case 'auth/operation-not-allowed':
+        return '入力されたメールアドレスは有効ではありません'
+        break
+      case 'auth/weak-password':
+        return 'パスワードが弱すぎます'
+        break
+      default:
+        return ''
+        break
+    }
   }
 
   /**
    * 名前チェック
    */
   checkName = value => {
+    let message = ''
     if (value === '') {
-      this.setState({
-        nameErrorMessage: '名前が未入力です'
-      })
+      message = '名前が未入力です'
     } else {
-      this.setState({
-        nameErrorMessage: ''
-      })
+      message = ''
     }
+    return message
   }
 
   /**
@@ -90,9 +105,7 @@ export default class CreateAccount extends Component {
     } else if (value.indexOf('@') === -1 || value.indexOf('.') === -1) {
       message = 'メールアドレスの形式が不適切です'
     }
-    this.setState({
-      emailErrorMessage: message,
-    })
+    return message
   }
 
   /**
@@ -105,58 +118,72 @@ export default class CreateAccount extends Component {
     } else if (value.length < 6) {
       message = 'パスワードは6文字以上で入力してください'
     }
-    this.setState({
-      passwordErrorMessage: message,
-    })
+    return message
   }
 
   render() {
     const {
+      name,
+      email,
+      password,
+      nameErrorMessage,
       emailErrorMessage,
       passwordErrorMessage,
-      nameErrorMessage
+      message,
+      dialogFlag,
     } = this.state
+
     const disabled = !(
+      nameErrorMessage === '' &&
       emailErrorMessage === '' &&
-      passwordErrorMessage === '' &&
-      nameErrorMessage === '')
+      passwordErrorMessage === '')
 
     return (
       <div style={styles.root}>
         <div>CreateAccount</div>
+        {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
         <TextField
           hintText='name'
           floatingLabelText='name'
-          value={this.state.name}
+          value={name}
           onChange={e => {
-            this.checkName(e.target.value),
-            this.setState({name: e.target.value})
+            const value = e.target.value
+            this.setState({
+              name: value,
+              nameErrorMessage: this.checkName(value),
+            })
           }}
-          errorText={this.state.nameErrorMessage !== '' ? this.state.nameErrorMessage : null}
+          errorText={nameErrorMessage !== '' ? nameErrorMessage : null}
         />
         <br />
         <TextField
           hintText='email'
           floatingLabelText='email'
           type='email'
-          value={this.state.email}
+          value={email}
           onChange={e => {
-            this.checkEmail(e.target.value),
-            this.setState({email: e.target.value})
+            const value = e.target.value
+            this.setState({
+              email: value,
+              emailErrorMessage: this.checkEmail(value),
+            })
           }}
-          errorText={this.state.emailErrorMessage !== '' ? this.state.emailErrorMessage : null}
+          errorText={emailErrorMessage !== '' ? emailErrorMessage : null}
         />
         <br />
         <TextField
           hintText='password'
           floatingLabelText='password'
           type='password'
-          value={this.state.password}
+          value={password}
           onChange={e => {
-            this.checkPassword(e.target.value),
-            this.setState({ password: e.target.value })
+            const value = e.target.value
+            this.setState({
+              password: value,
+              passwordErrorMessage: this.checkPassword(value),
+            })
           }}
-          errorText={this.state.passwordErrorMessage !== '' ? this.state.passwordErrorMessage : null}
+          errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
         />
         <br /><br />
         <FlatButton
@@ -169,7 +196,22 @@ export default class CreateAccount extends Component {
           label='OK'
           onTouchTap={() => this.createUser()}
           disabled={disabled}
+          primary={true}
         />
+        <Dialog
+          title='create account'
+          actions={[
+            <FlatButton
+              label='OK'
+              onTouchTap={() => this.closeDialog()}
+            />
+          ]}
+          modal={true}
+          open={dialogFlag}
+          onRequestClose={() => this.closeDialog()}
+        >
+          アカウントを作成しました
+        </Dialog>
       </div>
     )
   }

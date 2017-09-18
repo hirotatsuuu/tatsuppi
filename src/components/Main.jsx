@@ -13,7 +13,7 @@ const styles = {
   root: {
     position: 'fixed',
     height: '60px',
-    width: '100%',
+    width: '100vw',
     backgroundColor: 'pink',
   },
 }
@@ -47,6 +47,9 @@ export default class Main extends Component {
     firebase.database().ref('users/' + this.state.loginUser.uid).off('value')
   }
 
+  /**
+   * ログアウト処理
+   */
   logout = () => {
     firebase.auth().signOut().then(() => {
       this.props.logoutAuth()
@@ -59,6 +62,9 @@ export default class Main extends Component {
     })
   }
 
+  /**
+   * ヘッダーのタイトル変更
+   */
   changeTitle = () => {
     let title = ''
     switch (location.hash.slice(2)) {
@@ -67,6 +73,9 @@ export default class Main extends Component {
         break
       case 'input':
         title = 'Input'
+        break
+      case 'todo':
+        title = 'Todo'
         break
       case 'changepassword':
         title = 'Change Password'
@@ -93,20 +102,31 @@ export default class Main extends Component {
         onTouchTap={() => this.logout()}
       />
     ]
+
+    const { title, menuFlag, logoutDialogFlag } = this.state
+
     return (
       <div>
         {window.onhashchange=this.changeTitle}
         <AppBar
-          title={this.state.title}
-          iconClassNameRight='muidocs-icon-navigation-expand-more'
-          onLeftIconButtonTouchTap={() => this.setState({menuFlag: !this.state.menuFlag})}
           style={styles.root}
+          title={title}
+          iconClassNameRight='muidocs-icon-navigation-expand-more'
+          onLeftIconButtonTouchTap={() => {
+            this.setState({
+              menuFlag: !menuFlag,
+            })
+          }}
         />
         <Drawer
           docked={false}
           width={200}
-          open={this.state.menuFlag}
-          onRequestChange={() => this.setState({menuFlag: !this.state.menuFlag})}
+          open={menuFlag}
+          onRequestChange={() => {
+            this.setState({
+              menuFlag: !menuFlag,
+            })
+          }}
         >
           <MenuItem
             onTouchTap={() => (this.setState({menuFlag: false}), location.href='#home')}
@@ -114,6 +134,14 @@ export default class Main extends Component {
           <MenuItem
             onTouchTap={() => (this.setState({menuFlag: false}), location.href='#input')}
           >INPUT</MenuItem>
+          <MenuItem
+            onTouchTap={() => {
+              this.setState({
+                menuFlag: false,
+              }),
+              location.href = '#todo'
+            }}
+          >Todo</MenuItem>
           <MenuItem
             onTouchTap={() => (this.setState({menuFlag: false}), location.href='#changepassword')}
           >CHANGE PASSWORD</MenuItem>
@@ -124,7 +152,7 @@ export default class Main extends Component {
         <Dialog
           title='LOGOUT'
           modal={false}
-          open={this.state.logoutDialogFlag}
+          open={logoutDialogFlag}
           actions={logoutActions}
         >ログアウトしてよろしいですか？
         </Dialog>

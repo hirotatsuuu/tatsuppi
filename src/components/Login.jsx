@@ -21,8 +21,6 @@ export default class Login extends Component {
   state = {
     email: '',
     password: '',
-    emailErrorMessage: '',
-    passwordErrorMessage: '',
   }
 
   constructor(props) {
@@ -84,41 +82,44 @@ export default class Login extends Component {
 
   render() {
     const loginFormFlag = location.hash.slice(2) === ''
+
     const {
       email,
       password,
       emailErrorMessage,
       passwordErrorMessage,
+      message,
     } = this.state
+
     const disabled = !(emailErrorMessage === '' && passwordErrorMessage === '') || email === '' || password === ''
 
     return (
       <div style={styles.root}>
         {loginFormFlag ? <div>
           <div>LOGIN</div>
-          {this.state.message !== '' ? <div style={styles.error}>{this.state.message}</div> : null}
+          {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
           <TextField
             hintText='email'
             floatingLabelText='email'
             type='email'
-            value={this.state.email}
+            value={email}
             onChange={e => {
               this.checkEmail(e.target.value),
               this.setState({email: e.target.value})
             }}
-            errorText={this.state.emailErrorMessage !== '' ? this.state.emailErrorMessage : null}
+            errorText={emailErrorMessage !== '' ? emailErrorMessage : null}
           />
           <br />
           <TextField
             hintText='password'
             floatingLabelText='password'
             type='password'
-            value={this.state.password}
+            value={password}
             onChange={e => {
               this.checkPassword(e.target.value),
               this.setState({password: e.target.value})
             }}
-            errorText={this.state.passwordErrorMessage !== '' ? this.state.passwordErrorMessage : null}
+            errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
           />
           <br /><br />
           <RaisedButton

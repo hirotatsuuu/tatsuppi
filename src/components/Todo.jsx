@@ -35,6 +35,7 @@ export default class Todo extends Component {
     addFlag: false,
     editFlag: false,
     deleteFlag: false,
+    sortFlag: true,
   }
 
   componentWillMount = () => {
@@ -55,20 +56,45 @@ export default class Todo extends Component {
     this.todosRef.off('value')
   }
 
+  /**
+   * Todoリストの取得
+   */
   getTodos = todos => {
+    let todosArray = []
     if (todos) {
-      let todosArray = []
       Object.keys(todos).forEach(snapshot => {
         let todo = todos[snapshot]
         todo.id = snapshot
         todosArray.push(todo)
       })
-      this.setState({
-        todosArray: todosArray,
-      })
+      const { sortFlag } = this.state
+      todosArray = this.sortDateTime(todosArray, sortFlag)
     }
+    this.setState({
+      todosArray: todosArray,
+    })
   }
 
+  /**
+   * 時間のソート処理
+   */
+  sortDateTime = (array, flag) => {
+    let sort = []
+    sort = array.sort((before, after) => {
+      if (before.date_time < after.date_time) {
+        return (flag ? 1 : -1)
+      } else if (before.date_time > after.date_time) {
+        return (flag ? -1 : 1)
+      } else {
+        return 0
+      }
+    })
+    return sort
+  }
+
+  /**
+   * Todoの追加
+   */
   addTodo = () => {
     const { title, text } = this.state
     const dateTime = moment().format('YYYY-MM-DD HH:mm:ss')
@@ -79,7 +105,7 @@ export default class Todo extends Component {
       enter_datetime: firebase.database.ServerValue.TIMESTAMP,
     }
     this.todosRef.push(todoObj).then(() => {
-      // Todo
+      this.clearTodoForm()
     }, err => {
       console.log(err)
     })
@@ -88,6 +114,9 @@ export default class Todo extends Component {
     })
   }
 
+  /**
+   * Todoの編集
+   */
   editTodo = () => {
     const { title, text, authUid, editId } = this.state
     const dateTime = moment().format('YYYY-MM-DD HH:mm:ss')
@@ -97,7 +126,7 @@ export default class Todo extends Component {
       text: text,
     }
     firebase.database().ref('todos/' + authUid + '/' + editId).update(editObj).then(() => {
-      // Todo
+      this.clearTodoForm()
     }, err => {
       console.log(err)
     })
@@ -106,6 +135,9 @@ export default class Todo extends Component {
     })
   }
 
+  /**
+   * Todoの削除
+   */
   deleteTodo = () => {
     const { authUid, deleteId } = this.state
     firebase.database().ref('todos/' + authUid + '/' + deleteId).remove().then(() => {
@@ -116,6 +148,19 @@ export default class Todo extends Component {
     })
   }
 
+  /**
+   * TodoFormのリセット
+   */
+  clearTodoForm = () => {
+    this.setState({
+      title: '',
+      text: '',
+    })
+  }
+
+  /**
+   * Todoの入力フォーム
+   */
   TodoForm = () => {
     const { title, text } = this.state
     return (
@@ -140,6 +185,28 @@ export default class Todo extends Component {
             const value = e.target.value
             this.setState({
               text: value,
+            })
+          }}
+        />
+      </div>
+    )
+  }
+
+  /**
+   * ソートのボタン
+   */
+  SortButton = () => {
+    const { todosArray, sortFlag } = this.state
+    return (
+      <div>
+        <FlatButton
+          label={sortFlag ? '昇順' : '降順'}
+          primary={sortFlag}
+          secondary={!sortFlag}
+          onTouchTap={() => {
+            this.setState({
+              todosArray: this.sortDateTime(todosArray, !sortFlag),
+              sortFlag: !sortFlag
             })
           }}
         />
@@ -191,10 +258,14 @@ export default class Todo extends Component {
     return (
       <div style={styles.root}>
         <RaisedButton
-          label='新規追加'
-          onTouchTap={() => this.setState({addFlag: true,})}
+          label='ADD TODO'
+          onTouchTap={() => {
+            this.clearTodoForm(),
+            this.setState({ addFlag: true, })
+          }}
         />
-        {todosArray !== undefined ? todosArray.map((row, index) => {
+        <this.SortButton />
+        {todosArray !== undefined && todosArray.length !== 0 ? todosArray.map((row, index) => {
           return (
             <div key={index} style={styles.cord}>
               <Card>
@@ -209,7 +280,7 @@ export default class Todo extends Component {
                 </CardText>
                 <CardActions expandable={true}>
                   <FlatButton
-                    label='編集'
+                    label='EDIT'
                     onTouchTap={() => {
                       this.setState({
                         editFlag: true,
@@ -220,7 +291,7 @@ export default class Todo extends Component {
                     }}
                   />
                   <FlatButton
-                    label='削除'
+                    label='DELETE'
                     onTouchTap={() => {
                       this.setState({
                         deleteFlag: true,
@@ -232,7 +303,7 @@ export default class Todo extends Component {
               </Card>
             </div>
           )
-        }) : null}
+        }) : <span><br />TODOはありません</span>}
         <Dialog
           title='add'
           actions={addActions}

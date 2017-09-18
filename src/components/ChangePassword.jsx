@@ -5,6 +5,7 @@ import {
   TextField,
   RaisedButton,
   FlatButton,
+  Dialog,
 } from 'material-ui'
 
 const styles = {
@@ -12,14 +13,66 @@ const styles = {
     padding: '70px 10px 10px',
     width: '100%',
   },
+  error: {
+    color: 'red',
+  }
 }
 
 export default class ChangePassword extends Component {
   state = {
     password: '',
-    againPassword: '',
-    passwordErrorMessage: '',
-    againPasswordErrorMessage: '',
+    again: '',
+    dialogFlag: false,
+  }
+
+  /**
+   * パスワードの更新
+   */
+  updatePassword = () => {
+    const { password, again } = this.state
+    let message = this.checkMatchPassword(password, again)
+    if (message !== '') {
+      this.setState({
+        message: message,
+      })
+    } else {
+      firebase.auth().currentUser.updatePassword(password).then(() => {
+        this.setState({
+          dialogFlag: true,
+        })
+      }, err => {
+        this.setState({
+          message: this.checkErrorCode(err.code),
+        })
+      })
+    }
+  }
+
+  /**
+   * ダイアログを閉じたときの処理
+   */
+  closeDialog = () => {
+    this.setState({
+      dialogFlag: false,
+    })
+  }
+
+  /**
+   * エラーコードチェック
+   */
+  checkErrorCode = code => {
+    let message = ''
+    switch (code) {
+      case 'auth/requires-recent-login':
+        message = 'ログインしなおしてください'
+        break
+      case 'auth/weak-password':
+        message = 'パスワードが弱すぎます'
+        break
+      default:
+        break
+    }
+    return message
   }
 
   /**
@@ -32,53 +85,84 @@ export default class ChangePassword extends Component {
     } else if (value.length < 6) {
       message = 'パスワードは6文字以上で入力してください'
     }
-    this.setState({
-      passwordErrorMessage: message,
-      message: '',
-    })
+    return message
+  }
+
+  /**
+   * パスワードが同じかチェック
+   */
+  checkMatchPassword = (value, again) => {
+    let message = ''
+    if (value !== again) {
+      message = 'パスワードが一致していません'
+    }
+    return message
   }
 
   render() {
     const {
       password,
-      againPassword,
+      again,
       passwordErrorMessage,
-      againPasswordErrorMessage,
+      againErrorMessage,
+      message,
+      dialogFlag,
     } = this.state
-    const disabled = !(passwordErrorMessage === '' && againPasswordErrorMessage === '') || password === '' || againPassword === ''
+
+    const disabled = !(passwordErrorMessage === '' && againErrorMessage === '') || password === '' || again === ''
 
     return (
       <div style={styles.root}>
-        <div>ChangePassword(未実装)</div>
+        {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
         <TextField
           hintText='password'
           floatingLabelText='password'
           type='password'
-          value={this.state.password}
+          value={password}
           onChange={e => {
-            this.checkPassword(e.target.value),
-            this.setState({password: e.target.value})
+            const value = e.target.value
+            this.setState({
+              password: value,
+              passwordErrorMessage: this.checkPassword(value),
+            })
           }}
-          errorText={this.state.passwordErrorMessage !== '' ? this.state.passwordErrorMessage : null}
+          errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
         />
         <br />
         <TextField
-          hintText='againPassword'
-          floatingLabelText='againPassword'
+          hintText='again'
+          floatingLabelText='again'
           type='password'
-          value={this.state.againPassword}
+          value={again}
           onChange={e => {
-            this.checkPassword(e.target.value),
-            this.setState({againPassword: e.target.value})
+            const value = e.target.value
+            this.setState({
+              again: value,
+              againErrorMessage: this.checkPassword(value),
+            })
           }}
-          errorText={this.state.againPasswordErrorMessage !== '' ? this.state.againPasswordErrorMessage : null}
+          errorText={againErrorMessage !== '' ? againErrorMessage : null}
         />
         <br /><br />
         <RaisedButton
           label='OK'
-          onTouchTap={() => location.href='#'}
+          onTouchTap={() => this.updatePassword()}
           disabled={disabled}
         />
+        <Dialog
+          title='update password'
+          actions={[
+            <FlatButton
+              label='OK'
+              onTouchTap={() => this.closeDialog()}
+            />
+          ]}
+          modal={true}
+          open={dialogFlag}
+          onRequestClose={() => this.closeDialog()}
+        >
+          パスワードを更新しました
+        </Dialog>
       </div>
     )
   }

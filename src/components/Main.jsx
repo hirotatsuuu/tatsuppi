@@ -135,9 +135,6 @@ export default class Main extends Component {
             onTouchTap={() => (this.setState({menuFlag: false}), location.href='#input')}
           >INPUT</MenuItem>
           <MenuItem
-            onTouchTap={() => (this.setState({menuFlag: false}), location.href='#changepassword')}
-          >CHANGE PASSWORD</MenuItem>
-          <MenuItem
             onTouchTap={() => {
               this.setState({
                 menuFlag: false,
@@ -145,6 +142,9 @@ export default class Main extends Component {
               location.href = '#todo'
             }}
           >Todo</MenuItem>
+          <MenuItem
+            onTouchTap={() => (this.setState({menuFlag: false}), location.href='#changepassword')}
+          >CHANGE PASSWORD</MenuItem>
           <MenuItem
             onTouchTap={() => this.setState({logoutDialogFlag: true})}
           >LOGOUT</MenuItem>

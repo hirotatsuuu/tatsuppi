@@ -5,6 +5,7 @@ import {
   TextField,
   RaisedButton,
   FlatButton,
+  Dialog,
 } from 'material-ui'
 
 const styles = {
@@ -22,6 +23,7 @@ export default class CreateAccount extends Component {
     name: '',
     email: '',
     password: '',
+    dialogFlag
   }
 
   /**
@@ -36,13 +38,25 @@ export default class CreateAccount extends Component {
         enter_datetime: firebase.database.ServerValue.TIMESTAMP,
       }
       firebase.database().ref('users/' + user.uid).set(newUser).then(() => {
-        location.href='#'
+        this.setState({
+          dialogFlag: true,
+        })
       })
     }, err => {
       this.setState({
         message: this.checkErrorCode(err.code),
       })
     })
+  }
+
+  /**
+   * ダイアログを閉じたときの処理
+   */
+  closeDialog = () => {
+    this.setState({
+      dialogFlag: false,
+    })
+    location.href='#'
   }
 
   /**
@@ -116,6 +130,7 @@ export default class CreateAccount extends Component {
       emailErrorMessage,
       passwordErrorMessage,
       message,
+      dialogFlag,
     } = this.state
 
     const disabled = !(
@@ -183,6 +198,20 @@ export default class CreateAccount extends Component {
           disabled={disabled}
           primary={true}
         />
+        <Dialog
+          title='create account'
+          actions={[
+            <FlatButton
+              label='OK'
+              onTouchTap={() => this.closeDialog()}
+            />
+          ]}
+          modal={true}
+          open={dialogFlag}
+          onRequestClose={() => this.closeDialog()}
+        >
+          アカウントを作成しました
+        </Dialog>
       </div>
     )
   }

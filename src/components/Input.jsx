@@ -12,45 +12,68 @@ import {
 
 const styles = {
   root: {
-    padding: '60px 10px 10px',
-    width: '100vw',
+    padding: '65px 1vw 1vh',
+    width: '98vw',
   },
 }
 
 export default class Input extends Component {
   state = {
     target: '',
-    useMoney: '',
+    money: '',
+    moneyErrorMessage: '',
     date: new Date(moment()),
     dialogFlag: false,
   }
 
+  /**
+   * 使ったお金の情報を新規追加
+   */
   addUse = () => {
-    const { target, useMoney, date } = this.state
-    const useMoneyObj = {
+    const { target, money, date } = this.state
+    const moneyObj = {
       target: target,
-      use_money: useMoney,
+      use_money: money,
       enter_date: moment(date).format('YYYY-MM-DD'),
       enter_datetime: firebase.database.ServerValue.TIMESTAMP,
     }
-    firebase.database().ref('use/' + firebase.auth().currentUser.uid).push(useMoneyObj).then(() => {
+    firebase.database().ref('use/' + firebase.auth().currentUser.uid).push(moneyObj).then(() => {
       this.setState({
         dialogFlag: true,
         target: '',
-        useMoney: '',
+        money: '',
       })
     })
   }
 
-  change = date => {
+  /**
+   * 日付を変更したときの処理
+   */
+  changeDate = date => {
     this.setState({
       date: date,
     })
   }
 
+  /**
+   * 数字チェック
+   */
+  checkNumber = value => {
+    let message = ''
+    if (value.match(/[^0-9]+/)) {
+      message = '半角数字を入力して下さい'
+    } else {
+      this.setState({
+        money: value,
+      })
+    }
+    return message
+  }
+
   render() {
-    const { target, useMoney, date } = this.state
-    const disabled = useMoney === ''
+    const { target, money, moneyErrorMessage, date } = this.state
+
+    const disabled = money === ''
 
     return (
       <div style={styles.root}>
@@ -59,22 +82,31 @@ export default class Input extends Component {
           floatingLabelText='select date'
           autoOk={true}
           value={date}
-          onChange={(a, date) => this.change(date)}
+          onChange={(a, date) => this.changeDate(date)}
         />
         <TextField
           hintText='target'
           floatingLabelText='target'
-          value={this.state.target}
-          onChange={e => this.setState({target: e.target.value})}
+          value={target}
+          onChange={e => {
+            const value = e.target.value
+            this.setState({target: value,})
+          }}
         />
         <br />
         <TextField
-          hintText='use money'
-          floatingLabelText='use money'
-          value={this.state.useMoney}
-          onChange={e => this.setState({useMoney: e.target.value})}
-        />
-        <br />
+          hintText='money'
+          floatingLabelText='money'
+          value={money}
+          errorText={moneyErrorMessage}
+          onChange={e => {
+            const value = e.target.value
+            this.setState({
+              moneyErrorMessage: this.checkNumber(value),
+            })
+          }}
+        />yen
+        <br /><br />
         <RaisedButton
           label='ADD'
           disabled={disabled}
@@ -89,7 +121,8 @@ export default class Input extends Component {
           }
           modal={false}
           open={this.state.dialogFlag}
-        >使ったお金を入力しました
+        >
+          You have enterd using the money
         </Dialog>
       </div>
     )

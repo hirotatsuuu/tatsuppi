@@ -9,7 +9,6 @@ import {
   Dialog,
   Card,
   CardHeader,
-  CardTitle,
   CardText,
   CardActions,
 } from 'material-ui'
@@ -22,7 +21,7 @@ const styles = {
   error: {
     color: 'red',
   },
-  cord: {
+  card: {
     padding: '1vh 1vw',
     width: '96vw',
   },
@@ -79,8 +78,8 @@ export default class Todo extends Component {
    * 時間のソート処理
    */
   sortDateTime = (array, flag) => {
-    let sort = []
-    sort = array.sort((before, after) => {
+    let sortArray = []
+    sortArray = array.sort((before, after) => {
       if (before.date_time < after.date_time) {
         return (flag ? 1 : -1)
       } else if (before.date_time > after.date_time) {
@@ -89,7 +88,7 @@ export default class Todo extends Component {
         return 0
       }
     })
-    return sort
+    return sortArray
   }
 
   /**
@@ -142,7 +141,9 @@ export default class Todo extends Component {
     const { authUid, deleteId } = this.state
     firebase.database().ref('todos/' + authUid + '/' + deleteId).remove().then(() => {
       // Todo
-    }, error => console.log(error))
+    }, err => {
+      console.log(err)
+    })
     this.setState({
       deleteFlag: false,
     })
@@ -162,12 +163,14 @@ export default class Todo extends Component {
    * Todoの入力フォーム
    */
   TodoForm = () => {
-    const { title, text } = this.state
+    const { title, text, addFlag, editFlag } = this.state
+
     return (
       <div>
+        {addFlag ? <div>Add Todo</div> : editFlag ? <div>Edit Todo</div> : null}
         <TextField
-          hintText='title'
-          floatingLabelText='title'
+          hintText='Title'
+          floatingLabelText='Title'
           value={title}
           onChange={e => {
             const value = e.target.value
@@ -178,8 +181,8 @@ export default class Todo extends Component {
         />
         <br />
         <TextField
-          hintText='text'
-          floatingLabelText='text'
+          hintText='Text'
+          floatingLabelText='Text'
           value={text}
           onChange={e => {
             const value = e.target.value
@@ -188,6 +191,32 @@ export default class Todo extends Component {
             })
           }}
         />
+        <br /><br />
+        {addFlag ? <div>
+          <FlatButton
+            label='RETURN'
+            secondary={true}
+            onTouchTap={() => this.setState({ addFlag: false, })}
+          />
+          <span> </span>
+          <RaisedButton
+            label='OK'
+            primary={true}
+            onTouchTap={() => this.addTodo()}
+          />
+        </div> : editFlag ? <div>
+          <FlatButton
+            label='RETURN'
+            secondary={true}
+            onTouchTap={() => this.setState({ editFlag: false, })}
+          />
+          <span> </span>
+          <RaisedButton
+            label='OK'
+            primary={true}
+            onTouchTap={() => this.editTodo()}
+          />
+        </div> : null}
       </div>
     )
   }
@@ -200,13 +229,13 @@ export default class Todo extends Component {
     return (
       <div>
         <FlatButton
-          label={sortFlag ? '昇順' : '降順'}
+          label={sortFlag ? 'ASCENDING' : 'DESCENDING'}
           primary={sortFlag}
           secondary={!sortFlag}
           onTouchTap={() => {
             this.setState({
               todosArray: this.sortDateTime(todosArray, !sortFlag),
-              sortFlag: !sortFlag
+              sortFlag: !sortFlag,
             })
           }}
         />
@@ -222,114 +251,78 @@ export default class Todo extends Component {
       deleteFlag,
     } = this.state
 
-    const addActions = [
-      <FlatButton
-        label='cancel'
-        onTouchTap={() => this.setState({ addFlag: false, })}
-      />,
-      <FlatButton
-        label='OK'
-        onTouchTap={() => this.addTodo()}
-      />
-    ]
-
-    const editActions = [
-      <FlatButton
-        label='cancel'
-        onTouchTap={() => this.setState({ editFlag: false, })}
-      />,
-      <FlatButton
-        label='OK'
-        onTouchTap={() => this.editTodo()}
-      />
-    ]
-    
     const deleteActions = [
       <FlatButton
-        label='cancel'
+        label='CANCEL'
+        secondary={true}
         onTouchTap={() => this.setState({ deleteFlag: false, })}
       />,
       <FlatButton
         label='OK'
+        primary={true}
         onTouchTap={() => this.deleteTodo()}
       />
     ]
 
     return (
       <div style={styles.root}>
-        <RaisedButton
-          label='ADD TODO'
-          onTouchTap={() => {
-            this.clearTodoForm(),
-            this.setState({ addFlag: true, })
-          }}
-        />
-        <this.SortButton />
-        {todosArray !== undefined && todosArray.length !== 0 ? todosArray.map((row, index) => {
-          return (
-            <div key={index} style={styles.cord}>
-              <Card>
-                <CardHeader
-                  title={row.title}
-                  subtitle={row.date_time}
-                  actAsExpander={true}
-                  showExpandableButton={true}
-                />
+        {!addFlag && !editFlag ? <div>
+          <RaisedButton
+            label='ADD TODO'
+            onTouchTap={() => {
+              this.clearTodoForm(),
+              this.setState({ addFlag: true, })
+            }}
+          />
+          <this.SortButton />
+          {todosArray !== undefined && todosArray.length !== 0 ? todosArray.map((row, index) => {
+            return (
+              <div key={index} style={styles.card}>
+                <Card>
+                  <CardHeader
+                    title={row.title}
+                    subtitle={row.date_time}
+                    actAsExpander={true}
+                    showExpandableButton={true}
+                  />
                   <CardText expandable={true}>
                     {row.text}
-                </CardText>
-                <CardActions expandable={true}>
-                  <FlatButton
-                    label='EDIT'
-                    onTouchTap={() => {
-                      this.setState({
-                        editFlag: true,
-                        editId: row.id,
-                        title: row.title,
-                        text: row.text,
-                      })
-                    }}
-                  />
-                  <FlatButton
-                    label='DELETE'
-                    onTouchTap={() => {
-                      this.setState({
-                        deleteFlag: true,
-                        deleteId: row.id,
-                      })
-                    }}
-                  />
-                </CardActions>
-              </Card>
-            </div>
-          )
-        }) : <span><br />TODOはありません</span>}
+                  </CardText>
+                  <CardActions expandable={true}>
+                    <FlatButton
+                      label='EDIT'
+                      onTouchTap={() => {
+                        this.setState({
+                          editFlag: true,
+                          editId: row.id,
+                          title: row.title,
+                          text: row.text,
+                        })
+                      }}
+                    />
+                    <FlatButton
+                      label='DELETE'
+                      onTouchTap={() => {
+                        this.setState({
+                          deleteFlag: true,
+                          deleteId: row.id,
+                        })
+                      }}
+                    />
+                  </CardActions>
+                </Card>
+              </div>
+            )
+          }) : <span><br />There is no Todo List</span>}
+        </div> : <div><this.TodoForm /></div>}
         <Dialog
-          title='add'
-          actions={addActions}
-          modal={true}
-          open={addFlag}
-          onRequestClose={() => this.setState({addFlag: false,})}
-        >
-          <this.TodoForm />
-        </Dialog>
-        <Dialog
-          title='edit'
-          actions={editActions}
-          modal={true}
-          open={editFlag}
-          onRequestClose={() => this.setState({editFlag: false,})}
-        >
-          <this.TodoForm />
-        </Dialog>
-        <Dialog
-          title='delete'
+          title='DELETE'
           actions={deleteActions}
           modal={true}
           open={deleteFlag}
           onRequestClose={() => this.setState({deleteFlag: false,})}
         >
-          削除してよろしいですか？
+          Can I delete it ?
         </Dialog>
       </div>
     )

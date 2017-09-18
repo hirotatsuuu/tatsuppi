@@ -10,8 +10,8 @@ import {
 
 const styles = {
   root: {
-    padding: '10px',
-    width: '100%',
+    padding: '5vh 5vw',
+    width: '90vw',
   },
   error: {
     color: 'red',
@@ -23,7 +23,7 @@ export default class CreateAccount extends Component {
     name: '',
     email: '',
     password: '',
-    dialogFlag
+    dialogFlag: false,
   }
 
   /**
@@ -63,23 +63,24 @@ export default class CreateAccount extends Component {
    * エラーコードチェック
    */
   checkErrorCode = code => {
+    let message = ''
     switch (code) {
       case 'auth/email-already-in-use':
-        return '入力されたメールアドレスは既に使われています'
+        message = '入力されたメールアドレスは既に使われています'
         break
       case 'auth/invalid-email':
-        return '入力されたメールアドレスは使用できません'
+        message = '入力されたメールアドレスは使用できません'
         break
       case 'auth/operation-not-allowed':
-        return '入力されたメールアドレスは有効ではありません'
+        message = '入力されたメールアドレスは有効ではありません'
         break
       case 'auth/weak-password':
-        return 'パスワードが弱すぎます'
+        message = 'パスワードが弱すぎます'
         break
       default:
-        return ''
         break
     }
+    return message
   }
 
   /**
@@ -89,8 +90,6 @@ export default class CreateAccount extends Component {
     let message = ''
     if (value === '') {
       message = '名前が未入力です'
-    } else {
-      message = ''
     }
     return message
   }
@@ -210,7 +209,7 @@ export default class CreateAccount extends Component {
           open={dialogFlag}
           onRequestClose={() => this.closeDialog()}
         >
-          アカウントを作成しました
+          Created Account
         </Dialog>
       </div>
     )

@@ -18,8 +18,8 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete'
 
 const styles = {
   root: {
-    padding: '70px 10px 10px',
-    width: '100%',
+    padding: '65px 1vw 1vh',
+    width: '98vw',
   },
 }
 
@@ -27,7 +27,7 @@ export default class Home extends Component {
   state = {
     date: new Date(moment()),
     useArray: [],
-    removeFlag: false,
+    deleteFlag: false,
   }
 
   componentDidMount = () => {
@@ -47,6 +47,9 @@ export default class Home extends Component {
     this.useRef.off('value')
   }
 
+  /**
+   * 使ったお金一覧の取得
+   */
   getUse = (date, use) => {
     let [useVal, useArray] = [use.val(), []]
     Object.keys(useVal).forEach(snapshot => {
@@ -61,6 +64,9 @@ export default class Home extends Component {
     })
   }
 
+  /**
+   * 一日の使ったお金の合計の取得
+   */
   getTotalMoneyByDate = (date, use) => {
     let totalMoneyByDate = 0
     use.forEach(snapshot => {
@@ -73,6 +79,9 @@ export default class Home extends Component {
     })
   }
 
+  /**
+   * 一月の使ったお金の合計の取得
+   */
   getTotalMoneyByMonth = (date, use) => {
     let totalMoneyByMonth = 0
     use.forEach(snapshot => {
@@ -85,19 +94,27 @@ export default class Home extends Component {
     })
   }
 
-  change = date => {
+  /**
+   * 日付を変更したときの処理
+   */
+  changeDate = date => {
     this.setState({
       date: date,
     })
-    this.getUse(moment(date).format('YYYY-MM-DD'), this.state.use)
-    this.getTotalMoneyByDate(moment(date).format('YYYY-MM-DD'), this.state.use)
-    this.getTotalMoneyByMonth(moment(date).format('YYYY-MM-DD'), this.state.use)
+    const _date = moment(date).format('YYYY-MM-DD')
+    const { use } = this.state
+    this.getUse(_date, use)
+    this.getTotalMoneyByDate(_date, use)
+    this.getTotalMoneyByMonth(_date, use)
   }
 
-  removeUse = () => {
-    firebase.database().ref('use/' + firebase.auth().currentUser.uid + '/' + this.state.removeId).remove().then(() => {
+  /**
+   * 使ったお金の削除
+   */
+  deleteUse = () => {
+    firebase.database().ref('use/' + firebase.auth().currentUser.uid + '/' + this.state.deleteId).remove().then(() => {
       this.setState({
-        removeFlag: false,
+        deleteFlag: false,
       })
     }, err => {
       console.log(err)
@@ -105,23 +122,32 @@ export default class Home extends Component {
   }
 
   render() {
-    const { useArray, date } = this.state
+    const {
+      useArray,
+      date,
+      totalMoneyByMonth,
+      totalMoneyByDate,
+      deleteFlag,
+    } = this.state
+
     const [todayMonth, setMonth] = [
       moment().format('YYYYMM'),
       moment(date).format('YYYYMM')
     ]
+
     const [todayDate, setDate] = [
       moment().format('YYYYMMDD'),
       moment(date).format('YYYYMMDD')
     ]
-    const removeActions = [
+
+    const deleteActions = [
       <FlatButton
         label='cancel'
-        onTouchTap={() => this.setState({removeFlag: false})}
+        onTouchTap={() => this.setState({deleteFlag: false})}
       />,
       <FlatButton
         label='OK'
-        onTouchTap={() => this.removeUse()}
+        onTouchTap={() => this.deleteUse()}
       />
     ]
 
@@ -132,13 +158,13 @@ export default class Home extends Component {
           floatingLabelText='import date'
           autoOk={true}
           value={date}
-          onChange={(a, date) => this.change(date)}
+          onChange={(a, date) => this.changeDate(date)}
         />
         <div>
-          {todayMonth === setMonth ? '今月' : moment(date).format('M月')}の合計金額: {this.state.totalMoneyByMonth}円 / 月
+          {todayMonth === setMonth ? '今月' : moment(date).format('M月')}の合計金額: {totalMoneyByMonth}円 / 月
         </div>
         <div>
-          {todayDate === setDate ? '本日' : moment(date).format('D日')}の合計金額: {this.state.totalMoneyByDate}円 / 日
+          {todayDate === setDate ? '本日' : moment(date).format('D日')}の合計金額: {totalMoneyByDate}円 / 日
         </div>
         <Table>
           <TableHeader
@@ -148,7 +174,7 @@ export default class Home extends Component {
             <TableRow>
               <TableHeaderColumn>target</TableHeaderColumn>
               <TableHeaderColumn>money</TableHeaderColumn>
-              <TableHeaderColumn>remove</TableHeaderColumn>
+              <TableHeaderColumn>delete</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody
@@ -162,7 +188,7 @@ export default class Home extends Component {
                   <TableRowColumn>{row.use_money + '円'}</TableRowColumn>
                   <TableRowColumn>
                     <IconButton
-                      onTouchTap={() => this.setState({removeFlag: true, removeId: row.id})}
+                      onTouchTap={() => this.setState({deleteFlag: true, deleteId: row.id})}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -173,13 +199,13 @@ export default class Home extends Component {
           </TableBody>
         </Table>
         <Dialog
-          title='remove'
-          actions={removeActions}
+          title='DELETE'
+          actions={deleteActions}
           modal={true}
-          open={this.state.removeFlag}
-          onRequestClose={() => this.setState({removeFlag: false})}
+          open={deleteFlag}
+          onRequestClose={() => this.setState({deleteFlag: false})}
         >
-          削除してよろしいですか？
+          Are you sure you want to delete ?
         </Dialog>
       </div>
     )

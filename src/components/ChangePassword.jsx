@@ -10,18 +10,19 @@ import {
 
 const styles = {
   root: {
-    padding: '70px 10px 10px',
-    width: '100%',
+    padding: '65px 1vw 1vh',
+    width: '98vw',
   },
   error: {
     color: 'red',
-  }
+  },
 }
 
 export default class ChangePassword extends Component {
   state = {
     password: '',
     again: '',
+    message: '',
     dialogFlag: false,
   }
 
@@ -150,7 +151,7 @@ export default class ChangePassword extends Component {
           disabled={disabled}
         />
         <Dialog
-          title='update password'
+          title='UPDATE'
           actions={[
             <FlatButton
               label='OK'
@@ -161,7 +162,7 @@ export default class ChangePassword extends Component {
           open={dialogFlag}
           onRequestClose={() => this.closeDialog()}
         >
-          パスワードを更新しました
+          update password
         </Dialog>
       </div>
     )

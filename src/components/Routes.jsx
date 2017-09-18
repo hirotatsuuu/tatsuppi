@@ -7,6 +7,7 @@ import Todo from './Todo'
 import ForgotPassword from './ForgotPassword'
 import CreateAccount from './CreateAccount'
 import ChangePassword from './ChangePassword'
+import ChangeAccount from './ChangeAccount'
 
 const styles = {
   root: {
@@ -37,6 +38,7 @@ export default class Routes extends Component {
             <Route path='/input' component={Input} />
             <Route path='/todo' component={Todo} />
             <Route path='/changepassword' component={ChangePassword} />
+            <Route path='/changeaccount' component={ChangeAccount} />
             <Route component={NoMatch} />
           </Switch> :
           <Switch>

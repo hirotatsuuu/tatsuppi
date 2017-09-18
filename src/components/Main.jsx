@@ -21,6 +21,7 @@ const styles = {
 export default class Main extends Component {
   state = {
     loginUser: null,
+    loginUserName: '',
     menuFlag: false,
     logoutDialogFlag: false,
   }
@@ -38,13 +39,22 @@ export default class Main extends Component {
   componentDidMount = () => {
     firebase.database().ref('users/' + this.state.loginUser.uid).on('value', snapshot => {
       this.setState({
-        loginUserName: snapshot.val().name,
+        loginUserName: this.getAccountName(snapshot),
       })
     })
   }
 
   componentWillUnmount = () => {
     firebase.database().ref('users/' + this.state.loginUser.uid).off('value')
+  }
+
+  /**
+   * ログイン中のアカウントの名前の取得
+   */
+  getAccountName = loginUser => {
+    let name = ''
+    name = loginUser.val().name
+    return name
   }
 
   /**
@@ -80,6 +90,9 @@ export default class Main extends Component {
       case 'changepassword':
         title = 'Change Password'
         break
+      case 'changeaccount':
+        title = 'Change Account'
+        break
       default:
         title = 'default'
         break
@@ -103,7 +116,12 @@ export default class Main extends Component {
       />
     ]
 
-    const { title, menuFlag, logoutDialogFlag } = this.state
+    const {
+      title,
+      menuFlag,
+      logoutDialogFlag,
+      loginUserName,
+    } = this.state
 
     return (
       <div>
@@ -112,6 +130,11 @@ export default class Main extends Component {
           style={styles.root}
           title={title}
           iconClassNameRight='muidocs-icon-navigation-expand-more'
+          iconElementRight={
+            <FlatButton
+              label={loginUserName}
+              onTouchTap={() => location.href='#changeaccount'}
+            />}
           onLeftIconButtonTouchTap={() => {
             this.setState({
               menuFlag: !menuFlag,

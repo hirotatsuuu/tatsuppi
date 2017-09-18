@@ -166,38 +166,39 @@ export default class Home extends Component {
         <div>
           {todayDate === setDate ? '本日' : moment(date).format('D日')}の合計金額: {totalMoneyByDate}円 / 日
         </div>
-        <Table>
-          <TableHeader
-            displaySelectAll={false}
-            adjustForCheckbox={false}
-          >
-            <TableRow>
-              <TableHeaderColumn>target</TableHeaderColumn>
-              <TableHeaderColumn>money</TableHeaderColumn>
-              <TableHeaderColumn>delete</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody
-            showRowHover={true}
-            displayRowCheckbox={false}
-          >
-            {useArray.map((row, index) => {
-              return (
-                <TableRow key={index}>
-                  <TableRowColumn>{row.target}</TableRowColumn>
-                  <TableRowColumn>{row.use_money + '円'}</TableRowColumn>
-                  <TableRowColumn>
-                    <IconButton
-                      onTouchTap={() => this.setState({deleteFlag: true, deleteId: row.id})}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableRowColumn>
-                </TableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
+        {totalMoneyByDate === 0 ? <span><br />{todayDate === setDate ? '本日' : moment(date).format('D日')}はまだお金を使っていません</span> :
+          <Table>
+            <TableHeader
+              displaySelectAll={false}
+              adjustForCheckbox={false}
+            >
+              <TableRow>
+                <TableHeaderColumn>target</TableHeaderColumn>
+                <TableHeaderColumn>money</TableHeaderColumn>
+                <TableHeaderColumn>delete</TableHeaderColumn>
+              </TableRow>
+            </TableHeader>
+            <TableBody
+              showRowHover={true}
+              displayRowCheckbox={false}
+            >
+              {useArray.map((row, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableRowColumn>{row.target}</TableRowColumn>
+                    <TableRowColumn>{row.use_money + '円'}</TableRowColumn>
+                    <TableRowColumn>
+                      <IconButton
+                        onTouchTap={() => this.setState({ deleteFlag: true, deleteId: row.id })}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableRowColumn>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>}
         <Dialog
           title='DELETE'
           actions={deleteActions}

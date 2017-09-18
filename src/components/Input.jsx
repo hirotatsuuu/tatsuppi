@@ -8,6 +8,8 @@ import {
   Dialog,
   FlatButton,
   DatePicker,
+  SelectField,
+  MenuItem,
 } from 'material-ui'
 
 const styles = {
@@ -19,10 +21,14 @@ const styles = {
 
 export default class Input extends Component {
   state = {
+    date: new Date(moment()),
     target: '',
     money: '',
     moneyErrorMessage: '',
-    date: new Date(moment()),
+    tax: 1,
+    selectTaxValue: 1,
+    pay: '',
+    selectPayValue: 1,
     dialogFlag: false,
   }
 
@@ -30,19 +36,20 @@ export default class Input extends Component {
    * 使ったお金の情報を新規追加
    */
   addUse = () => {
-    const { target, money, date } = this.state
+    const { target, money, date, tax, pay } = this.state
     const moneyObj = {
       target: target,
-      use_money: money,
+      use_money: money * tax,
       enter_date: moment(date).format('YYYY-MM-DD'),
+      howto_pay: pay,
       enter_datetime: firebase.database.ServerValue.TIMESTAMP,
     }
     firebase.database().ref('use/' + firebase.auth().currentUser.uid).push(moneyObj).then(() => {
       this.setState({
         dialogFlag: true,
-        target: '',
-        money: '',
       })
+    }, err => {
+      console.log(err)
     })
   }
 
@@ -63,6 +70,7 @@ export default class Input extends Component {
     if (value.match(/[^0-9]+/)) {
       message = '半角数字を入力して下さい'
     } else {
+      const { tax } = this.state
       this.setState({
         money: value,
       })
@@ -70,8 +78,59 @@ export default class Input extends Component {
     return message
   }
 
+  /**
+   * 税の選択の処理
+   */
+  changeSelectTax = selectTaxValue => {
+    this.setState({
+      selectTaxValue: selectTaxValue,
+    })
+    let tax = 1
+    switch (selectTaxValue) {
+      case 1:
+        tax = 1
+        break
+      case 2:
+        tax = 1.08
+        break
+      default:
+        break
+    }
+    return tax
+  }
+
+  /**
+   * 支払い方法の選択の処理
+   */
+  changeSelectPay = selectPayValue => {
+    this.setState({
+      selectPayValue: selectPayValue,
+    })
+    let pay = ''
+    switch (selectPayValue) {
+      case 1:
+        pay = 'クレジットカード'
+        break
+      case 2:
+        pay = '現金'
+        break
+      default:
+        break
+    }
+    return pay
+  }
+
   render() {
-    const { target, money, moneyErrorMessage, date } = this.state
+    const {
+      date,
+      target,
+      money,
+      moneyErrorMessage,
+      tax,
+      selectTaxValue,
+      selectPayValue,
+      dialogFlag,
+    } = this.state
 
     const disabled = money === ''
 
@@ -105,8 +164,45 @@ export default class Input extends Component {
               moneyErrorMessage: this.checkNumber(value),
             })
           }}
-        />yen
+        />
+        {moneyErrorMessage === '' ? <span>{tax !== 1 ? '*' + tax : null} yen</span> : null}
         <br /><br />
+        <SelectField
+          value={selectTaxValue}
+          onChange={(e, i, selectTaxValue) =>
+            this.setState({
+              tax: this.changeSelectTax(selectTaxValue),
+            })
+          }
+        >
+          <MenuItem
+            value={1}
+            primaryText='税込み'
+          />
+          <MenuItem
+            value={2}
+            primaryText='税抜き'
+          />
+        </SelectField>
+        <br /><br />
+        <SelectField
+          value={selectPayValue}
+          onChange={(e, i, selectPayValue) =>
+            this.setState({
+              pay: this.changeSelectPay(selectPayValue),
+            })
+          }
+        >
+          <MenuItem
+            value={1}
+            primaryText='クレジットカード'
+          />
+          <MenuItem
+            value={2}
+            primaryText='現金'
+          />
+        </SelectField>
+        <br />
         <RaisedButton
           label='ADD'
           disabled={disabled}
@@ -120,9 +216,9 @@ export default class Input extends Component {
             />
           }
           modal={false}
-          open={this.state.dialogFlag}
+          open={dialogFlag}
         >
-          You have enterd using the money
+          You have enterd using {money * tax} yen
         </Dialog>
       </div>
     )

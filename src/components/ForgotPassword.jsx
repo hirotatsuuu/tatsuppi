@@ -9,8 +9,8 @@ import {
 
 const styles = {
   root: {
-    padding: '10px',
-    width: '100%',
+    padding: '0 3vw',
+    width: '94vw',
   },
   error: {
     color: 'red',
@@ -52,7 +52,7 @@ export default class ForgotPassword extends Component {
   render() {
     return (
       <div style={styles.root}>
-        <div>ForgotPassword(未実装)</div>
+        <div>FORGOT PASSWORD (未実装)</div>
         <TextField
           hintText='email'
           floatingLabelText='email'

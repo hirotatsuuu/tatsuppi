@@ -82,16 +82,16 @@ export default class Main extends Component {
         title = 'HOME'
         break
       case 'input':
-        title = 'Input'
+        title = 'INPUT'
         break
       case 'todo':
-        title = 'Todo'
+        title = 'TODO'
         break
       case 'changepassword':
-        title = 'Change Password'
+        title = 'CHANGE PASSWORD'
         break
       case 'changeaccount':
-        title = 'Change Account'
+        title = 'CHANGE ACCOUNT'
         break
       default:
         title = 'default'
@@ -164,7 +164,7 @@ export default class Main extends Component {
               }),
               location.href = '#todo'
             }}
-          >Todo</MenuItem>
+          >TODO</MenuItem>
           <MenuItem
             onTouchTap={() => (this.setState({menuFlag: false}), location.href='#changepassword')}
           >CHANGE PASSWORD</MenuItem>

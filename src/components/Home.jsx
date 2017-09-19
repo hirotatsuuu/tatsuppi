@@ -1,12 +1,8 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
 import moment from 'moment'
-
 import {
   DatePicker,
-  Dialog,
-  FlatButton,
-  IconButton,
   Table,
   TableBody,
   TableHeader,
@@ -14,13 +10,16 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui'
-import DeleteIcon from 'material-ui/svg-icons/action/delete'
+import Detail from './Detail'
 
 const styles = {
   root: {
     padding: '65px 1vw 1vh',
     width: '98vw',
   },
+  text: {
+    textAlign: 'center',
+  }
 }
 
 export default class Home extends Component {
@@ -28,6 +27,7 @@ export default class Home extends Component {
     date: new Date(moment()),
     useArray: [],
     deleteFlag: false,
+    detailFlag: false,
   }
 
   componentDidMount = () => {
@@ -109,15 +109,27 @@ export default class Home extends Component {
   }
 
   /**
-   * 使ったお金の削除
+   * セルのタッチによる処理
    */
-  deleteUse = () => {
-    firebase.database().ref('use/' + firebase.auth().currentUser.uid + '/' + this.state.deleteId).remove().then(() => {
-      this.setState({
-        deleteFlag: false,
-      })
-    }, err => {
-      console.log(err)
+  cellTouch = id => {
+    const { detaiFlag } = this.state
+    const props = {
+      changeDetailFlag: this.changeDetailFlag,
+      id: id,
+    }
+    this.setState({
+      detaiFlag: !detaiFlag,
+      props: props,
+    })
+  }
+
+  /**
+   * コンポーネントを切り替える処理
+   */
+  changeDetailFlag = () => {
+    const { detaiFlag } = this.state
+    this.setState({
+      detaiFlag: !detaiFlag
     })
   }
 
@@ -128,6 +140,8 @@ export default class Home extends Component {
       totalMoneyByMonth,
       totalMoneyByDate,
       deleteFlag,
+      detaiFlag,
+      props,
     } = this.state
 
     const [todayMonth, setMonth] = [
@@ -140,74 +154,50 @@ export default class Home extends Component {
       moment(date).format('YYYYMMDD')
     ]
 
-    const deleteActions = [
-      <FlatButton
-        label='cancel'
-        onTouchTap={() => this.setState({deleteFlag: false})}
-      />,
-      <FlatButton
-        label='OK'
-        onTouchTap={() => this.deleteUse()}
-      />
-    ]
-
     return (
       <div style={styles.root}>
-        <DatePicker
-          hintText='import date'
-          floatingLabelText='import date'
-          autoOk={true}
-          value={date}
-          onChange={(a, date) => this.changeDate(date)}
-        />
-        <div>
-          {todayMonth === setMonth ? '今月' : moment(date).format('M月')}の合計金額: {totalMoneyByMonth}円 / 月
-        </div>
-        <div>
-          {todayDate === setDate ? '本日' : moment(date).format('D日')}の合計金額: {totalMoneyByDate}円 / 日
-        </div>
-        {totalMoneyByDate === 0 ? <span><br />{todayDate === setDate ? '本日' : moment(date).format('D日')}はまだお金を使っていません</span> :
-          <Table>
-            <TableHeader
-              displaySelectAll={false}
-              adjustForCheckbox={false}
-            >
-              <TableRow>
-                <TableHeaderColumn>target</TableHeaderColumn>
-                <TableHeaderColumn>money</TableHeaderColumn>
-                <TableHeaderColumn>delete</TableHeaderColumn>
-              </TableRow>
-            </TableHeader>
-            <TableBody
-              showRowHover={true}
-              displayRowCheckbox={false}
-            >
-              {useArray.map((row, index) => {
-                return (
-                  <TableRow key={index}>
-                    <TableRowColumn>{row.target}</TableRowColumn>
-                    <TableRowColumn>{row.use_money + '円'}</TableRowColumn>
-                    <TableRowColumn>
-                      <IconButton
-                        onTouchTap={() => this.setState({ deleteFlag: true, deleteId: row.id })}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableRowColumn>
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>}
-        <Dialog
-          title='DELETE'
-          actions={deleteActions}
-          modal={true}
-          open={deleteFlag}
-          onRequestClose={() => this.setState({deleteFlag: false})}
-        >
-          Are you sure you want to delete ?
-        </Dialog>
+        {!detaiFlag ? <div>
+          <DatePicker
+            hintText='import date'
+            floatingLabelText='import date'
+            autoOk={true}
+            value={date}
+            onChange={(a, date) => this.changeDate(date)}
+          />
+          <div>
+            {todayMonth === setMonth ? '今月' : moment(date).format('M月')}の合計金額: {totalMoneyByMonth}円 / 月
+          </div>
+          <div>
+            {todayDate === setDate ? '本日' : moment(date).format('D日')}の合計金額: {totalMoneyByDate}円 / 日
+          </div>
+          {totalMoneyByDate === 0 ? <span><br />{todayDate === setDate ? '本日' : moment(date).format('D日')}はまだお金を使っていません</span> :
+            <Table>
+              <TableHeader
+                displaySelectAll={false}
+                adjustForCheckbox={false}
+              >
+                <TableRow>
+                  <TableHeaderColumn><span style={styles.text}>target</span></TableHeaderColumn>
+                  <TableHeaderColumn><span style={styles.text}>money</span></TableHeaderColumn>
+                </TableRow>
+              </TableHeader>
+              <TableBody
+                showRowHover={true}
+                displayRowCheckbox={false}
+              >
+                {useArray.map((row, index) => {
+                  return (
+                    <TableRow key={index}
+                      onTouchTap={() => this.cellTouch(row.id)}
+                    >
+                      <TableRowColumn><span style={styles.text}>{row.target}</span></TableRowColumn>
+                      <TableRowColumn><span style={styles.text}>{row.use_money + ' 円'}</span></TableRowColumn>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>}
+        </div> : <Detail props={props} />}
       </div>
     )
   }

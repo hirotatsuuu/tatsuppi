@@ -13,12 +13,15 @@ const styles = {
     padding: '65px 1vw 1vh',
     width: '98vw',
   },
+  error: {
+    color: 'red',
+  },
 }
 
-export default class ChangeAccount extends Component {
+export default class UpdateAccount extends Component {
   componentWillMount = () => {
     this.setState({
-      authUid: firebase.auth().currentUser.uid,
+      auth: firebase.auth().currentUser,
       name: '',
       emai: '',
       nameErrorMessage: '',
@@ -29,24 +32,21 @@ export default class ChangeAccount extends Component {
   }
 
   componentDidMount = () => {
-    const { authUid } = this.state
-    this.usersRef = firebase.database().ref('users/' + authUid)
-    this.usersRef.on('value', snapshots => {
-      this.setState({
-        user: snapshots.val(),
-      })
+    const { auth } = this.state
+    this.userRef = firebase.database().ref('users/' + auth.uid)
+    this.userRef.on('value', snapshots => {
+      this.setAccount(snapshots.val())
     })
   }
 
   componentWillUnmount = () => {
-    this.usersRef.off('value')
+    this.userRef.off('value')
   }
 
   /**
    * アカウント情報の挿入
    */
-  setAccount = () => {
-    const { user } = this.state
+  setAccount = user => {
     this.setState({
       name: user.name,
       email: user.email,
@@ -81,9 +81,46 @@ export default class ChangeAccount extends Component {
    * アカウント情報の更新
    */
   updateUser = () => {
-    this.setState({
-      dialogFlag: true,
+    const { name, email, auth } = this.state
+    auth.updateEmail(email).then(() => {
+      const userObj = {
+        name: name,
+        email: email,
+      }
+      this.userRef.update(userObj).then(() => {
+        this.setState({
+          dialogFlag: true,
+        })
+      }, err => {
+        console.log(err)
+      })
+    }, err => {
+      console.log(err)
+      this.setState({
+        message: this.checkEmailErrorCode(err.code),
+      })
     })
+  }
+
+  /**
+   * エラーコードチェック
+   */
+  checkEmailErrorCode = code => {
+    let message = ''
+    switch (code) {
+      case 'auth/invalid-email':
+        message = '入力されたメールアドレスは無効です'
+        break
+      case 'auth/email-already-in-use':
+        message = '入力されたメールアドレスは既に使われています'
+        break
+      case 'auth/requires-recent-login':
+        message = 'ログインしなおしてください'
+        break
+      default:
+        break
+    }
+    return message
   }
 
   render() {
@@ -134,16 +171,15 @@ export default class ChangeAccount extends Component {
           label='OK'
           onTouchTap={() => this.updateUser()}
           disabled={disabled}
-          primary={true}
         />
         <Dialog
           title='update account'
           actions={[
             <FlatButton
               label='OK'
-              onTouchTap={() => this.setState({
+              onTouchTap={() => (this.setState({
                 dialogFlag: false,
-              })}
+              }), location.href='#home')}
             />
           ]}
           modal={true}

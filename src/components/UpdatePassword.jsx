@@ -18,7 +18,7 @@ const styles = {
   },
 }
 
-export default class ChangePassword extends Component {
+export default class UpdatePassword extends Component {
   state = {
     password: '',
     again: '',

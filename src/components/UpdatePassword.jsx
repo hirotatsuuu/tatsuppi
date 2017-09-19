@@ -162,7 +162,7 @@ export default class UpdatePassword extends Component {
           open={dialogFlag}
           onRequestClose={() => this.closeDialog()}
         >
-          update password
+          We updated you're password !!
         </Dialog>
       </div>
     )

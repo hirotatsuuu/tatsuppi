@@ -188,7 +188,7 @@ export default class UpdateAccount extends Component {
             dialogFlag: false,
           })}
         >
-          Updated Account
+          We updated account infomation !!
         </Dialog>
       </div>
     )

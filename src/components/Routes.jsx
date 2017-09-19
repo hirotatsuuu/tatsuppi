@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Route, Switch, Link } from 'react-router-dom'
 
 import Home from './Home'
-import Detail from './Detail'
 import Input from './Input'
 import Todo from './Todo'
 import ForgotPassword from './ForgotPassword'
@@ -36,12 +35,11 @@ export default class Routes extends Component {
         {loginFlag ?
           <Switch>
             <Route path='/home' component={Home} />
-            <Route path='/detail/:id' component={Detail} />
             <Route path='/input' component={Input} />
             <Route path='/todo' component={Todo} />
             <Route path='/updatepassword' component={UpdatePassword} />
             <Route path='/updateaccount' component={UpdateAccount} />
-            <Route component={NoMatch} />
+            <Route render={() => (<Link to='#' />)} />
           </Switch> :
           <Switch>
             <Route path='/forgotpassword' component={ForgotPassword} />

@@ -199,7 +199,7 @@ export default class CreateAccount extends Component {
           primary={true}
         />
         <Dialog
-          title='create account'
+          title='CREATE ACCOUNT'
           actions={[
             <FlatButton
               label='OK'
@@ -210,7 +210,7 @@ export default class CreateAccount extends Component {
           open={dialogFlag}
           onRequestClose={() => this.closeDialog()}
         >
-          Created Account
+          We created account !!
         </Dialog>
       </div>
     )

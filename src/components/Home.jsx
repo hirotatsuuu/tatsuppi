@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
 import moment from 'moment'
+
 import {
   DatePicker,
   Table,
@@ -10,6 +11,7 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui'
+
 import Detail from './Detail'
 
 const styles = {
@@ -19,14 +21,13 @@ const styles = {
   },
   text: {
     textAlign: 'center',
-  }
+  },
 }
 
 export default class Home extends Component {
   state = {
     date: new Date(moment()),
     useArray: [],
-    deleteFlag: false,
     detailFlag: false,
   }
 
@@ -129,7 +130,7 @@ export default class Home extends Component {
   changeDetailFlag = () => {
     const { detaiFlag } = this.state
     this.setState({
-      detaiFlag: !detaiFlag
+      detaiFlag: !detaiFlag,
     })
   }
 
@@ -139,7 +140,6 @@ export default class Home extends Component {
       date,
       totalMoneyByMonth,
       totalMoneyByDate,
-      deleteFlag,
       detaiFlag,
       props,
     } = this.state

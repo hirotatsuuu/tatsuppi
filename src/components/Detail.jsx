@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
+
 import {
   FlatButton,
   Card,
@@ -12,12 +13,10 @@ import {
 export default class Detail extends Component {
   state = {
     deleteFlag: false,
-
   }
 
   constructor(props) {
     super(props)
-    console.log(props)
   }
 
   componentWillMount = () => {
@@ -31,7 +30,6 @@ export default class Detail extends Component {
     const { auth, id } = this.state
     this.useRef = firebase.database().ref('use/' + auth.uid + '/' + id)
     this.useRef.on('value', snapshot => {
-      console.log(snapshot.val())
       this.setState({
         use: snapshot.val(),
       })
@@ -91,7 +89,8 @@ export default class Detail extends Component {
             />
             <CardText>
               you use money {use.use_money} yen<br />
-              you use how to pay {use.howto_pay}
+              you use how to pay {use.howto_pay}<br />
+              use type is {use.use_type}
             </CardText>
             <CardActions>
               <FlatButton

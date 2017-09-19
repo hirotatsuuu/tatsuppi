@@ -178,7 +178,7 @@ export default class Main extends Component {
           modal={false}
           open={logoutDialogFlag}
           actions={logoutActions}
-        >ログアウトしてよろしいですか？
+        >Are you sure you want to logout?
         </Dialog>
       </div>
     )

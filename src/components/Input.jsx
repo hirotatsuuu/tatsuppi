@@ -21,6 +21,7 @@ const styles = {
 
 export default class Input extends Component {
   state = {
+    dialogFlag: false,
     date: new Date(moment()),
     target: '',
     money: '',
@@ -29,22 +30,30 @@ export default class Input extends Component {
     selectTaxValue: 1,
     pay: '',
     selectPayValue: 1,
-    dialogFlag: false,
+    type: '',
+    selectTypeValue: 1,
+  }
+
+  componentWillMount = () => {
+    this.setState({
+      auth: firebase.auth().currentUser,
+    })
   }
 
   /**
    * 使ったお金の情報を新規追加
    */
   addUse = () => {
-    const { target, money, date, tax, pay } = this.state
+    const { auth, target, money, date, tax, pay, type, } = this.state
     const moneyObj = {
       target: target,
       use_money: money * tax,
       enter_date: moment(date).format('YYYY-MM-DD'),
       howto_pay: pay,
+      use_type: type,
       enter_datetime: firebase.database.ServerValue.TIMESTAMP,
     }
-    firebase.database().ref('use/' + firebase.auth().currentUser.uid).push(moneyObj).then(() => {
+    firebase.database().ref('use/' + auth.uid).push(moneyObj).then(() => {
       this.setState({
         dialogFlag: true,
       })
@@ -120,8 +129,39 @@ export default class Input extends Component {
     return pay
   }
 
+  /**
+   * 使ったお金の種類の選択の処理
+   */
+  changeSelectType = selectTypeValue => {
+    this.setState({
+      selectTypeValue: selectTypeValue,
+    })
+    let type = ''
+    switch (selectTypeValue) {
+      case 1:
+        type = '交際費'
+        break
+      case 2:
+        type = '生活費'
+        break
+      case 3:
+        type = '食費'
+        break
+      case 4:
+        type = '無駄遣い'
+        break
+      case 5:
+        type = 'その他'
+        break
+      default:
+        break
+    }
+    return type
+  }
+
   render() {
     const {
+      dialogFlag,
       date,
       target,
       money,
@@ -129,7 +169,7 @@ export default class Input extends Component {
       tax,
       selectTaxValue,
       selectPayValue,
-      dialogFlag,
+      selectTypeValue,
     } = this.state
 
     const disabled = money === ''
@@ -166,8 +206,10 @@ export default class Input extends Component {
           }}
         />
         {moneyErrorMessage === '' ? <span>{tax !== 1 ? '*' + tax : null} yen</span> : null}
-        <br /><br />
+        <br />
         <SelectField
+          hintText='tax'
+          floatingLabelText='tax'
           value={selectTaxValue}
           onChange={(e, i, selectTaxValue) =>
             this.setState({
@@ -184,8 +226,10 @@ export default class Input extends Component {
             primaryText='税抜き'
           />
         </SelectField>
-        <br /><br />
+        <br />
         <SelectField
+          hintText='how to pay'
+          floatingLabelText='how to pay'
           value={selectPayValue}
           onChange={(e, i, selectPayValue) =>
             this.setState({
@@ -203,6 +247,38 @@ export default class Input extends Component {
           />
         </SelectField>
         <br />
+        <SelectField
+          hintText='type'
+          floatingLabelText='type'
+          value={selectTypeValue}
+          onChange={(e, i, selectTypeValue) =>
+            this.setState({
+              type: this.changeSelectType(selectTypeValue),
+            })
+          }
+        >
+          <MenuItem
+            value={1}
+            primaryText='交際費'
+          />
+          <MenuItem
+            value={2}
+            primaryText='生活費'
+          />
+          <MenuItem
+            value={3}
+            primaryText='食費'
+          />
+          <MenuItem
+            value={4}
+            primaryText='無駄遣い'
+          />
+          <MenuItem
+            value={5}
+            primaryText='その他'
+          />
+        </SelectField>
+        <br />
         <RaisedButton
           label='ADD'
           disabled={disabled}
@@ -212,7 +288,10 @@ export default class Input extends Component {
           actions={
             <FlatButton
               label='OK'
-              onTouchTap={() => (this.setState({dialogFlag: false}), location.href='#home')}
+              onTouchTap={() => (
+                this.setState({ dialogFlag: false }),
+                location.href = '#home'
+              )}
             />
           }
           modal={false}

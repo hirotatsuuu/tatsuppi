@@ -20,7 +20,6 @@ const styles = {
 
 export default class Main extends Component {
   state = {
-    loginUser: null,
     loginUserName: '',
     menuFlag: false,
     logoutDialogFlag: false,
@@ -32,12 +31,14 @@ export default class Main extends Component {
 
   componentWillMount = () => {
     this.setState({
-      loginUser: firebase.auth().currentUser
+      auth: firebase.auth().currentUser,
     })
   }
 
   componentDidMount = () => {
-    firebase.database().ref('users/' + this.state.loginUser.uid).on('value', snapshot => {
+    const { auth } = this.state
+    this.userRef = firebase.database().ref('users/' + auth.uid)
+    this.userRef.on('value', snapshot => {
       this.setState({
         loginUserName: this.getAccountName(snapshot),
       })
@@ -45,7 +46,7 @@ export default class Main extends Component {
   }
 
   componentWillUnmount = () => {
-    firebase.database().ref('users/' + this.state.loginUser.uid).off('value')
+    this.userRef.off('value')
   }
 
   /**
@@ -87,11 +88,11 @@ export default class Main extends Component {
       case 'todo':
         title = 'TODO'
         break
-      case 'changepassword':
-        title = 'CHANGE PASSWORD'
+      case 'updatepassword':
+        title = 'PASSWORD'
         break
-      case 'changeaccount':
-        title = 'CHANGE ACCOUNT'
+      case 'updateaccount':
+        title = 'ACCOUNT'
         break
       default:
         title = 'default'
@@ -133,7 +134,7 @@ export default class Main extends Component {
           iconElementRight={
             <FlatButton
               label={loginUserName}
-              onTouchTap={() => location.href='#changeaccount'}
+              onTouchTap={() => location.href = location.hash.slice(2) === 'updateaccount' ? '#home' : '#updateaccount'}
             />}
           onLeftIconButtonTouchTap={() => {
             this.setState({
@@ -166,8 +167,8 @@ export default class Main extends Component {
             }}
           >TODO</MenuItem>
           <MenuItem
-            onTouchTap={() => (this.setState({menuFlag: false}), location.href='#changepassword')}
-          >CHANGE PASSWORD</MenuItem>
+            onTouchTap={() => (this.setState({menuFlag: false}), location.href='#updatepassword')}
+          >PASSWORD</MenuItem>
           <MenuItem
             onTouchTap={() => this.setState({logoutDialogFlag: true})}
           >LOGOUT</MenuItem>
@@ -177,7 +178,7 @@ export default class Main extends Component {
           modal={false}
           open={logoutDialogFlag}
           actions={logoutActions}
-        >ログアウトしてよろしいですか？
+        >Are you sure you want to logout?
         </Dialog>
       </div>
     )

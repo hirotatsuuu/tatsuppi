@@ -18,7 +18,7 @@ const styles = {
   },
 }
 
-export default class ChangePassword extends Component {
+export default class UpdatePassword extends Component {
   state = {
     password: '',
     again: '',
@@ -162,7 +162,7 @@ export default class ChangePassword extends Component {
           open={dialogFlag}
           onRequestClose={() => this.closeDialog()}
         >
-          update password
+          We updated you're password !!
         </Dialog>
       </div>
     )

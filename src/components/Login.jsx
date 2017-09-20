@@ -103,7 +103,7 @@ export default class Login extends Component {
         {loginFormFlag ? <div>
           <Card>
             <CardHeader
-              title=''
+              title='LOGIN'
             />
             <CardText>
               {message !== '' ? <div style={styles.error}><br />{message}</div> : null}

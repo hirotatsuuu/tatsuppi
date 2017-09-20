@@ -177,9 +177,10 @@ export default class Home extends Component {
               <div>
                 {todayDate === setDate ? '本日' : moment(date).format('D日')}の合計金額: {totalMoneyByDate}円 / 日
               </div>
-            </CardText>  
-            {totalMoneyByDate === 0 ? <span><br />{todayDate === setDate ? '本日' : moment(date).format('D日')}はまだお金を使っていません
-            </span> : <div style={styles.card}>
+            </CardText>
+            {totalMoneyByDate === 0 ? <CardText>
+              {todayDate === setDate ? '本日' : moment(date).format('D日')}はまだお金を使っていません
+            </CardText> : <div style={styles.card}>
               <Card>
                 <Table>
                   <TableHeader

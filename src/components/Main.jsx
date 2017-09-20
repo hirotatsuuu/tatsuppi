@@ -38,24 +38,26 @@ export default class Main extends Component {
   componentDidMount = () => {
     const { auth } = this.state
     this.userRef = firebase.database().ref('users/' + auth.uid)
-    this.userRef.on('value', snapshot => {
+    this.userRef.once('value', snapshot => {
       this.setState({
-        loginUserName: this.getAccountName(snapshot),
+        loginUserName: snapshot.val().name,
       })
+    })
+    this.userRef.on('child_changed', data => {
+      this.getAccountName(data)
     })
   }
 
   componentWillUnmount = () => {
+    console.log('Main componentWillUnmount')
     this.userRef.off('value')
   }
 
   /**
    * ログイン中のアカウントの名前の取得
    */
-  getAccountName = loginUser => {
-    let name = ''
-    name = loginUser.val().name
-    return name
+  getAccountName = data => {
+    data.key === 'name' ? this.setState({loginUserName: data.val()}) : null
   }
 
   /**
@@ -109,10 +111,12 @@ export default class Main extends Component {
     const logoutActions = [
       <FlatButton
         label='CANCEL'
+        secondary={true}
         onTouchTap={() => this.setState({logoutDialogFlag: false,})}
       />,
       <FlatButton
         label='OK'
+        primary={true}
         onTouchTap={() => this.logout()}
       />
     ]
@@ -178,7 +182,7 @@ export default class Main extends Component {
           modal={false}
           open={logoutDialogFlag}
           actions={logoutActions}
-        >Are you sure you want to logout?
+        >Are you sure logout ?
         </Dialog>
       </div>
     )

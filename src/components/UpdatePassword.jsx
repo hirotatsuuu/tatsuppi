@@ -7,6 +7,7 @@ import {
   FlatButton,
   Dialog,
   Card,
+  CardHeader,
   CardText,
   CardActions,
 } from 'material-ui'
@@ -121,6 +122,9 @@ export default class UpdatePassword extends Component {
     return (
       <div style={styles.root}>
         <Card>
+          <CardHeader
+            title='UPDATE PASSWORD'
+          />
           <CardText>
             {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
             <TextField

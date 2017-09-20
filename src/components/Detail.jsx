@@ -10,6 +10,12 @@ import {
   Dialog,
 } from 'material-ui'
 
+const styles = {
+  button: {
+    width: '45vw',
+  },
+}
+
 export default class Detail extends Component {
   state = {
     deleteFlag: false,
@@ -71,10 +77,12 @@ export default class Detail extends Component {
     const deleteActions = [
       <FlatButton
         label='cancel'
+        secondary={true}
         onTouchTap={() => this.setState({deleteFlag: false})}
       />,
       <FlatButton
         label='OK'
+        primary={true}
         onTouchTap={() => this.deleteUse()}
       />
     ]
@@ -95,10 +103,14 @@ export default class Detail extends Component {
             <CardActions>
               <FlatButton
                 label='RETURN'
+                secondary={true}
+                style={styles.button}
                 onTouchTap={() => this.return()}
               />
               <FlatButton
                 label='DELETE'
+                primary={true}
+                style={styles.button}
                 onTouchTap={() => (
                   this.setState({
                     deleteFlag: true,

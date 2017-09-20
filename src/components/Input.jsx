@@ -11,6 +11,7 @@ import {
   SelectField,
   MenuItem,
   Card,
+  CardHeader,
   CardText,
   CardActions,
 } from 'material-ui'
@@ -20,8 +21,8 @@ const styles = {
     padding: '65px 1vw 1vh',
     width: '98vw',
   },
-  button: {
-    width: '50vw',
+  field: {
+    width: '70vw',
   },
 }
 
@@ -30,6 +31,7 @@ export default class Input extends Component {
     dialogFlag: false,
     date: new Date(moment()),
     target: '',
+    targetError: '',
     money: '',
     moneyErrorMessage: '',
     tax: 1,
@@ -165,11 +167,23 @@ export default class Input extends Component {
     return type
   }
 
+  /**
+   * 文字数制限のチェック
+   */
+  checkCount = value => {
+    let message = ''
+    if (value.length > 20) {
+      message = '20文字以内で入力して下さい'
+    }
+    return message
+  }
+
   render() {
     const {
       dialogFlag,
       date,
       target,
+      targetError,
       money,
       moneyErrorMessage,
       tax,
@@ -178,32 +192,42 @@ export default class Input extends Component {
       selectTypeValue,
     } = this.state
 
-    const disabled = money === ''
+    const disabled = money === '' || targetError !== ''
 
     return (
       <div style={styles.root}>
         <Card>
+          <CardHeader
+            title='INPUT USE MONEY'
+          />
           <CardText>
             <DatePicker
               hintText='select date'
               floatingLabelText='select date'
               autoOk={true}
+              style={styles.field}
               value={date}
               onChange={(a, date) => this.changeDate(date)}
             />
             <TextField
               hintText='target'
               floatingLabelText='target'
+              style={styles.field}
               value={target}
+              errorText={targetError}
               onChange={e => {
                 const value = e.target.value
-                this.setState({target: value,})
+                this.setState({
+                  target: value,
+                  targetError: this.checkCount(value),
+                })
               }}
             />
             <br />
             <TextField
               hintText='money'
               floatingLabelText='money'
+              style={styles.field}
               value={money}
               errorText={moneyErrorMessage}
               onChange={e => {
@@ -218,6 +242,7 @@ export default class Input extends Component {
             <SelectField
               hintText='tax'
               floatingLabelText='tax'
+              style={styles.field}
               value={selectTaxValue}
               onChange={(e, i, selectTaxValue) =>
                 this.setState({
@@ -238,6 +263,7 @@ export default class Input extends Component {
             <SelectField
               hintText='how to pay'
               floatingLabelText='how to pay'
+              style={styles.field}
               value={selectPayValue}
               onChange={(e, i, selectPayValue) =>
                 this.setState({
@@ -258,6 +284,7 @@ export default class Input extends Component {
             <SelectField
               hintText='type'
               floatingLabelText='type'
+              style={styles.field}
               value={selectTypeValue}
               onChange={(e, i, selectTypeValue) =>
                 this.setState({
@@ -291,7 +318,7 @@ export default class Input extends Component {
             <RaisedButton
               label='ADD'
               disabled={disabled}
-              style={styles.button}
+              style={styles.field}
               onTouchTap={() => this.addUse()}
             />
           </CardActions>
@@ -300,6 +327,7 @@ export default class Input extends Component {
           actions={
             <FlatButton
               label='OK'
+              secondary={true}
               onTouchTap={() => (
                 this.setState({ dialogFlag: false }),
                 location.href = '#home'

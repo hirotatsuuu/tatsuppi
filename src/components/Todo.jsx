@@ -26,7 +26,7 @@ const styles = {
     width: '96vw',
   },
   button: {
-    width: '50vw',
+    width: '45vw',
   },
 }
 
@@ -163,6 +163,15 @@ export default class Todo extends Component {
   }
 
   /**
+   * 改行の置き換え
+   */
+  replaceStr = str => {
+    console.log('replaceStr', str)
+    const replacedStr = str.replace('\n', '(改行)')
+    return replacedStr
+  }
+
+  /**
    * Todoの入力フォーム
    */
   TodoForm = () => {
@@ -178,6 +187,7 @@ export default class Todo extends Component {
             <TextField
               hintText='title'
               floatingLabelText='title'
+              fullWidth={true}
               value={title}
               onChange={e => {
                 const value = e.target.value
@@ -206,24 +216,28 @@ export default class Todo extends Component {
               <FlatButton
                 label='RETURN'
                 secondary={true}
+                style={styles.button}
                 onTouchTap={() => this.setState({ addFlag: false, })}
               />
               <span> </span>
               <FlatButton
                 label='OK'
                 primary={true}
+                style={styles.button}
                 onTouchTap={() => this.addTodo()}
               />
             </div> : editFlag ? <div>
               <FlatButton
                 label='RETURN'
                 secondary={true}
+                style={styles.button}
                 onTouchTap={() => this.setState({ editFlag: false, })}
               />
               <span> </span>
               <FlatButton
                 label='OK'
                 primary={true}
+                style={styles.button}
                 onTouchTap={() => this.editTodo()}
               />
             </div> : null}
@@ -239,19 +253,18 @@ export default class Todo extends Component {
   SortButton = () => {
     const { todosArray, sortFlag } = this.state
     return (
-      <div>
-        <FlatButton
-          label={sortFlag ? 'ASCENDING' : 'DESCENDING'}
-          primary={sortFlag}
-          secondary={!sortFlag}
-          onTouchTap={() => {
-            this.setState({
-              todosArray: this.sortDateTime(todosArray, !sortFlag),
-              sortFlag: !sortFlag,
-            })
-          }}
-        />
-      </div>
+      <FlatButton
+        label={sortFlag ? 'ASCENDING' : 'DESCENDING'}
+        primary={sortFlag}
+        secondary={!sortFlag}
+        style={styles.button}
+        onTouchTap={() => {
+          this.setState({
+            todosArray: this.sortDateTime(todosArray, !sortFlag),
+            sortFlag: !sortFlag,
+          })
+        }}
+      />
     )
   }
 
@@ -281,6 +294,8 @@ export default class Todo extends Component {
         <Card>
           {!addFlag && !editFlag ? <div>
             <CardActions>
+              <this.SortButton />
+              <span> </span>
               <RaisedButton
                 label='ADD TODO'
                 style={styles.button}
@@ -289,7 +304,6 @@ export default class Todo extends Component {
                   this.setState({ addFlag: true, })
                 }}
               />
-              <this.SortButton />
             </CardActions>
             {todosArray !== undefined && todosArray.length !== 0 ? todosArray.map((row, index) => {
               return (
@@ -302,11 +316,12 @@ export default class Todo extends Component {
                       showExpandableButton={true}
                     />
                     <CardText expandable={true}>
-                      {row.text}
+                      {this.replaceStr(row.text)}
                     </CardText>
                     <CardActions expandable={true}>
                       <FlatButton
                         label='EDIT'
+                        primary={true}
                         onTouchTap={() => {
                           this.setState({
                             editFlag: true,
@@ -318,6 +333,7 @@ export default class Todo extends Component {
                       />
                       <FlatButton
                         label='DELETE'
+                        secondary={true}
                         onTouchTap={() => {
                           this.setState({
                             deleteFlag: true,

@@ -19,6 +19,12 @@ const styles = {
   error: {
     color: 'red',
   },
+  field: {
+    root: {
+      textAlign: 'center',
+    },
+    width: '70vw',
+  },
 }
 
 export default class Login extends Component {
@@ -102,54 +108,61 @@ export default class Login extends Component {
       <div style={styles.root}>
         {loginFormFlag ? <div>
           <Card>
-            <CardHeader
-              title='LOGIN'
-            />
-            <CardText>
-              {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
-              <TextField
-                hintText='email'
-                floatingLabelText='email'
-                type='email'
-                value={email}
-                onChange={e => {
-                  this.checkEmail(e.target.value),
-                  this.setState({email: e.target.value})
-                }}
-                errorText={emailErrorMessage !== '' ? emailErrorMessage : null}
+            <div style={styles.field.root}>
+              <CardHeader
+                title='TATSUPPI'
               />
-              <br />
-              <TextField
-                hintText='password'
-                floatingLabelText='password'
-                type='password'
-                value={password}
-                onChange={e => {
-                  this.checkPassword(e.target.value),
-                  this.setState({password: e.target.value})
-                }}
-                errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
-              />
-            </CardText>
-            <CardActions>
-              <RaisedButton
-                label='LOGIN'
-                onTouchTap={() => this.loginAuth()}
-                disabled={disabled}
-              />
-              <br />
-              <FlatButton
-                label='パスワードを忘れた方はこちら'
-                onTouchTap={() => location.href='#forgotpassword'}
-                secondary={true}
-              />
-              <br />
-              <FlatButton
-                label='はじめての方はこちら'
-                onTouchTap={() => location.href='#createaccount'}
-                primary={true}
-              />
-            </CardActions>
+              <CardText>
+                {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
+                <TextField
+                  hintText='email'
+                  floatingLabelText='email'
+                  type='email'
+                  style={styles.field}
+                  value={email}
+                  onChange={e => {
+                    this.checkEmail(e.target.value),
+                    this.setState({email: e.target.value})
+                  }}
+                  errorText={emailErrorMessage !== '' ? emailErrorMessage : null}
+                />
+                <br />
+                <TextField
+                  hintText='password'
+                  floatingLabelText='password'
+                  type='password'
+                  style={styles.field}
+                  value={password}
+                  onChange={e => {
+                    this.checkPassword(e.target.value),
+                    this.setState({password: e.target.value})
+                  }}
+                  errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
+                />
+              </CardText>
+              <CardActions>
+                <RaisedButton
+                  label='LOGIN'
+                  style={styles.field}
+                  onTouchTap={() => this.loginAuth()}
+                  disabled={disabled}
+                />
+                <br />
+                <FlatButton
+                  label='パスワードを忘れた方はこちら'
+                  style={styles.field}
+                  onTouchTap={() => location.href='#forgotpassword'}
+                  secondary={true}
+                />
+                <br />
+                <FlatButton
+                  label='はじめての方はこちら'
+                  style={styles.field}
+                  onTouchTap={() => location.href='#createaccount'}
+                  primary={true}
+                />
+              </CardActions>
+            </div>
           </Card>
         </div> : null}
       </div>

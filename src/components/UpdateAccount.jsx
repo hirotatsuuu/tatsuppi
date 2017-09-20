@@ -6,6 +6,9 @@ import {
   RaisedButton,
   FlatButton,
   Dialog,
+  Card,
+  CardText,
+  CardActions,
 } from 'material-ui'
 
 const styles = {
@@ -15,6 +18,9 @@ const styles = {
   },
   error: {
     color: 'red',
+  },
+  button: {
+    width: '50vw',
   },
 }
 
@@ -137,41 +143,47 @@ export default class UpdateAccount extends Component {
 
     return (
       <div style={styles.root}>
-        {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
-        <TextField
-          hintText='name'
-          floatingLabelText='name'
-          value={name}
-          errorText={nameErrorMessage}
-          onChange={e => {
-            const value = e.target.value
-            this.setState({
-              name: value,
-              nameErrorMessage: this.checkName(value),
-            })
-          }}
-        />
-        <br />
-        <TextField
-          hintText='email'
-          floatingLabelText='email'
-          type='email'
-          value={email}
-          errorText={emailErrorMessage}
-          onChange={e => {
-            const value = e.target.value
-            this.setState({
-              email: value,
-              emailErrorMessage: this.checkEmail(value),
-            })
-          }}
-        />
-        <br /><br />
-        <RaisedButton
-          label='OK'
-          onTouchTap={() => this.updateUser()}
-          disabled={disabled}
-        />
+        <Card>
+          <CardText>
+            {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
+            <TextField
+              hintText='name'
+              floatingLabelText='name'
+              value={name}
+              errorText={nameErrorMessage}
+              onChange={e => {
+                const value = e.target.value
+                this.setState({
+                  name: value,
+                  nameErrorMessage: this.checkName(value),
+                })
+              }}
+            />
+            <br />
+            <TextField
+              hintText='email'
+              floatingLabelText='email'
+              type='email'
+              value={email}
+              errorText={emailErrorMessage}
+              onChange={e => {
+                const value = e.target.value
+                this.setState({
+                  email: value,
+                  emailErrorMessage: this.checkEmail(value),
+                })
+              }}
+            />
+          </CardText>
+          <CardActions>
+            <RaisedButton
+              label='OK'
+              disabled={disabled}
+              style={styles.button}
+              onTouchTap={() => this.updateUser()}
+            />
+          </CardActions>
+        </Card>
         <Dialog
           title='update account'
           actions={[
@@ -188,7 +200,7 @@ export default class UpdateAccount extends Component {
             dialogFlag: false,
           })}
         >
-          We updated account infomation !!
+          We updated account infomation
         </Dialog>
       </div>
     )

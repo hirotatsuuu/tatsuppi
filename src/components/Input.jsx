@@ -10,12 +10,18 @@ import {
   DatePicker,
   SelectField,
   MenuItem,
+  Card,
+  CardText,
+  CardActions,
 } from 'material-ui'
 
 const styles = {
   root: {
     padding: '65px 1vw 1vh',
     width: '98vw',
+  },
+  button: {
+    width: '50vw',
   },
 }
 
@@ -176,114 +182,120 @@ export default class Input extends Component {
 
     return (
       <div style={styles.root}>
-        <DatePicker
-          hintText='select date'
-          floatingLabelText='select date'
-          autoOk={true}
-          value={date}
-          onChange={(a, date) => this.changeDate(date)}
-        />
-        <TextField
-          hintText='target'
-          floatingLabelText='target'
-          value={target}
-          onChange={e => {
-            const value = e.target.value
-            this.setState({target: value,})
-          }}
-        />
-        <br />
-        <TextField
-          hintText='money'
-          floatingLabelText='money'
-          value={money}
-          errorText={moneyErrorMessage}
-          onChange={e => {
-            const value = e.target.value
-            this.setState({
-              moneyErrorMessage: this.checkNumber(value),
-            })
-          }}
-        />
-        {moneyErrorMessage === '' ? <span>{tax !== 1 ? '*' + tax : null} yen</span> : null}
-        <br />
-        <SelectField
-          hintText='tax'
-          floatingLabelText='tax'
-          value={selectTaxValue}
-          onChange={(e, i, selectTaxValue) =>
-            this.setState({
-              tax: this.changeSelectTax(selectTaxValue),
-            })
-          }
-        >
-          <MenuItem
-            value={1}
-            primaryText='税込み'
-          />
-          <MenuItem
-            value={2}
-            primaryText='税抜き'
-          />
-        </SelectField>
-        <br />
-        <SelectField
-          hintText='how to pay'
-          floatingLabelText='how to pay'
-          value={selectPayValue}
-          onChange={(e, i, selectPayValue) =>
-            this.setState({
-              pay: this.changeSelectPay(selectPayValue),
-            })
-          }
-        >
-          <MenuItem
-            value={1}
-            primaryText='クレジットカード'
-          />
-          <MenuItem
-            value={2}
-            primaryText='現金'
-          />
-        </SelectField>
-        <br />
-        <SelectField
-          hintText='type'
-          floatingLabelText='type'
-          value={selectTypeValue}
-          onChange={(e, i, selectTypeValue) =>
-            this.setState({
-              type: this.changeSelectType(selectTypeValue),
-            })
-          }
-        >
-          <MenuItem
-            value={1}
-            primaryText='交際費'
-          />
-          <MenuItem
-            value={2}
-            primaryText='生活費'
-          />
-          <MenuItem
-            value={3}
-            primaryText='食費'
-          />
-          <MenuItem
-            value={4}
-            primaryText='無駄遣い'
-          />
-          <MenuItem
-            value={5}
-            primaryText='その他'
-          />
-        </SelectField>
-        <br />
-        <RaisedButton
-          label='ADD'
-          disabled={disabled}
-          onTouchTap={() => this.addUse()}
-        />
+        <Card>
+          <CardText>
+            <DatePicker
+              hintText='select date'
+              floatingLabelText='select date'
+              autoOk={true}
+              value={date}
+              onChange={(a, date) => this.changeDate(date)}
+            />
+            <TextField
+              hintText='target'
+              floatingLabelText='target'
+              value={target}
+              onChange={e => {
+                const value = e.target.value
+                this.setState({target: value,})
+              }}
+            />
+            <br />
+            <TextField
+              hintText='money'
+              floatingLabelText='money'
+              value={money}
+              errorText={moneyErrorMessage}
+              onChange={e => {
+                const value = e.target.value
+                this.setState({
+                  moneyErrorMessage: this.checkNumber(value),
+                })
+              }}
+            />
+            {moneyErrorMessage === '' ? <span>{tax !== 1 ? '*' + tax : null} yen</span> : null}
+            <br />
+            <SelectField
+              hintText='tax'
+              floatingLabelText='tax'
+              value={selectTaxValue}
+              onChange={(e, i, selectTaxValue) =>
+                this.setState({
+                  tax: this.changeSelectTax(selectTaxValue),
+                })
+              }
+            >
+              <MenuItem
+                value={1}
+                primaryText='税込み'
+              />
+              <MenuItem
+                value={2}
+                primaryText='税抜き'
+              />
+            </SelectField>
+            <br />
+            <SelectField
+              hintText='how to pay'
+              floatingLabelText='how to pay'
+              value={selectPayValue}
+              onChange={(e, i, selectPayValue) =>
+                this.setState({
+                  pay: this.changeSelectPay(selectPayValue),
+                })
+              }
+            >
+              <MenuItem
+                value={1}
+                primaryText='クレジットカード'
+              />
+              <MenuItem
+                value={2}
+                primaryText='現金'
+              />
+            </SelectField>
+            <br />
+            <SelectField
+              hintText='type'
+              floatingLabelText='type'
+              value={selectTypeValue}
+              onChange={(e, i, selectTypeValue) =>
+                this.setState({
+                  type: this.changeSelectType(selectTypeValue),
+                })
+              }
+            >
+              <MenuItem
+                value={1}
+                primaryText='交際費'
+              />
+              <MenuItem
+                value={2}
+                primaryText='生活費'
+              />
+              <MenuItem
+                value={3}
+                primaryText='食費'
+              />
+              <MenuItem
+                value={4}
+                primaryText='無駄遣い'
+              />
+              <MenuItem
+                value={5}
+                primaryText='その他'
+              />
+            </SelectField>
+          </CardText>
+          <CardActions>
+            <RaisedButton
+              label='ADD'
+              disabled={disabled}
+              style={styles.button}
+              onTouchTap={() => this.addUse()}
+            />
+          </CardActions>
+        </Card>
         <Dialog
           actions={
             <FlatButton

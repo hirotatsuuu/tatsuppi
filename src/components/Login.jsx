@@ -5,6 +5,10 @@ import {
   TextField,
   RaisedButton,
   FlatButton,
+  Card,
+  CardHeader,
+  CardText,
+  CardActions,
 } from 'material-ui'
 
 const styles = {
@@ -97,49 +101,56 @@ export default class Login extends Component {
     return (
       <div style={styles.root}>
         {loginFormFlag ? <div>
-          <div>LOGIN</div>
-          {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
-          <TextField
-            hintText='email'
-            floatingLabelText='email'
-            type='email'
-            value={email}
-            onChange={e => {
-              this.checkEmail(e.target.value),
-              this.setState({email: e.target.value})
-            }}
-            errorText={emailErrorMessage !== '' ? emailErrorMessage : null}
-          />
-          <br />
-          <TextField
-            hintText='password'
-            floatingLabelText='password'
-            type='password'
-            value={password}
-            onChange={e => {
-              this.checkPassword(e.target.value),
-              this.setState({password: e.target.value})
-            }}
-            errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
-          />
-          <br /><br />
-          <RaisedButton
-            label='LOGIN'
-            onTouchTap={() => this.loginAuth()}
-            disabled={disabled}
-          />
-          <br />
-          <FlatButton
-            label='パスワードを忘れた方はこちら'
-            onTouchTap={() => location.href='#forgotpassword'}
-            secondary={true}
-          />
-          <br />
-          <FlatButton
-            label='はじめての方はこちら'
-            onTouchTap={() => location.href='#createaccount'}
-            primary={true}
-          />
+          <Card>
+            <CardHeader
+              title=''
+            />
+            <CardText>
+              {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
+              <TextField
+                hintText='email'
+                floatingLabelText='email'
+                type='email'
+                value={email}
+                onChange={e => {
+                  this.checkEmail(e.target.value),
+                  this.setState({email: e.target.value})
+                }}
+                errorText={emailErrorMessage !== '' ? emailErrorMessage : null}
+              />
+              <br />
+              <TextField
+                hintText='password'
+                floatingLabelText='password'
+                type='password'
+                value={password}
+                onChange={e => {
+                  this.checkPassword(e.target.value),
+                  this.setState({password: e.target.value})
+                }}
+                errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
+              />
+            </CardText>
+            <CardActions>
+              <RaisedButton
+                label='LOGIN'
+                onTouchTap={() => this.loginAuth()}
+                disabled={disabled}
+              />
+              <br />
+              <FlatButton
+                label='パスワードを忘れた方はこちら'
+                onTouchTap={() => location.href='#forgotpassword'}
+                secondary={true}
+              />
+              <br />
+              <FlatButton
+                label='はじめての方はこちら'
+                onTouchTap={() => location.href='#createaccount'}
+                primary={true}
+              />
+            </CardActions>
+          </Card>
         </div> : null}
       </div>
     )

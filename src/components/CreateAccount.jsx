@@ -3,9 +3,12 @@ import firebase from 'firebase'
 
 import {
   TextField,
-  RaisedButton,
   FlatButton,
   Dialog,
+  Card,
+  CardHeader,
+  CardText,
+  CardActions,
 } from 'material-ui'
 
 const styles = {
@@ -15,6 +18,14 @@ const styles = {
   },
   error: {
     color: 'red',
+  },
+  field: {
+    root: {
+      textAlign: 'center',
+    },
+    button: {
+      width: '40vw',
+    },
   },
 }
 
@@ -140,64 +151,78 @@ export default class CreateAccount extends Component {
 
     return (
       <div style={styles.root}>
-        <div>CREATE ACCOUNT</div>
-        {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
-        <TextField
-          hintText='name'
-          floatingLabelText='name'
-          value={name}
-          onChange={e => {
-            const value = e.target.value
-            this.setState({
-              name: value,
-              nameErrorMessage: this.checkName(value),
-            })
-          }}
-          errorText={nameErrorMessage !== '' ? nameErrorMessage : null}
-        />
-        <br />
-        <TextField
-          hintText='email'
-          floatingLabelText='email'
-          type='email'
-          value={email}
-          onChange={e => {
-            const value = e.target.value
-            this.setState({
-              email: value,
-              emailErrorMessage: this.checkEmail(value),
-            })
-          }}
-          errorText={emailErrorMessage !== '' ? emailErrorMessage : null}
-        />
-        <br />
-        <TextField
-          hintText='password'
-          floatingLabelText='password'
-          type='password'
-          value={password}
-          onChange={e => {
-            const value = e.target.value
-            this.setState({
-              password: value,
-              passwordErrorMessage: this.checkPassword(value),
-            })
-          }}
-          errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
-        />
-        <br /><br />
-        <FlatButton
-          label='RETURN'
-          onTouchTap={() => location.href = '#'}
-          secondary={true}
-        />
-        <span> </span>
-        <RaisedButton
-          label='OK'
-          onTouchTap={() => this.createUser()}
-          disabled={disabled}
-          primary={true}
-        />
+        <Card>
+          <CardHeader
+            title='CREATE ACCOUNT'
+          />
+          <div style={styles.field.root}>
+            <CardText>
+              {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
+              <TextField
+                hintText='name'
+                floatingLabelText='name'
+                fullWidth={true}
+                value={name}
+                onChange={e => {
+                  const value = e.target.value
+                  this.setState({
+                    name: value,
+                    nameErrorMessage: this.checkName(value),
+                  })
+                }}
+                errorText={nameErrorMessage !== '' ? nameErrorMessage : null}
+              />
+              <br />
+              <TextField
+                hintText='email'
+                floatingLabelText='email'
+                type='email'
+                fullWidth={true}
+                value={email}
+                onChange={e => {
+                  const value = e.target.value
+                  this.setState({
+                    email: value,
+                    emailErrorMessage: this.checkEmail(value),
+                  })
+                }}
+                errorText={emailErrorMessage !== '' ? emailErrorMessage : null}
+              />
+              <br />
+              <TextField
+                hintText='password'
+                floatingLabelText='password'
+                type='password'
+                fullWidth={true}
+                value={password}
+                onChange={e => {
+                  const value = e.target.value
+                  this.setState({
+                    password: value,
+                    passwordErrorMessage: this.checkPassword(value),
+                  })
+                }}
+                errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
+              />
+            </CardText>
+            <CardActions>
+              <FlatButton
+                label='RETURN'
+                secondary={true}
+                style={styles.field.button}
+                onTouchTap={() => location.href = '#'}
+              />
+              <span> </span>
+              <FlatButton
+                label='OK'
+                primary={true}
+                disabled={disabled}
+                style={styles.field.button}
+                onTouchTap={() => this.createUser()}
+              />
+            </CardActions>
+          </div>
+        </Card>
         <Dialog
           title='CREATE ACCOUNT'
           actions={[
@@ -210,7 +235,7 @@ export default class CreateAccount extends Component {
           open={dialogFlag}
           onRequestClose={() => this.closeDialog()}
         >
-          We created account !!
+          We created account
         </Dialog>
       </div>
     )

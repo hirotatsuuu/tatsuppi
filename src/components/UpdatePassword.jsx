@@ -47,27 +47,20 @@ export default class UpdatePassword extends Component {
     if (message !== '') {
       this.setState({
         message: message,
+        dialogFlag: false,
       })
     } else {
+      this.setState({
+        dialogFlag: false,
+      })
       firebase.auth().currentUser.updatePassword(password).then(() => {
-        this.setState({
-          dialogFlag: true,
-        })
+        // Todo
       }, err => {
         this.setState({
           message: this.checkErrorCode(err.code),
         })
       })
     }
-  }
-
-  /**
-   * ダイアログを閉じたときの処理
-   */
-  closeDialog = () => {
-    this.setState({
-      dialogFlag: false,
-    })
   }
 
   /**
@@ -115,8 +108,12 @@ export default class UpdatePassword extends Component {
   render() {
     const updateActions = [
       <FlatButton
+        label='CANCEL'
+        onTouchTap={() => this.setState({ dialogFlag: false })}
+      />,
+      <FlatButton
         label='OK'
-        onTouchTap={() => this.closeDialog()}
+        onTouchTap={() => this.updatePassword()}
       />
     ]
 
@@ -177,7 +174,7 @@ export default class UpdatePassword extends Component {
                 label='OK'
                 disabled={disabled}
                 fullWidth={true}
-                onTouchTap={() => this.updatePassword()}
+                onTouchTap={() => this.setState({dialogFlag: true})}
               />
             </CardActions>
           </div>
@@ -188,7 +185,7 @@ export default class UpdatePassword extends Component {
           open={dialogFlag}
           contentStyle={styles.dialog}
           actions={updateActions}
-          onRequestClose={() => this.closeDialog()}
+          onRequestClose={() => this.setState({dialogFlag: false})}
         >
           It was updated password
         </Dialog>

@@ -36,10 +36,17 @@ export default class Home extends Component {
     detailFlag: false,
   }
 
+  componentWillMount = () => {
+    this.setState({
+      auth: firebase.auth().currentUser,
+    })
+  }
+
   componentDidMount = () => {
-    this.useRef = firebase.database().ref('use/' + firebase.auth().currentUser.uid)
+    const { auth, date } = this.state
+    this.useRef = firebase.database().ref('use/' + auth.uid)
     this.useRef.on('value', snapshot => {
-      const date = moment(this.state.date).format('YYYY-MM-DD')
+      const date = moment(date).format('YYYY-MM-DD')
       this.getUse(date, snapshot)
       this.getTotalMoneyByDate(date, snapshot)
       this.getTotalMoneyByMonth(date, snapshot)

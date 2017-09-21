@@ -11,8 +11,8 @@ export default class App extends Component {
   }
 
   componentDidMount = () => {
-    firebase.auth().onIdTokenChanged(loginUser => {
-      if (loginUser === null) {
+    firebase.auth().onIdTokenChanged(auth => {
+      if (auth === null) {
         this.setState({
           loginFlag: false,
         })

@@ -37,8 +37,8 @@ export default class CreateAccount extends Component {
     name: '',
     email: '',
     password: '',
-    dialogFlag: false,
     message: '',
+    dialogFlag: false,
   }
 
   /**
@@ -106,6 +106,9 @@ export default class CreateAccount extends Component {
     if (value === '') {
       message = '名前が未入力です'
     }
+    this.setState({
+      message: '',
+    })
     return message
   }
 
@@ -119,6 +122,9 @@ export default class CreateAccount extends Component {
     } else if (value.indexOf('@') === -1 || value.indexOf('.') === -1) {
       message = 'メールアドレスの形式が不適切です'
     }
+    this.setState({
+      message: '',
+    })
     return message
   }
 
@@ -132,10 +138,20 @@ export default class CreateAccount extends Component {
     } else if (value.length < 6) {
       message = 'パスワードは6文字以上で入力してください'
     }
+    this.setState({
+      message: '',
+    })
     return message
   }
 
   render() {
+    const createActions = [
+      <FlatButton
+        label='OK'
+        onTouchTap={() => this.closeDialog()}
+      />
+    ]
+
     const {
       name,
       email,
@@ -147,10 +163,14 @@ export default class CreateAccount extends Component {
       dialogFlag,
     } = this.state
 
-    const disabled = !(
-      nameErrorMessage === '' &&
-      emailErrorMessage === '' &&
-      passwordErrorMessage === '')
+    const disabled = 
+      name === '' ||
+      email === '' ||
+      password === '' ||
+      nameErrorMessage !== '' ||
+      emailErrorMessage !== '' ||
+      passwordErrorMessage !== '' ||
+      message !== ''
 
     return (
       <div style={styles.root}>
@@ -228,18 +248,13 @@ export default class CreateAccount extends Component {
         </Card>
         <Dialog
           title='CREATE ACCOUNT'
-          actions={[
-            <FlatButton
-              label='OK'
-              onTouchTap={() => this.closeDialog()}
-            />
-          ]}
           modal={true}
           open={dialogFlag}
           contentStyle={styles.dialog}
+          actions={createActions}
           onRequestClose={() => this.closeDialog()}
         >
-          We created account
+          We created a new account
         </Dialog>
       </div>
     )

@@ -135,6 +135,16 @@ export default class UpdateAccount extends Component {
   }
 
   render() {
+    const updateActions = [
+      <FlatButton
+        label='OK'
+        onTouchTap={() => (
+          this.setState({ dialogFlag: false }),
+          location.href = '#home'
+        )}
+      />
+    ]
+
     const {
       name,
       email,
@@ -198,14 +208,7 @@ export default class UpdateAccount extends Component {
         </Card>
         <Dialog
           title='UPDATE ACCOUNT'
-          actions={[
-            <FlatButton
-              label='OK'
-              onTouchTap={() => (this.setState({
-                dialogFlag: false,
-              }), location.href='#home')}
-            />
-          ]}
+          actions={updateActions}
           modal={true}
           open={dialogFlag}
           contentStyle={styles.dialog}
@@ -213,7 +216,7 @@ export default class UpdateAccount extends Component {
             dialogFlag: false,
           })}
         >
-          We updated account infomation
+          It was updated account
         </Dialog>
       </div>
     )

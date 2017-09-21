@@ -113,6 +113,13 @@ export default class UpdatePassword extends Component {
   }
 
   render() {
+    const updateActions = [
+      <FlatButton
+        label='OK'
+        onTouchTap={() => this.closeDialog()}
+      />
+    ]
+
     const {
       password,
       again,
@@ -177,18 +184,13 @@ export default class UpdatePassword extends Component {
         </Card>
         <Dialog
           title='UPDATE'
-          actions={[
-            <FlatButton
-              label='OK'
-              onTouchTap={() => this.closeDialog()}
-            />
-          ]}
           modal={true}
           open={dialogFlag}
           contentStyle={styles.dialog}
+          actions={updateActions}
           onRequestClose={() => this.closeDialog()}
         >
-          We updated you're password
+          It was updated password
         </Dialog>
       </div>
     )

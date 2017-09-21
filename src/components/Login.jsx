@@ -69,9 +69,9 @@ export default class Login extends Component {
       message = 'メールアドレスの形式が不適切です'
     }
     this.setState({
-      emailErrorMessage: message,
       message: '',
     })
+    return message
   }
 
   /**
@@ -85,9 +85,9 @@ export default class Login extends Component {
       message = 'パスワードは6文字以上で入力してください'
     }
     this.setState({
-      passwordErrorMessage: message,
       message: '',
     })
+    return message
   }
 
   render() {
@@ -120,8 +120,11 @@ export default class Login extends Component {
                   fullWidth={true}
                   value={email}
                   onChange={e => {
-                    this.checkEmail(e.target.value),
-                    this.setState({email: e.target.value})
+                    const value = e.target.value
+                    this.setState({
+                      email: value,
+                      emailErrorMessage: this.checkEmail(value),
+                    })
                   }}
                   errorText={emailErrorMessage !== '' ? emailErrorMessage : null}
                 />
@@ -133,8 +136,11 @@ export default class Login extends Component {
                   fullWidth={true}
                   value={password}
                   onChange={e => {
-                    this.checkPassword(e.target.value),
-                    this.setState({password: e.target.value})
+                    const value = e.target.value
+                    this.setState({
+                      password: value,
+                      passwordErrorMessage: this.checkPassword(value),
+                    })
                   }}
                   errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
                 />
@@ -143,22 +149,22 @@ export default class Login extends Component {
                 <RaisedButton
                   label='LOGIN'
                   fullWidth={true}
-                  onTouchTap={() => this.loginAuth()}
                   disabled={disabled}
+                  onTouchTap={() => this.loginAuth()}
                 />
                 <br />
                 <FlatButton
                   label='パスワードを忘れた方はこちら'
                   fullWidth={true}
-                  onTouchTap={() => location.href='#forgotpassword'}
                   secondary={true}
+                  onTouchTap={() => location.href='#forgotpassword'}
                 />
                 <br />
                 <FlatButton
                   label='はじめての方はこちら'
                   fullWidth={true}
-                  onTouchTap={() => location.href='#createaccount'}
                   primary={true}
+                  onTouchTap={() => location.href='#createaccount'}
                 />
               </CardActions>
             </div>

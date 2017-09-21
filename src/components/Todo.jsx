@@ -356,7 +356,7 @@ export default class Todo extends Component {
                   </Card>
                 </div>
               )
-            }) : <CardText>There is no Todo List</CardText>}
+            }) : <CardText>There is no Todo</CardText>}
           </div> : <div><this.TodoForm /></div>}
         </Card>
         <Dialog

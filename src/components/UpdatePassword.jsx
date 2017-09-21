@@ -25,6 +25,9 @@ const styles = {
       textAlign: 'center',
     },
   },
+  dialog: {
+    width: '100vw',
+  },
 }
 
 export default class UpdatePassword extends Component {
@@ -182,6 +185,7 @@ export default class UpdatePassword extends Component {
           ]}
           modal={true}
           open={dialogFlag}
+          contentStyle={styles.dialog}
           onRequestClose={() => this.closeDialog()}
         >
           We updated you're password

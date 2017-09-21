@@ -25,6 +25,9 @@ const styles = {
       textAlign: 'center',
     },
   },
+  dialog: {
+    width: '100vw',
+  },
 }
 
 export default class UpdateAccount extends Component {
@@ -205,6 +208,7 @@ export default class UpdateAccount extends Component {
           ]}
           modal={true}
           open={dialogFlag}
+          contentStyle={styles.dialog}
           onRequestClose={() => this.setState({
             dialogFlag: false,
           })}

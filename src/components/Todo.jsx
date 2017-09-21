@@ -31,6 +31,9 @@ const styles = {
   button: {
     width: '40vw',
   },
+  dialog: {
+    width: '100vw',
+  },
 }
 
 export default class Todo extends Component {
@@ -361,6 +364,7 @@ export default class Todo extends Component {
           actions={deleteActions}
           modal={true}
           open={deleteFlag}
+          contentStyle={styles.dialog}
           onRequestClose={() => this.setState({deleteFlag: false,})}
         >
           Can I delete it ?

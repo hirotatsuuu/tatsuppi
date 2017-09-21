@@ -16,6 +16,9 @@ const styles = {
     width: '100vw',
     backgroundColor: 'pink',
   },
+  dialog: {
+    width: '100vw',
+  },
 }
 
 export default class Main extends Component {
@@ -179,6 +182,7 @@ export default class Main extends Component {
         <Dialog
           title='LOGOUT'
           modal={false}
+          contentStyle={styles.dialog}
           open={logoutDialogFlag}
           actions={logoutActions}
         >Are you sure logout ?

@@ -20,8 +20,10 @@ const styles = {
   error: {
     color: 'red',
   },
-  button: {
-    width: '50vw',
+  field: {
+    root: {
+      textAlign: 'center',
+    },
   },
 }
 
@@ -125,46 +127,50 @@ export default class UpdatePassword extends Component {
           <CardHeader
             title='UPDATE PASSWORD'
           />
-          <CardText>
-            {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
-            <TextField
-              hintText='password'
-              floatingLabelText='password'
-              type='password'
-              value={password}
-              onChange={e => {
-                const value = e.target.value
-                this.setState({
-                  password: value,
-                  passwordErrorMessage: this.checkPassword(value),
-                })
-              }}
-              errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
-            />
-            <br />
-            <TextField
-              hintText='again'
-              floatingLabelText='again'
-              type='password'
-              value={again}
-              onChange={e => {
-                const value = e.target.value
-                this.setState({
-                  again: value,
-                  againErrorMessage: this.checkPassword(value),
-                })
-              }}
-              errorText={againErrorMessage !== '' ? againErrorMessage : null}
-            />
-          </CardText>
-          <CardActions>
-            <RaisedButton
-              label='OK'
-              disabled={disabled}
-              style={styles.button}
-              onTouchTap={() => this.updatePassword()}
-            />
-          </CardActions>
+          <div style={styles.field.root}>
+            <CardText>
+              {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
+              <TextField
+                hintText='password'
+                floatingLabelText='password'
+                type='password'
+                fullWidth={true}
+                value={password}
+                onChange={e => {
+                  const value = e.target.value
+                  this.setState({
+                    password: value,
+                    passwordErrorMessage: this.checkPassword(value),
+                  })
+                }}
+                errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
+              />
+              <br />
+              <TextField
+                hintText='again'
+                floatingLabelText='again'
+                type='password'
+                fullWidth={true}
+                value={again}
+                onChange={e => {
+                  const value = e.target.value
+                  this.setState({
+                    again: value,
+                    againErrorMessage: this.checkPassword(value),
+                  })
+                }}
+                errorText={againErrorMessage !== '' ? againErrorMessage : null}
+              />
+            </CardText>
+            <CardActions>
+              <RaisedButton
+                label='OK'
+                disabled={disabled}
+                fullWidth={true}
+                onTouchTap={() => this.updatePassword()}
+              />
+            </CardActions>
+          </div>
         </Card>
         <Dialog
           title='UPDATE'

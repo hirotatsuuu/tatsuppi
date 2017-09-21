@@ -13,7 +13,7 @@ import {
 
 const styles = {
   root: {
-    padding: '3vh 3vw',
+    padding: '1vh 3vw',
     width: '94vw',
   },
   error: {
@@ -23,7 +23,6 @@ const styles = {
     root: {
       textAlign: 'center',
     },
-    width: '70vw',
   },
 }
 
@@ -108,17 +107,17 @@ export default class Login extends Component {
       <div style={styles.root}>
         {loginFormFlag ? <div>
           <Card>
+            <CardHeader
+              title='TATSUPPI'
+            />
             <div style={styles.field.root}>
-              <CardHeader
-                title='TATSUPPI'
-              />
               <CardText>
                 {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
                 <TextField
                   hintText='email'
                   floatingLabelText='email'
                   type='email'
-                  style={styles.field}
+                  fullWidth={true}
                   value={email}
                   onChange={e => {
                     this.checkEmail(e.target.value),
@@ -131,7 +130,7 @@ export default class Login extends Component {
                   hintText='password'
                   floatingLabelText='password'
                   type='password'
-                  style={styles.field}
+                  fullWidth={true}
                   value={password}
                   onChange={e => {
                     this.checkPassword(e.target.value),
@@ -143,21 +142,21 @@ export default class Login extends Component {
               <CardActions>
                 <RaisedButton
                   label='LOGIN'
-                  style={styles.field}
+                  fullWidth={true}
                   onTouchTap={() => this.loginAuth()}
                   disabled={disabled}
                 />
                 <br />
                 <FlatButton
                   label='パスワードを忘れた方はこちら'
-                  style={styles.field}
+                  fullWidth={true}
                   onTouchTap={() => location.href='#forgotpassword'}
                   secondary={true}
                 />
                 <br />
                 <FlatButton
                   label='はじめての方はこちら'
-                  style={styles.field}
+                  fullWidth={true}
                   onTouchTap={() => location.href='#createaccount'}
                   primary={true}
                 />

@@ -21,7 +21,7 @@ const styles = {
     padding: '65px 1vw 1vh',
     width: '98vw',
   },
-  field: {
+  money: {
     width: '70vw',
   },
 }
@@ -205,14 +205,14 @@ export default class Input extends Component {
               hintText='select date'
               floatingLabelText='select date'
               autoOk={true}
-              style={styles.field}
+              fullWidth={true}
               value={date}
               onChange={(a, date) => this.changeDate(date)}
             />
             <TextField
               hintText='target'
               floatingLabelText='target'
-              style={styles.field}
+              fullWidth={true}
               value={target}
               errorText={targetError}
               onChange={e => {
@@ -227,7 +227,7 @@ export default class Input extends Component {
             <TextField
               hintText='money'
               floatingLabelText='money'
-              style={styles.field}
+              style={styles.money}
               value={money}
               errorText={moneyErrorMessage}
               onChange={e => {
@@ -242,7 +242,7 @@ export default class Input extends Component {
             <SelectField
               hintText='tax'
               floatingLabelText='tax'
-              style={styles.field}
+              fullWidth={true}
               value={selectTaxValue}
               onChange={(e, i, selectTaxValue) =>
                 this.setState({
@@ -263,7 +263,7 @@ export default class Input extends Component {
             <SelectField
               hintText='how to pay'
               floatingLabelText='how to pay'
-              style={styles.field}
+              fullWidth={true}
               value={selectPayValue}
               onChange={(e, i, selectPayValue) =>
                 this.setState({
@@ -284,7 +284,7 @@ export default class Input extends Component {
             <SelectField
               hintText='type'
               floatingLabelText='type'
-              style={styles.field}
+              fullWidth={true}
               value={selectTypeValue}
               onChange={(e, i, selectTypeValue) =>
                 this.setState({
@@ -318,7 +318,7 @@ export default class Input extends Component {
             <RaisedButton
               label='ADD'
               disabled={disabled}
-              style={styles.field}
+              fullWidth={true}
               onTouchTap={() => this.addUse()}
             />
           </CardActions>

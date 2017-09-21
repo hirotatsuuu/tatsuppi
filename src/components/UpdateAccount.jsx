@@ -24,7 +24,6 @@ const styles = {
     root: {
       textAlign: 'center',
     },
-    width: '70vw',
   },
 }
 
@@ -147,16 +146,16 @@ export default class UpdateAccount extends Component {
     return (
       <div style={styles.root}>
         <Card>
+          <CardHeader
+            title='UPDATE ACCOUNT'
+          />
           <div style={styles.field.root}>
-            <CardHeader
-              title='UPDATE ACCOUNT'
-            />
             <CardText>
               {message !== '' ? <div style={styles.error}><br />{message}</div> : null}
               <TextField
                 hintText='name'
                 floatingLabelText='name'
-                style={styles.field}
+                fullWidth={true}
                 value={name}
                 errorText={nameErrorMessage}
                 onChange={e => {
@@ -172,7 +171,7 @@ export default class UpdateAccount extends Component {
                 hintText='email'
                 floatingLabelText='email'
                 type='email'
-                style={styles.field}
+                fullWidth={true}
                 value={email}
                 errorText={emailErrorMessage}
                 onChange={e => {
@@ -188,14 +187,14 @@ export default class UpdateAccount extends Component {
               <RaisedButton
                 label='OK'
                 disabled={disabled}
-                style={styles.field}
+                fullWidth={true}
                 onTouchTap={() => this.updateUser()}
               />
             </CardActions>
           </div>
         </Card>
         <Dialog
-          title='update account'
+          title='UPDATE ACCOUNT'
           actions={[
             <FlatButton
               label='OK'

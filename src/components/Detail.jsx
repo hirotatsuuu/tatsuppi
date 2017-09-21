@@ -11,8 +11,11 @@ import {
 } from 'material-ui'
 
 const styles = {
+  card: {
+    textAlign: 'center',
+  },
   button: {
-    width: '45vw',
+    width: '40vw',
   },
 }
 
@@ -101,23 +104,25 @@ export default class Detail extends Component {
               use type is {use.use_type}
             </CardText>
             <CardActions>
-              <FlatButton
-                label='RETURN'
-                secondary={true}
-                style={styles.button}
-                onTouchTap={() => this.return()}
-              />
-              <FlatButton
-                label='DELETE'
-                primary={true}
-                style={styles.button}
-                onTouchTap={() => (
-                  this.setState({
-                    deleteFlag: true,
-                    deleteId: id,
-                  })
-                )}
-              />
+              <div style={styles.card}>
+                <FlatButton
+                  label='RETURN'
+                  secondary={true}
+                  style={styles.button}
+                  onTouchTap={() => this.return()}
+                />
+                <FlatButton
+                  label='DELETE'
+                  primary={true}
+                  style={styles.button}
+                  onTouchTap={() => (
+                    this.setState({
+                      deleteFlag: true,
+                      deleteId: id,
+                    })
+                  )}
+                />
+              </div>
             </CardActions>
           </Card>
         </span> : null}

@@ -24,9 +24,12 @@ const styles = {
   card: {
     padding: '1vh 1vw',
     width: '96vw',
+    center: {
+      textAlign: 'center',
+    },
   },
   button: {
-    width: '45vw',
+    width: '40vw',
   },
 }
 
@@ -181,7 +184,7 @@ export default class Todo extends Component {
       <div>
         <Card>
           <CardHeader
-            title={addFlag ? <div>Add Todo</div> : editFlag ? <div>Edit Todo</div> : null}
+            title={addFlag ? <div>ADD TODO</div> : editFlag ? <div>EDIT TODO</div> : null}
           />
           <CardText>
             <TextField
@@ -212,7 +215,7 @@ export default class Todo extends Component {
             />
           </CardText>
           <CardActions>
-            {addFlag ? <div>
+            {addFlag ? <div style={styles.card.center}>
               <FlatButton
                 label='RETURN'
                 secondary={true}
@@ -294,16 +297,18 @@ export default class Todo extends Component {
         <Card>
           {!addFlag && !editFlag ? <div>
             <CardActions>
-              <this.SortButton />
-              <span> </span>
-              <RaisedButton
-                label='ADD TODO'
-                style={styles.button}
-                onTouchTap={() => {
-                  this.clearTodoForm(),
-                  this.setState({ addFlag: true, })
-                }}
-              />
+                <div style={styles.card.center}>
+                <this.SortButton />
+                <span> </span>
+                <RaisedButton
+                  label='ADD TODO'
+                  style={styles.button}
+                  onTouchTap={() => {
+                    this.clearTodoForm(),
+                    this.setState({ addFlag: true, })
+                  }}
+                />
+              </div>
             </CardActions>
             {todosArray !== undefined && todosArray.length !== 0 ? todosArray.map((row, index) => {
               return (
@@ -319,33 +324,37 @@ export default class Todo extends Component {
                       {this.replaceStr(row.text)}
                     </CardText>
                     <CardActions expandable={true}>
-                      <FlatButton
-                        label='EDIT'
-                        primary={true}
-                        onTouchTap={() => {
-                          this.setState({
-                            editFlag: true,
-                            editId: row.id,
-                            title: row.title,
-                            text: row.text,
-                          })
-                        }}
-                      />
-                      <FlatButton
-                        label='DELETE'
-                        secondary={true}
-                        onTouchTap={() => {
-                          this.setState({
-                            deleteFlag: true,
-                            deleteId: row.id,
-                          })
-                        }}
-                      />
+                      <div style={styles.card.center}>
+                        <FlatButton
+                          label='EDIT'
+                          primary={true}
+                          style={styles.button}
+                          onTouchTap={() => {
+                            this.setState({
+                              editFlag: true,
+                              editId: row.id,
+                              title: row.title,
+                              text: row.text,
+                            })
+                          }}
+                        />
+                        <FlatButton
+                          label='DELETE'
+                          secondary={true}
+                          style={styles.button}
+                          onTouchTap={() => {
+                            this.setState({
+                              deleteFlag: true,
+                              deleteId: row.id,
+                            })
+                          }}
+                        />
+                      </div>
                     </CardActions>
                   </Card>
                 </div>
               )
-            }) : <span><br />There is no Todo List</span>}
+            }) : <CardText>There is no Todo List</CardText>}
           </div> : <div><this.TodoForm /></div>}
         </Card>
         <Dialog

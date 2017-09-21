@@ -139,41 +139,40 @@ export default class Main extends Component {
           iconClassNameRight='muidocs-icon-navigation-expand-more'
           iconElementRight={
             <FlatButton
-              label={loginUserName}
+              label={<span>{loginUserName}</span>}
               onTouchTap={() => location.href = location.hash.slice(2) === 'updateaccount' ? '#home' : '#updateaccount'}
             />}
-          onLeftIconButtonTouchTap={() => {
-            this.setState({
-              menuFlag: !menuFlag,
-            })
-          }}
+          onLeftIconButtonTouchTap={() => this.setState({menuFlag: !menuFlag})}
         />
         <Drawer
           docked={false}
           width={200}
           open={menuFlag}
-          onRequestChange={() => {
-            this.setState({
-              menuFlag: !menuFlag,
-            })
-          }}
+          onRequestChange={() => this.setState({menuFlag: !menuFlag})}
         >
           <MenuItem
-            onTouchTap={() => (this.setState({menuFlag: false}), location.href='#home')}
+            onTouchTap={() => (
+              this.setState({ menuFlag: false }),
+              location.href = '#home'
+            )}
           >HOME</MenuItem>
           <MenuItem
-            onTouchTap={() => (this.setState({menuFlag: false}), location.href='#input')}
+            onTouchTap={() => (
+              this.setState({ menuFlag: false }),
+              location.href = '#input'
+            )}
           >INPUT</MenuItem>
           <MenuItem
-            onTouchTap={() => {
-              this.setState({
-                menuFlag: false,
-              }),
+            onTouchTap={() => (
+              this.setState({ menuFlag: false }),
               location.href = '#todo'
-            }}
+            )}
           >TODO</MenuItem>
           <MenuItem
-            onTouchTap={() => (this.setState({menuFlag: false}), location.href='#updatepassword')}
+            onTouchTap={() => (
+              this.setState({ menuFlag: false }),
+              location.href = '#updatepassword'
+            )}
           >PASSWORD</MenuItem>
           <MenuItem
             onTouchTap={() => this.setState({logoutDialogFlag: true})}

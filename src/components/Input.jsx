@@ -55,7 +55,7 @@ export default class Input extends Component {
     const { auth, target, money, date, tax, pay, type, } = this.state
     const moneyObj = {
       target: target,
-      use_money: money * tax,
+      use_money: Math.round(money * tax),
       enter_date: moment(date).format('YYYY-MM-DD'),
       howto_pay: pay,
       use_type: type,
@@ -227,7 +227,7 @@ export default class Input extends Component {
             <TextField
               hintText='money'
               floatingLabelText='money'
-              type='number'
+              type='tel'
               style={styles.money}
               value={money}
               errorText={moneyErrorMessage}
@@ -338,7 +338,7 @@ export default class Input extends Component {
           modal={false}
           open={dialogFlag}
         >
-          You have enterd using {money * tax} yen
+          You have enterd using {Math.round(money * tax)} yen
         </Dialog>
       </div>
     )

@@ -54,12 +54,10 @@ export default class Detail extends Component {
    */
   deleteUse = () => {
     const { auth, deleteId } = this.state
-    this.setState({
-      deleteFlag: false,
-    })
-    this.props.props.changeDetailFlag()
     firebase.database().ref('use/' + auth.uid + '/' + deleteId).remove().then(() => {
-      // Todo
+      this.setState({
+        deleteFlag: false,
+      })
     }, err => {
       console.log(err)
     })

@@ -136,6 +136,13 @@ export default class CreateAccount extends Component {
   }
 
   render() {
+    const createActions = [
+      <FlatButton
+        label='OK'
+        onTouchTap={() => this.closeDialog()}
+      />
+    ]
+
     const {
       name,
       email,
@@ -228,18 +235,13 @@ export default class CreateAccount extends Component {
         </Card>
         <Dialog
           title='CREATE ACCOUNT'
-          actions={[
-            <FlatButton
-              label='OK'
-              onTouchTap={() => this.closeDialog()}
-            />
-          ]}
           modal={true}
           open={dialogFlag}
           contentStyle={styles.dialog}
+          actions={createActions}
           onRequestClose={() => this.closeDialog()}
         >
-          We created account
+          We created a new account
         </Dialog>
       </div>
     )

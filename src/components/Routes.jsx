@@ -11,8 +11,8 @@ import UpdateAccount from './UpdateAccount'
 
 const styles = {
   root: {
-    padding: '70px 10px 10px',
-    width: '100%',
+    padding: '65px 1vw 1vh',
+    width: '98vw',
   }
 }
 

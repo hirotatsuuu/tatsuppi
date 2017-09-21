@@ -24,6 +24,9 @@ const styles = {
   money: {
     width: '70vw',
   },
+  dialog: {
+    width: '100vw',
+  },
 }
 
 export default class Input extends Component {
@@ -337,6 +340,7 @@ export default class Input extends Component {
           }
           modal={false}
           open={dialogFlag}
+          contentStyle={styles.dialog}
         >
           You have enterd using {Math.round(money * tax)} yen
         </Dialog>

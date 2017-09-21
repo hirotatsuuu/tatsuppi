@@ -17,6 +17,9 @@ const styles = {
   button: {
     width: '40vw',
   },
+  dialog: {
+    width: '100vw',
+  },
 }
 
 export default class Detail extends Component {
@@ -57,7 +60,7 @@ export default class Detail extends Component {
     this.setState({
       deleteFlag: false,
     })
-    this.props.props.changeDetailFlag()
+    this.return()
     firebase.database().ref('use/' + auth.uid + '/' + deleteId).remove().then(() => {
       // Todo
     }, err => {
@@ -133,6 +136,7 @@ export default class Detail extends Component {
           actions={deleteActions}
           modal={true}
           open={deleteFlag}
+          contentStyle={styles.dialog}
           onRequestClose={() => this.setState({deleteFlag: false})}
         >
           Are you sure you want to delete ?

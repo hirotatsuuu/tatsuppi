@@ -27,6 +27,9 @@ const styles = {
       width: '40vw',
     },
   },
+  dialog: {
+    width: '100vw',
+  },
 }
 
 export default class CreateAccount extends Component {
@@ -233,6 +236,7 @@ export default class CreateAccount extends Component {
           ]}
           modal={true}
           open={dialogFlag}
+          contentStyle={styles.dialog}
           onRequestClose={() => this.closeDialog()}
         >
           We created account

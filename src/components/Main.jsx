@@ -49,7 +49,6 @@ export default class Main extends Component {
   }
 
   componentWillUnmount = () => {
-    console.log('Main componentWillUnmount')
     this.userRef.off('value')
   }
 

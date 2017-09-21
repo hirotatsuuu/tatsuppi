@@ -169,8 +169,7 @@ export default class Todo extends Component {
    * 改行の置き換え
    */
   replaceStr = str => {
-    console.log('replaceStr', str)
-    const replacedStr = str.replace('\n', '(改行)')
+    const replacedStr = str.replace('\n', '\n')
     return replacedStr
   }
 

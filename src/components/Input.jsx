@@ -227,7 +227,7 @@ export default class Input extends Component {
             <TextField
               hintText='money'
               floatingLabelText='money'
-              tyle='number'
+              type='number'
               style={styles.money}
               value={money}
               errorText={moneyErrorMessage}

@@ -182,10 +182,10 @@ export default class Main extends Component {
         <Dialog
           title='LOGOUT'
           modal={false}
-          contentStyle={styles.dialog}
           open={logoutDialogFlag}
           actions={logoutActions}
-        >Are you sure logout ?
+          contentStyle={styles.dialog}
+        >Are you sure you want to logout ?
         </Dialog>
       </div>
     )

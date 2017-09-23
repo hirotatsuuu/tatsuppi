@@ -32,7 +32,6 @@ const styles = {
 export default class Home extends Component {
   state = {
     auth: firebase.auth().currentUser,
-    date: new Date(moment()),
     useArray: [],
     detailFlag: false,
     inputFlag: null,
@@ -41,13 +40,27 @@ export default class Home extends Component {
   componentDidMount = () => {
     const { auth } = this.state
     this.useRef = firebase.database().ref('use/' + auth.uid)
+    this.stateRef = firebase.database().ref('state/' + auth.uid)
     this.useRef.on('value', use => {
       if (use.val() !== null) {
-        const { date } = this.state
-        this.changeAll(date, use)
         this.setState({
           use: use,
           inputFlag: true,
+        })
+        let date = new Date(moment())
+        this.stateRef.once('value', state => {
+          if (state.val() !== null) {
+            date = new Date(state.val().date)
+            this.stateRef.remove()
+            this.setState({
+              date: date,
+            })
+          } else {
+            this.setState({
+              date: date,
+            })
+          }
+          this.changeAll(date, use)
         })
       } else {
         this.setState({

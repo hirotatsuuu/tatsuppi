@@ -28,7 +28,7 @@ const styles = {
 
 export default class Detail extends Component {
   state = {
-    deleteFlag: false,
+    dialogFlag: false,
     auth: firebase.auth().currentUser,
   }
 
@@ -60,13 +60,16 @@ export default class Detail extends Component {
    * 使ったお金の削除
    */
   deleteUse = () => {
-    const { auth, deleteId } = this.state
+    const { auth, deleteId, use } = this.state
     this.setState({
-      deleteFlag: false,
+      dialogFlag: false,
     })
-    this.props.props.changeDetailFlag()
     firebase.database().ref('use/' + auth.uid + '/' + deleteId).remove().then(() => {
-      // Todo
+      firebase.database().ref('state/' + auth.uid).set({ date: use.enter_date }).then(() => {
+        this.changeDetailFlag()
+      }, err => {
+        console.log(err)
+      })
     }, err => {
       console.log(err)
     })
@@ -75,7 +78,7 @@ export default class Detail extends Component {
   /**
    * コンポーネントを切り替える処理
    */
-  return = () => {
+  changeDetailFlag = () => {
     this.props.props.changeDetailFlag()
   }
 
@@ -83,14 +86,14 @@ export default class Detail extends Component {
     const {
       use,
       id,
-      deleteFlag,
+      dialogFlag,
     } = this.state
 
     const deleteActions = [
       <FlatButton
         label='cancel'
         secondary={true}
-        onTouchTap={() => this.setState({deleteFlag: false})}
+        onTouchTap={() => this.setState({dialogFlag: false})}
       />,
       <FlatButton
         label='OK'
@@ -101,7 +104,7 @@ export default class Detail extends Component {
 
     return (
       <div>
-        {use !== undefined ? <span>
+        {use !== undefined && use !== null ? <span>
           <Card>
             <CardHeader
               title={use.target}
@@ -136,7 +139,7 @@ export default class Detail extends Component {
                   label='RETURN'
                   secondary={true}
                   style={styles.button}
-                  onTouchTap={() => this.return()}
+                  onTouchTap={() => this.changeDetailFlag()}
                 />
                 <FlatButton
                   label='DELETE'
@@ -144,7 +147,7 @@ export default class Detail extends Component {
                   style={styles.button}
                   onTouchTap={() => (
                     this.setState({
-                      deleteFlag: true,
+                      dialogFlag: true,
                       deleteId: id,
                     })
                   )}
@@ -157,9 +160,9 @@ export default class Detail extends Component {
           title='DELETE'
           actions={deleteActions}
           modal={true}
-          open={deleteFlag}
+          open={dialogFlag}
           contentStyle={styles.dialog}
-          onRequestClose={() => this.setState({deleteFlag: false})}
+          onRequestClose={() => this.setState({dialogFlag: false})}
         >
           Are you sure you want to delete ?
         </Dialog>

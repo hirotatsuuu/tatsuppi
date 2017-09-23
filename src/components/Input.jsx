@@ -58,11 +58,11 @@ export default class Input extends Component {
   makeInputObject = () => {
     const { date, money, target, tax, pay, type, } = this.state
     const input = {
-      enter_date: moment(date).format('YYYY-MM-DD'),
-      use_money: Math.round(money * tax),
+      date: moment(date).format('YYYY-MM-DD'),
+      money: Math.round(money * tax),
       target: target,
-      howto_pay: pay,
-      use_type: type,
+      pay: pay,
+      type: type,
       enter_datetime: firebase.database.ServerValue.TIMESTAMP,
     }
     return input

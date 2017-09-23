@@ -116,9 +116,10 @@ export default class Detail extends Component {
             />
             <CardText>
               <Card>
-                <Table>
+                <Table
+                  selectable={false}
+                >
                   <TableBody
-                    showRowHover={true}
                     displayRowCheckbox={false}
                   >
                     <TableRow>

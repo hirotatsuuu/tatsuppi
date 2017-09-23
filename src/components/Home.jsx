@@ -236,7 +236,8 @@ export default class Home extends Component {
                       >
                         {useArray.map((row, index) => {
                           return (
-                            <TableRow key={index}
+                            <TableRow
+                              key={index}
                               onTouchTap={() => this.cellTouch(row.id)}
                             >
                               <TableRowColumn><span style={styles.text}>{row.target}</span></TableRowColumn>

@@ -7,7 +7,7 @@ import Login from './Login'
 
 export default class App extends Component {
   state = {
-    loginFlag: null,
+    loginFlag: false,
   }
 
   componentDidMount = () => {

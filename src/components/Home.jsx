@@ -44,16 +44,14 @@ export default class Home extends Component {
   }
 
   componentDidMount = () => {
-    const { auth, date } = this.state
+    const { auth } = this.state
     this.useRef = firebase.database().ref('use/' + auth.uid)
-    this.useRef.on('value', snapshot => {
-      if (snapshot.val() !== null) {
-        const date = moment(date).format('YYYY-MM-DD')
-        this.getUse(date, snapshot)
-        this.getTotalMoneyByDate(date, snapshot)
-        this.getTotalMoneyByMonth(date, snapshot)
+    this.useRef.on('value', use => {
+      if (use.val() !== null) {
+        const { date } = this.state
+        this.changeAll(date, use)
         this.setState({
-          use: snapshot,
+          use: use,
           inputFlag: true,
         })
       } else {
@@ -66,6 +64,16 @@ export default class Home extends Component {
 
   componentWillUnmount = () => {
     this.useRef.off('value')
+  }
+
+  /**
+   * 更新があった時の処理
+   */
+  changeAll = (date, use) => {
+    const _date = moment(date).format('YYYY-MM-DD')
+    this.getUse(_date, use)
+    this.getTotalMoneyByDate(_date, use)
+    this.getTotalMoneyByMonth(_date, use)
   }
 
   /**
@@ -119,14 +127,11 @@ export default class Home extends Component {
    * 日付を変更したときの処理
    */
   changeDate = date => {
+    const { use } = this.state
+    this.changeAll(date, use)
     this.setState({
       date: date,
     })
-    const _date = moment(date).format('YYYY-MM-DD')
-    const { use } = this.state
-    this.getUse(_date, use)
-    this.getTotalMoneyByDate(_date, use)
-    this.getTotalMoneyByMonth(_date, use)
   }
 
   /**

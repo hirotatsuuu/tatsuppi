@@ -12,16 +12,10 @@ export default class App extends Component {
 
   componentDidMount = () => {
     firebase.auth().onIdTokenChanged(auth => {
-      if (auth === null) {
-        this.setState({
-          loginFlag: false,
-        })
-        location.href='#'
+      if (auth !== null) {
+        this.loginAuth()
       } else {
-        this.setState({
-          loginFlag: true,
-        })
-        location.href='#home'
+        this.logoutAuth()
       }
     })
   }

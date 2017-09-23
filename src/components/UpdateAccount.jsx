@@ -31,16 +31,14 @@ const styles = {
 }
 
 export default class UpdateAccount extends Component {
-  componentWillMount = () => {
-    this.setState({
-      auth: firebase.auth().currentUser,
-      name: '',
-      emai: '',
-      nameErrorMessage: '',
-      emailErrorMessage: '',
-      message: '',
-      dialogFlag: false,
-    })
+  state = {
+    auth: firebase.auth().currentUser,
+    name: '',
+    emai: '',
+    nameErrorMessage: '',
+    emailErrorMessage: '',
+    message: '',
+    dialogFlag: false,
   }
 
   componentDidMount = () => {
@@ -94,15 +92,16 @@ export default class UpdateAccount extends Component {
    */
   updateUser = () => {
     const { name, email, auth } = this.state
+    this.setState({
+      dialogFlag: false,
+    })
     auth.updateEmail(email).then(() => {
       const userObj = {
         name: name,
         email: email,
       }
       this.userRef.update(userObj).then(() => {
-        this.setState({
-          dialogFlag: true,
-        })
+        // Todo
       }, err => {
         console.log(err)
       })
@@ -111,6 +110,7 @@ export default class UpdateAccount extends Component {
         message: this.checkEmailErrorCode(err.code),
       })
     })
+    location.href = '#home'
   }
 
   /**
@@ -137,11 +137,12 @@ export default class UpdateAccount extends Component {
   render() {
     const updateActions = [
       <FlatButton
+        label='CANCEL'
+        onTouchTap={() => this.setState({ dialogFlag: false })}
+      />,
+      <FlatButton
         label='OK'
-        onTouchTap={() => (
-          this.setState({ dialogFlag: false }),
-          location.href = '#home'
-        )}
+        onTouchTap={() => this.updateUser()}
       />
     ]
 
@@ -201,7 +202,7 @@ export default class UpdateAccount extends Component {
                 label='OK'
                 disabled={disabled}
                 fullWidth={true}
-                onTouchTap={() => this.updateUser()}
+                onTouchTap={() => this.setState({dialogFlag: true})}
               />
             </CardActions>
           </div>
@@ -212,11 +213,9 @@ export default class UpdateAccount extends Component {
           modal={true}
           open={dialogFlag}
           contentStyle={styles.dialog}
-          onRequestClose={() => this.setState({
-            dialogFlag: false,
-          })}
+          onRequestClose={() => this.setState({dialogFlag: false})}
         >
-          It was updated account
+          Are you sure you want to update your account ?
         </Dialog>
       </div>
     )

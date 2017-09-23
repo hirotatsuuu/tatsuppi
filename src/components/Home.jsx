@@ -31,28 +31,36 @@ const styles = {
 
 export default class Home extends Component {
   state = {
-    date: new Date(moment()),
+    auth: firebase.auth().currentUser,
     useArray: [],
     detailFlag: false,
-  }
-
-  componentWillMount = () => {
-    this.setState({
-      auth: firebase.auth().currentUser,
-      inputFlag: false,
-    })
+    inputFlag: null,
   }
 
   componentDidMount = () => {
     const { auth } = this.state
     this.useRef = firebase.database().ref('use/' + auth.uid)
+    this.stateRef = firebase.database().ref('state/' + auth.uid)
     this.useRef.on('value', use => {
       if (use.val() !== null) {
-        const { date } = this.state
-        this.changeAll(date, use)
         this.setState({
           use: use,
           inputFlag: true,
+        })
+        let date = new Date(moment())
+        this.stateRef.once('value', state => {
+          if (state.val() !== null) {
+            date = new Date(state.val().date)
+            this.stateRef.remove()
+            this.setState({
+              date: date,
+            })
+          } else {
+            this.setState({
+              date: date,
+            })
+          }
+          this.changeAll(date, use)
         })
       } else {
         this.setState({
@@ -138,15 +146,14 @@ export default class Home extends Component {
    * セルのタッチによる処理
    */
   cellTouch = id => {
-    const { detaiFlag } = this.state
     const props = {
       changeDetailFlag: this.changeDetailFlag,
       id: id,
     }
     this.setState({
-      detaiFlag: !detaiFlag,
       props: props,
     })
+    this.changeDetailFlag()
   }
 
   /**
@@ -183,56 +190,58 @@ export default class Home extends Component {
     return (
       <div style={styles.root}>
         <Card>
-          {inputFlag ? <div>
-            {!detaiFlag ? <div>
-              <CardText>
-                <DatePicker
-                  hintText='import date'
-                  floatingLabelText='import date'
-                  autoOk={true}
-                  value={date}
-                  onChange={(a, date) => this.changeDate(date)}
-                />
-                <div>
-                  {todayMonth === setMonth ? '今月' : moment(date).format('M月')}の合計金額: {totalMoneyByMonth}円 / 月
-                </div>
-                <div>
-                  {todayDate === setDate ? '本日' : moment(date).format('D日')}の合計金額: {totalMoneyByDate}円 / 日
-                </div>
-              </CardText>
-              {totalMoneyByDate !== 0 ? <div style={styles.card}>
-                <Card>
-                  <Table>
-                    <TableHeader
-                      displaySelectAll={false}
-                      adjustForCheckbox={false}
-                    >
-                      <TableRow>
-                        <TableHeaderColumn><span style={styles.text}>target</span></TableHeaderColumn>
-                        <TableHeaderColumn><span style={styles.text}>money</span></TableHeaderColumn>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody
-                      showRowHover={true}
-                      displayRowCheckbox={false}
-                    >
-                      {useArray.map((row, index) => {
-                        return (
-                          <TableRow key={index}
-                            onTouchTap={() => this.cellTouch(row.id)}
-                          >
-                            <TableRowColumn><span style={styles.text}>{row.target}</span></TableRowColumn>
-                            <TableRowColumn><span style={styles.text}>{row.use_money + ' 円'}</span></TableRowColumn>
-                          </TableRow>
-                        )
-                      })}
-                    </TableBody>
-                  </Table>
-                </Card></div> : <CardText>
-                {todayDate === setDate ? '本日' : moment(date).format('D日')}はまだお金を使っていません
-              </CardText>}
-            </div> : <Detail props={props} />}
-          </div> : <CardText>家計簿を付けましょう</CardText>}
+          {inputFlag !== null ?
+            inputFlag ? <div>
+              {!detaiFlag ? <div>
+                <CardText>
+                  <DatePicker
+                    hintText='import date'
+                    floatingLabelText='import date'
+                    autoOk={true}
+                    value={date}
+                    onChange={(a, date) => this.changeDate(date)}
+                  />
+                  <div>
+                    {todayMonth === setMonth ? '今月' : moment(date).format('M月')}の合計金額: {totalMoneyByMonth}円 / 月
+                  </div>
+                  <div>
+                    {todayDate === setDate ? '本日' : moment(date).format('D日')}の合計金額: {totalMoneyByDate}円 / 日
+                  </div>
+                </CardText>
+                {totalMoneyByDate !== 0 ? <div style={styles.card}>
+                  <Card>
+                    <Table>
+                      <TableHeader
+                        displaySelectAll={false}
+                        adjustForCheckbox={false}
+                      >
+                        <TableRow>
+                          <TableHeaderColumn><span style={styles.text}>target</span></TableHeaderColumn>
+                          <TableHeaderColumn><span style={styles.text}>money</span></TableHeaderColumn>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody
+                        showRowHover={true}
+                        displayRowCheckbox={false}
+                      >
+                        {useArray.map((row, index) => {
+                          return (
+                            <TableRow key={index}
+                              onTouchTap={() => this.cellTouch(row.id)}
+                            >
+                              <TableRowColumn><span style={styles.text}>{row.target}</span></TableRowColumn>
+                              <TableRowColumn><span style={styles.text}>{row.use_money + ' 円'}</span></TableRowColumn>
+                            </TableRow>
+                          )
+                        })}
+                      </TableBody>
+                    </Table>
+                  </Card></div> : <CardText>
+                  {todayDate === setDate ? '本日' : moment(date).format('D日')}はまだお金を使っていません
+                </CardText>}
+              </div> : <Detail props={props} />}
+            </div> : <CardText>家計簿を付けましょう</CardText>
+            : null}
         </Card>
       </div>
     )

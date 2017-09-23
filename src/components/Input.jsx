@@ -31,23 +31,24 @@ const styles = {
 
 export default class Input extends Component {
   state = {
-    dialogFlag: false,
+    auth: firebase.auth().currentUser,
     date: new Date(moment()),
+    dialogFlag: false,
     target: '',
     targetError: '',
     money: '',
     moneyErrorMessage: '',
-    tax: 1,
     selectTaxValue: 1,
-    pay: '',
     selectPayValue: 1,
-    type: '',
     selectTypeValue: 1,
   }
 
   componentWillMount = () => {
+    const { selectTaxValue, selectPayValue, selectTypeValue } = this.state
     this.setState({
-      auth: firebase.auth().currentUser,
+      tax: this.getSelectTax(selectTaxValue),
+      pay: this.getSelectPay(selectPayValue),
+      type: this.getSelectType(selectTypeValue),
     })
   }
 
@@ -71,6 +72,7 @@ export default class Input extends Component {
     }, err => {
       console.log(err)
     })
+    firebase.database().ref('state/' + auth.uid).set({date: moment(date).format('YYYY-MM-DD')})
   }
 
   /**
@@ -90,7 +92,6 @@ export default class Input extends Component {
     if (value.match(/[^0-9]+/)) {
       message = '半角数字を入力して下さい'
     } else {
-      const { tax } = this.state
       this.setState({
         money: value,
       })
@@ -101,10 +102,7 @@ export default class Input extends Component {
   /**
    * 税の選択の処理
    */
-  changeSelectTax = selectTaxValue => {
-    this.setState({
-      selectTaxValue: selectTaxValue,
-    })
+  getSelectTax = selectTaxValue => {
     let tax = 1
     switch (selectTaxValue) {
       case 1:
@@ -122,10 +120,7 @@ export default class Input extends Component {
   /**
    * 支払い方法の選択の処理
    */
-  changeSelectPay = selectPayValue => {
-    this.setState({
-      selectPayValue: selectPayValue,
-    })
+  getSelectPay = selectPayValue => {
     let pay = ''
     switch (selectPayValue) {
       case 1:
@@ -143,10 +138,7 @@ export default class Input extends Component {
   /**
    * 使ったお金の種類の選択の処理
    */
-  changeSelectType = selectTypeValue => {
-    this.setState({
-      selectTypeValue: selectTypeValue,
-    })
+  getSelectType = selectTypeValue => {
     let type = ''
     switch (selectTypeValue) {
       case 1:
@@ -261,7 +253,8 @@ export default class Input extends Component {
               value={selectTaxValue}
               onChange={(e, i, selectTaxValue) =>
                 this.setState({
-                  tax: this.changeSelectTax(selectTaxValue),
+                  tax: this.getSelectTax(selectTaxValue),
+                  selectTaxValue: selectTaxValue,
                 })
               }
             >
@@ -282,7 +275,8 @@ export default class Input extends Component {
               value={selectPayValue}
               onChange={(e, i, selectPayValue) =>
                 this.setState({
-                  pay: this.changeSelectPay(selectPayValue),
+                  pay: this.getSelectPay(selectPayValue),
+                  selectPayValue: selectPayValue,
                 })
               }
             >
@@ -303,7 +297,8 @@ export default class Input extends Component {
               value={selectTypeValue}
               onChange={(e, i, selectTypeValue) =>
                 this.setState({
-                  type: this.changeSelectType(selectTypeValue),
+                  type: this.getSelectType(selectTypeValue),
+                  selectTypeValue: selectTypeValue,
                 })
               }
             >

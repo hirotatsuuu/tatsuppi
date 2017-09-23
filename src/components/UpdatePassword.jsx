@@ -109,10 +109,12 @@ export default class UpdatePassword extends Component {
     const updateActions = [
       <FlatButton
         label='CANCEL'
+        secondary={true}
         onTouchTap={() => this.setState({ dialogFlag: false })}
       />,
       <FlatButton
         label='OK'
+        primary={true}
         onTouchTap={() => this.updatePassword()}
       />
     ]

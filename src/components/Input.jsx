@@ -72,7 +72,6 @@ export default class Input extends Component {
     }, err => {
       console.log(err)
     })
-    firebase.database().ref('state/' + auth.uid).set({date: moment(date).format('YYYY-MM-DD')})
   }
 
   /**
@@ -173,15 +172,25 @@ export default class Input extends Component {
     return message
   }
 
+  /**
+   * HOME画面に遷移
+   */
+  goHome = () => {
+    const { auth, date } = this.state
+    firebase.database().ref('state/' + auth.uid).set({ date: date}).then(() => {
+      this.setState({
+        dialogFlag: false
+      })
+      location.href = '#home'
+    })
+  }
+
   render() {
     const inputActions = [
       <FlatButton
         label='OK'
         secondary={true}
-        onTouchTap={() => (
-          this.setState({ dialogFlag: false }),
-          location.href = '#home'
-        )}
+        onTouchTap={() => this.goHome()}
       />
     ]
 

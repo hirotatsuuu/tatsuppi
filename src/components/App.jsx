@@ -7,7 +7,7 @@ import Login from './Login'
 
 export default class App extends Component {
   state = {
-    loginFlag: false,
+    loginFlag: null,
   }
 
   componentDidMount = () => {
@@ -37,7 +37,7 @@ export default class App extends Component {
   }
 
   /**
-   * ログイアウト処理
+   * ログアウト処理
    */
   logoutAuth = () => {
     this.setState({

@@ -98,6 +98,9 @@ export default class Main extends Component {
       case 'updateaccount':
         title = 'ACCOUNT'
         break
+      case 'line':
+        title = 'LINE'
+        break
       default:
         title = 'default'
         break
@@ -174,6 +177,12 @@ export default class Main extends Component {
               location.href = '#updatepassword'
             )}
           >PASSWORD</MenuItem>
+          <MenuItem
+            onTouchTap={() => (
+              this.setState({ menuFlag: false }),
+              location.href = '#line'
+            )}
+          >LINE</MenuItem>
           <MenuItem
             onTouchTap={() => this.setState({logoutDialogFlag: true})}
           >LOGOUT</MenuItem>

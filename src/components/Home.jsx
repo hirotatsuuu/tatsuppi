@@ -64,12 +64,11 @@ export default class Home extends Component {
               })
             }
             this.stateRef.remove()
-          } else {
-            this.setState({
-              date: date,
-              message: message,
-            })
           }
+          this.setState({
+            date: date,
+            message: message,
+          })
           this.changeAll(date, use)
         })
       } else {
@@ -100,7 +99,7 @@ export default class Home extends Component {
   getUse = (date, use) => {
     let [useVal, useArray] = [use.val(), []]
     Object.keys(useVal).forEach(snapshot => {
-      if (date === useVal[snapshot].enter_date) {
+      if (date === useVal[snapshot].date) {
         let obj = useVal[snapshot]
         obj.id = snapshot
         useArray.push(obj)
@@ -117,8 +116,8 @@ export default class Home extends Component {
   getTotalMoneyByDate = (date, use) => {
     let totalMoneyByDate = 0
     use.forEach(snapshot => {
-      if (date === snapshot.val().enter_date) {
-        totalMoneyByDate += parseInt(snapshot.val().use_money)
+      if (date === snapshot.val().date) {
+        totalMoneyByDate += parseInt(snapshot.val().money)
       }
     })
     this.setState({
@@ -132,8 +131,8 @@ export default class Home extends Component {
   getTotalMoneyByMonth = (date, use) => {
     let totalMoneyByMonth = 0
     use.forEach(snapshot => {
-      if (moment(date).format('M') === moment(snapshot.val().enter_date).format('M')) {
-        totalMoneyByMonth += parseInt(snapshot.val().use_money)
+      if (moment(date).format('M') === moment(snapshot.val().date).format('M')) {
+        totalMoneyByMonth += parseInt(snapshot.val().money)
       }
     })
     this.setState({
@@ -241,7 +240,7 @@ export default class Home extends Component {
                               onTouchTap={() => this.cellTouch(row.id)}
                             >
                               <TableRowColumn><span style={styles.text}>{row.target}</span></TableRowColumn>
-                              <TableRowColumn><span style={styles.text}>{row.use_money + ' 円'}</span></TableRowColumn>
+                              <TableRowColumn><span style={styles.text}>{row.money + ' 円'}</span></TableRowColumn>
                             </TableRow>
                           )
                         })}

@@ -88,20 +88,36 @@ export default class UpdateAccount extends Component {
   }
 
   /**
+   * 更新オブジェクトの作成
+   */
+  makeAccountObject = () => {
+    const { name, email } = this.state
+    const user = {
+      name: name,
+      email: email,
+    }
+    return user
+  }
+
+  /**
    * アカウント情報の更新
    */
   updateUser = () => {
-    const { name, email, auth } = this.state
+    const { email, auth } = this.state
     this.setState({
       dialogFlag: false,
     })
     auth.updateEmail(email).then(() => {
-      const userObj = {
-        name: name,
-        email: email,
-      }
-      this.userRef.update(userObj).then(() => {
+      const user = this.makeAccountObject()
+      this.userRef.update(user).then(() => {
+        const state = {
+          message: 'UPDATE ACCOUNT',
+        }
+        firebase.database().ref('state/' + auth.uid).set(state).then(() => {
         location.href = '#home'
+        }, err => {
+          console.log(err)
+        })
       }, err => {
         console.log(err)
       })

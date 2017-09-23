@@ -53,19 +53,28 @@ export default class Input extends Component {
   }
 
   /**
+   * インプット情報のオブジェクト作成
+   */
+  makeInputObject = () => {
+    const { date, money, target, tax, pay, type, } = this.state
+    const input = {
+      date: moment(date).format('YYYY-MM-DD'),
+      money: Math.round(money * tax),
+      target: target,
+      pay: pay,
+      type: type,
+      enter_datetime: firebase.database.ServerValue.TIMESTAMP,
+    }
+    return input
+  }
+
+  /**
    * 使ったお金の情報を新規追加
    */
   addUse = () => {
-    const { auth, target, money, date, tax, pay, type, } = this.state
-    const moneyObj = {
-      target: target,
-      use_money: Math.round(money * tax),
-      enter_date: moment(date).format('YYYY-MM-DD'),
-      howto_pay: pay,
-      use_type: type,
-      enter_datetime: firebase.database.ServerValue.TIMESTAMP,
-    }
-    firebase.database().ref('use/' + auth.uid).push(moneyObj).then(() => {
+    const { auth } = this.state
+    const input = this.makeInputObject()
+    firebase.database().ref('use/' + auth.uid).push(input).then(() => {
       this.setState({
         dialogFlag: true,
       })

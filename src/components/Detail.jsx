@@ -66,7 +66,7 @@ export default class Detail extends Component {
     })
     firebase.database().ref('use/' + auth.uid + '/' + deleteId).remove().then(() => {
       const state = {
-        date: use.enter_date,
+        date: use.date,
         message: 'DELETED INPUT'
       }
       firebase.database().ref('state/' + auth.uid).set(state).then(() => {
@@ -112,7 +112,7 @@ export default class Detail extends Component {
           <Card>
             <CardHeader
               title={use.target}
-              subtitle={use.enter_date}
+              subtitle={use.date}
             />
             <CardText>
               <Card>
@@ -123,15 +123,15 @@ export default class Detail extends Component {
                   >
                     <TableRow>
                       <TableRowColumn>money</TableRowColumn>
-                      <TableRowColumn>{use.use_money} yen</TableRowColumn>
+                      <TableRowColumn>{use.money} yen</TableRowColumn>
                     </TableRow>
                     <TableRow>
                       <TableRowColumn>how to pay</TableRowColumn>
-                      <TableRowColumn>{use.howto_pay}</TableRowColumn>
+                      <TableRowColumn>{use.pay}</TableRowColumn>
                     </TableRow>
                     <TableRow>
                       <TableRowColumn>type</TableRowColumn>
-                      <TableRowColumn>{use.use_type}</TableRowColumn>
+                      <TableRowColumn>{use.type}</TableRowColumn>
                     </TableRow>
                   </TableBody>
                 </Table>

@@ -89,9 +89,9 @@ export default class Todo extends Component {
   sortDateTime = (array, flag) => {
     let sortArray = []
     sortArray = array.sort((before, after) => {
-      if (before.date_time < after.date_time) {
+      if (before.datetime < after.datetime) {
         return (flag ? 1 : -1)
-      } else if (before.date_time > after.date_time) {
+      } else if (before.datetime > after.datetime) {
         return (flag ? -1 : 1)
       } else {
         return 0
@@ -108,7 +108,7 @@ export default class Todo extends Component {
     const dateTime = moment().format('YYYY-MM-DD HH:mm:ss')
     const todoObj = {
       title: title,
-      date_time: dateTime,
+      datetime: dateTime,
       text: text,
       enter_datetime: firebase.database.ServerValue.TIMESTAMP,
     }
@@ -130,7 +130,7 @@ export default class Todo extends Component {
     const dateTime = moment().format('YYYY-MM-DD HH:mm:ss')
     const editObj = {
       title: title,
-      date_time: dateTime,
+      datetime: dateTime,
       text: text,
     }
     firebase.database().ref('todos/' + authUid + '/' + editId).update(editObj).then(() => {
@@ -320,7 +320,7 @@ export default class Todo extends Component {
                   <Card>
                     <CardHeader
                       title={row.title}
-                      subtitle={row.date_time}
+                      subtitle={row.datetime}
                       actAsExpander={true}
                       showExpandableButton={true}
                     />

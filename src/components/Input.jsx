@@ -177,11 +177,17 @@ export default class Input extends Component {
    */
   goHome = () => {
     const { auth, date } = this.state
-    firebase.database().ref('state/' + auth.uid).set({ date: date}).then(() => {
+    const state = {
+      date: moment(date).format(),
+      message: 'ADD INPUT',
+    }
+    firebase.database().ref('state/' + auth.uid).set(state).then(() => {
       this.setState({
         dialogFlag: false
       })
       location.href = '#home'
+    }, err => {
+      console.log(err)
     })
   }
 

@@ -21,13 +21,13 @@ const styles = {
   },
 }
 
-export default class UpdateAccount extends Component {
+export default class SNS extends Component {
 
   render() {
     return (
       <div style={styles.root}>
         <FlatButton
-          label='LINEの友達の追加'
+          label='GO TO LINE'
           href='https://line.me/R/ti/p/%40ond8714j'
           style={styles.full}
         />

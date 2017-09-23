@@ -98,8 +98,8 @@ export default class Main extends Component {
       case 'updateaccount':
         title = 'ACCOUNT'
         break
-      case 'line':
-        title = 'LINE'
+      case 'sns':
+        title = 'SNS'
         break
       default:
         title = 'default'
@@ -180,9 +180,9 @@ export default class Main extends Component {
           <MenuItem
             onTouchTap={() => (
               this.setState({ menuFlag: false }),
-              location.href = '#line'
+              location.href = '#sns'
             )}
-          >LINE</MenuItem>
+          >SNS</MenuItem>
           <MenuItem
             onTouchTap={() => this.setState({logoutDialogFlag: true})}
           >LOGOUT</MenuItem>

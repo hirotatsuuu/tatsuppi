@@ -240,21 +240,6 @@ export default class Input extends Component {
               onChange={(a, date) => this.changeDate(date)}
             />
             <TextField
-              hintText='target'
-              floatingLabelText='target'
-              fullWidth={true}
-              value={target}
-              errorText={targetError}
-              onChange={e => {
-                const value = e.target.value
-                this.setState({
-                  target: value,
-                  targetError: this.checkCount(value),
-                })
-              }}
-            />
-            <br />
-            <TextField
               hintText='money'
               floatingLabelText='money'
               type='tel'
@@ -269,6 +254,21 @@ export default class Input extends Component {
               }}
             />
             {moneyErrorMessage === '' ? <span>{tax !== 1 ? '*' + tax : null} yen</span> : null}
+            <br />
+            <TextField
+              hintText='target'
+              floatingLabelText='target'
+              fullWidth={true}
+              value={target}
+              errorText={targetError}
+              onChange={e => {
+                const value = e.target.value
+                this.setState({
+                  target: value,
+                  targetError: this.checkCount(value),
+                })
+              }}
+            />
             <br />
             <SelectField
               hintText='tax'

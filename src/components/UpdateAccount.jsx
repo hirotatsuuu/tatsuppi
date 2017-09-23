@@ -101,7 +101,7 @@ export default class UpdateAccount extends Component {
         email: email,
       }
       this.userRef.update(userObj).then(() => {
-        // Todo
+        location.href = '#home'
       }, err => {
         console.log(err)
       })
@@ -110,7 +110,6 @@ export default class UpdateAccount extends Component {
         message: this.checkEmailErrorCode(err.code),
       })
     })
-    location.href = '#home'
   }
 
   /**
@@ -138,10 +137,12 @@ export default class UpdateAccount extends Component {
     const updateActions = [
       <FlatButton
         label='CANCEL'
+        secondary={true}
         onTouchTap={() => this.setState({ dialogFlag: false })}
       />,
       <FlatButton
         label='OK'
+        primary={true}
         onTouchTap={() => this.updateUser()}
       />
     ]

@@ -8,6 +8,10 @@ import {
   CardText,
   CardActions,
   Dialog,
+  Table,
+  TableBody,
+  TableRow,
+  TableRowColumn,
 } from 'material-ui'
 
 const styles = {
@@ -25,6 +29,7 @@ const styles = {
 export default class Detail extends Component {
   state = {
     deleteFlag: false,
+    auth: firebase.auth().currentUser,
   }
 
   constructor(props) {
@@ -33,7 +38,6 @@ export default class Detail extends Component {
 
   componentWillMount = () => {
     this.setState({
-      auth: firebase.auth().currentUser,
       id: this.props.props.id,
     })
   }
@@ -69,7 +73,7 @@ export default class Detail extends Component {
   }
 
   /**
-   * 戻るをタッチしたときの処理
+   * コンポーネントを切り替える処理
    */
   return = () => {
     this.props.props.changeDetailFlag()
@@ -104,9 +108,27 @@ export default class Detail extends Component {
               subtitle={use.enter_date}
             />
             <CardText>
-              you use money {use.use_money} yen<br />
-              you use how to pay {use.howto_pay}<br />
-              use type is {use.use_type}
+              <Card>
+                <Table>
+                  <TableBody
+                    showRowHover={true}
+                    displayRowCheckbox={false}
+                  >
+                    <TableRow>
+                      <TableRowColumn>money</TableRowColumn>
+                      <TableRowColumn>{use.use_money} yen</TableRowColumn>
+                    </TableRow>
+                    <TableRow>
+                      <TableRowColumn>how to pay</TableRowColumn>
+                      <TableRowColumn>{use.howto_pay}</TableRowColumn>
+                    </TableRow>
+                    <TableRow>
+                      <TableRowColumn>type</TableRowColumn>
+                      <TableRowColumn>{use.use_type}</TableRowColumn>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </Card>
             </CardText>
             <CardActions>
               <div style={styles.card}>

@@ -8,7 +8,7 @@ import ForgotPassword from './ForgotPassword'
 import CreateAccount from './CreateAccount'
 import UpdatePassword from './UpdatePassword'
 import UpdateAccount from './UpdateAccount'
-import LINE from './LINE'
+import SNS from './SNS'
 
 const styles = {
   root: {
@@ -40,7 +40,7 @@ export default class Routes extends Component {
             <Route path='/todo' component={Todo} />
             <Route path='/updatepassword' component={UpdatePassword} />
             <Route path='/updateaccount' component={UpdateAccount} />
-            <Route path='/line' component={LINE} />
+            <Route path='/sns' component={SNS} />
             <Route render={() => (<Link to='#' />)} />
           </Switch> :
           <Switch>

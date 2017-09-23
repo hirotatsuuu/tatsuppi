@@ -7,7 +7,7 @@ import Login from './Login'
 
 export default class App extends Component {
   state = {
-    loginFlag: false,
+    loginFlag: null,
   }
 
   componentDidMount = () => {
@@ -45,9 +45,9 @@ export default class App extends Component {
 
     return (
       <div>
-        {loginFlag ?
+        {loginFlag !== null ? loginFlag ?
           <Main logoutAuth={this.logoutAuth} /> :
-          <Login loginAuth={this.loginAuth} />}
+          <Login loginAuth={this.loginAuth} /> : null}
         <Routes loginFlag={loginFlag} />
       </div>
     )

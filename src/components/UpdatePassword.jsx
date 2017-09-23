@@ -32,6 +32,7 @@ const styles = {
 
 export default class UpdatePassword extends Component {
   state = {
+    auth: firebase.auth().currentUser,
     password: '',
     again: '',
     message: '',
@@ -54,7 +55,15 @@ export default class UpdatePassword extends Component {
         dialogFlag: false,
       })
       firebase.auth().currentUser.updatePassword(password).then(() => {
-        // Todo
+        const { auth } = this.state
+        const state = {
+          message: 'UPDATE PASSWORD',
+        }
+        firebase.database().ref('state/' + auth.uid).set(state).then(() => {
+          location.href = '#home'
+          }, err => {
+            console.log(err)
+          })
       }, err => {
         this.setState({
           message: this.checkErrorCode(err.code),

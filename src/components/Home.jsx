@@ -64,12 +64,11 @@ export default class Home extends Component {
               })
             }
             this.stateRef.remove()
-          } else {
-            this.setState({
-              date: date,
-              message: message,
-            })
           }
+          this.setState({
+            date: date,
+            message: message,
+          })
           this.changeAll(date, use)
         })
       } else {

@@ -65,7 +65,11 @@ export default class Detail extends Component {
       dialogFlag: false,
     })
     firebase.database().ref('use/' + auth.uid + '/' + deleteId).remove().then(() => {
-      firebase.database().ref('state/' + auth.uid).set({ date: use.enter_date }).then(() => {
+      const state = {
+        date: use.enter_date,
+        message: 'DELETED INPUT'
+      }
+      firebase.database().ref('state/' + auth.uid).set(state).then(() => {
         this.changeDetailFlag()
       }, err => {
         console.log(err)

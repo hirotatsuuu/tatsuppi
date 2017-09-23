@@ -12,6 +12,7 @@ import {
   TableRowColumn,
   Card,
   CardText,
+  Snackbar,
 } from 'material-ui'
 
 import Detail from './Detail'
@@ -47,17 +48,26 @@ export default class Home extends Component {
           use: use,
           inputFlag: true,
         })
-        let date = new Date(moment())
+        let [date, message] = [new Date(moment()), '']
         this.stateRef.once('value', state => {
           if (state.val() !== null) {
-            date = new Date(state.val().date)
+            if (state.val().date !== undefined) {
+              date = new Date(state.val().date)
+              this.setState({
+                date: date,
+              })
+            }
+            if (state.val().message !== undefined) {
+              message = state.val().message
+              this.setState({
+                message: message,
+              })
+            }
             this.stateRef.remove()
-            this.setState({
-              date: date,
-            })
           } else {
             this.setState({
               date: date,
+              message: message,
             })
           }
           this.changeAll(date, use)
@@ -175,6 +185,7 @@ export default class Home extends Component {
       detaiFlag,
       props,
       inputFlag,
+      message,
     } = this.state
 
     const [todayMonth, setMonth] = [
@@ -243,6 +254,13 @@ export default class Home extends Component {
             </div> : <CardText>家計簿を付けましょう</CardText>
             : null}
         </Card>
+        {message !== undefined ?
+          <Snackbar
+            open={message !== ''}
+            message={message}
+            autoHideDuration={3000}
+            onRequestClose={() => this.setState({ message: '' })}
+          /> : null}
       </div>
     )
   }

@@ -92,14 +92,17 @@ export default class Main extends Component {
       case 'todo':
         title = 'TODO'
         break
+      case 'chat':
+        title = 'CHAT'
+        break
+      case 'sns':
+        title = 'SNS'
+        break
       case 'updatepassword':
         title = 'PASSWORD'
         break
       case 'updateaccount':
         title = 'ACCOUNT'
-        break
-      case 'sns':
-        title = 'SNS'
         break
       default:
         title = 'default'
@@ -174,15 +177,21 @@ export default class Main extends Component {
           <MenuItem
             onTouchTap={() => (
               this.setState({ menuFlag: false }),
-              location.href = '#updatepassword'
+              location.href = '#chat'
             )}
-          >PASSWORD</MenuItem>
+          >CHAT</MenuItem>
           <MenuItem
             onTouchTap={() => (
               this.setState({ menuFlag: false }),
               location.href = '#sns'
             )}
           >SNS</MenuItem>
+          <MenuItem
+            onTouchTap={() => (
+              this.setState({ menuFlag: false }),
+              location.href = '#updatepassword'
+            )}
+          >PASSWORD</MenuItem>
           <MenuItem
             onTouchTap={() => this.setState({logoutDialogFlag: true})}
           >LOGOUT</MenuItem>

@@ -9,6 +9,7 @@ import CreateAccount from './CreateAccount'
 import UpdatePassword from './UpdatePassword'
 import UpdateAccount from './UpdateAccount'
 import SNS from './SNS'
+import Chat from './chat'
 
 const styles = {
   root: {
@@ -41,6 +42,7 @@ export default class Routes extends Component {
             <Route path='/updatepassword' component={UpdatePassword} />
             <Route path='/updateaccount' component={UpdateAccount} />
             <Route path='/sns' component={SNS} />
+            <Route path='/chat' component={Chat} />
             <Route render={() => (<Link to='#' />)} />
           </Switch> :
           <Switch>

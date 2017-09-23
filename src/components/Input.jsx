@@ -182,6 +182,17 @@ export default class Input extends Component {
   }
 
   render() {
+    const inputActions = [
+      <FlatButton
+        label='OK'
+        secondary={true}
+        onTouchTap={() => (
+          this.setState({ dialogFlag: false }),
+          location.href = '#home'
+        )}
+      />
+    ]
+
     const {
       dialogFlag,
       date,
@@ -328,16 +339,7 @@ export default class Input extends Component {
           </CardActions>
         </Card>
         <Dialog
-          actions={
-            <FlatButton
-              label='OK'
-              secondary={true}
-              onTouchTap={() => (
-                this.setState({ dialogFlag: false }),
-                location.href = '#home'
-              )}
-            />
-          }
+          actions={inputActions}
           modal={false}
           open={dialogFlag}
           contentStyle={styles.dialog}

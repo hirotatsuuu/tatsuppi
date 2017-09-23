@@ -95,7 +95,7 @@ export default class UpdatePassword extends Component {
   }
 
   /**
-   * パスワードが同じかチェック
+   * 同一パスワードチェック
    */
   checkMatchPassword = (value, again) => {
     let message = ''

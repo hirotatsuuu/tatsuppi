@@ -45,6 +45,9 @@ export default class CreateAccount extends Component {
    * アカウント作成
    */
   createUser = () => {
+    this.setState({
+      dialogFlag: false,
+    })
     const { name, email, password } = this.state
     firebase.auth().createUserWithEmailAndPassword(email, password).then(user => {
       const newUser = {
@@ -53,9 +56,9 @@ export default class CreateAccount extends Component {
         enter_datetime: firebase.database.ServerValue.TIMESTAMP,
       }
       firebase.database().ref('users/' + user.uid).set(newUser).then(() => {
-        this.setState({
-          dialogFlag: true,
-        })
+        // Todo
+      }, err => {
+        console.log(err)
       })
     }, err => {
       this.setState({
@@ -106,9 +109,6 @@ export default class CreateAccount extends Component {
     if (value === '') {
       message = '名前が未入力です'
     }
-    this.setState({
-      message: '',
-    })
     return message
   }
 
@@ -122,9 +122,6 @@ export default class CreateAccount extends Component {
     } else if (value.indexOf('@') === -1 || value.indexOf('.') === -1) {
       message = 'メールアドレスの形式が不適切です'
     }
-    this.setState({
-      message: '',
-    })
     return message
   }
 
@@ -138,17 +135,20 @@ export default class CreateAccount extends Component {
     } else if (value.length < 6) {
       message = 'パスワードは6文字以上で入力してください'
     }
-    this.setState({
-      message: '',
-    })
     return message
   }
 
   render() {
     const createActions = [
       <FlatButton
+        label='CANCEL'
+        secondary={true}
+        onTouchTap={() => this.setState({dialogFlag: false})}
+      />,
+      <FlatButton
         label='OK'
-        onTouchTap={() => this.closeDialog()}
+        primary={true}
+        onTouchTap={() => this.createUser()}
       />
     ]
 
@@ -191,6 +191,7 @@ export default class CreateAccount extends Component {
                   this.setState({
                     name: value,
                     nameErrorMessage: this.checkName(value),
+                    message: '',
                   })
                 }}
                 errorText={nameErrorMessage !== '' ? nameErrorMessage : null}
@@ -207,6 +208,7 @@ export default class CreateAccount extends Component {
                   this.setState({
                     email: value,
                     emailErrorMessage: this.checkEmail(value),
+                    message: '',
                   })
                 }}
                 errorText={emailErrorMessage !== '' ? emailErrorMessage : null}
@@ -223,6 +225,7 @@ export default class CreateAccount extends Component {
                   this.setState({
                     password: value,
                     passwordErrorMessage: this.checkPassword(value),
+                    message: '',
                   })
                 }}
                 errorText={passwordErrorMessage !== '' ? passwordErrorMessage : null}
@@ -241,7 +244,7 @@ export default class CreateAccount extends Component {
                 primary={true}
                 disabled={disabled}
                 style={styles.field.button}
-                onTouchTap={() => this.createUser()}
+                onTouchTap={() => this.setState({dialogFlag: true})}
               />
             </CardActions>
           </div>
@@ -252,7 +255,7 @@ export default class CreateAccount extends Component {
           open={dialogFlag}
           contentStyle={styles.dialog}
           actions={createActions}
-          onRequestClose={() => this.closeDialog()}
+          onRequestClose={() => this.setState({dialogFlag: false})}
         >
           We created a new account
         </Dialog>

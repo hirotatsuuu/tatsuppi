@@ -104,6 +104,9 @@ export default class Main extends Component {
       case 'updateaccount':
         title = 'ACCOUNT'
         break
+      case 'match':
+        title = 'MATCH'
+        break
       default:
         title = 'default'
         break

@@ -15,7 +15,7 @@ import {
 
 const styles = {
   root: {
-    padding: '65px 1vw 1vh',
+    padding: '65px 1vw 65px',
     width: '98vw',
   },
   error: {
@@ -301,7 +301,7 @@ export default class Todo extends Component {
         <Card>
           {!addFlag && !editFlag ? <div>
             <CardActions>
-                <div style={styles.card.center}>
+              <div style={styles.card.center}>
                 <this.SortButton />
                 <span> </span>
                 <RaisedButton

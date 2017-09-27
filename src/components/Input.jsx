@@ -11,14 +11,13 @@ import {
   SelectField,
   MenuItem,
   Card,
-  CardHeader,
   CardText,
   CardActions,
 } from 'material-ui'
 
 const styles = {
   root: {
-    padding: '65px 1vw 1vh',
+    padding: '65px 1vw 65px',
     width: '98vw',
   },
   money: {
@@ -227,9 +226,6 @@ export default class Input extends Component {
     return (
       <div style={styles.root}>
         <Card>
-          <CardHeader
-            title='INPUT USE MONEY'
-          />
           <CardText>
             <DatePicker
               hintText='select date'

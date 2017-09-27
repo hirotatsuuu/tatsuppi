@@ -51,6 +51,7 @@ const styles = {
 
 export default class Main extends Component {
   state = {
+    auth: firebase.auth().currentUser,
     loginUserName: '',
     menuFlag: false,
     logoutDialogFlag: false,
@@ -62,14 +63,15 @@ export default class Main extends Component {
   }
 
   componentWillMount = () => {
-    this.setState({
-      auth: firebase.auth().currentUser,
+    const { auth } = this.state
+    this.userRef = firebase.database().ref('users/' + auth.uid)
+    this.userRef.once('value', snapshot => {
+      snapshot.val().state !== null ? this.checkState(snapshot.val().state) : null
     })
   }
 
   componentDidMount = () => {
     const { auth } = this.state
-    this.userRef = firebase.database().ref('users/' + auth.uid)
     this.userRef.once('value', snapshot => {
       this.setState({
         loginUserName: snapshot.val().name,
@@ -82,11 +84,6 @@ export default class Main extends Component {
 
   componentWillUnmount = () => {
     this.userRef.off('value')
-    const { auth } = this.state
-    const state = {
-      state: location.hash.slice(2),
-    }
-    firebase.database().ref('users/' + auth.uid).update(state)
   }
 
   /**
@@ -155,8 +152,30 @@ export default class Main extends Component {
   /**
    * フッターメニューの処理
    */
-  select = (index) => this.setState({selectedIndex: index})
+  select = index => this.setState({ selectedIndex: index })
   
+  /**
+   * アカウントの状態によるフッタメニューの制御
+   */
+  checkState = state => {
+    switch (state) {
+      case 'home':
+        this.select(0)
+        break
+      case 'input':
+        this.select(1)
+        break
+      case 'todo':
+        this.select(2)
+        break
+      case 'setting':
+        this.select(3)
+        break
+      default:
+        this.select(null)
+        break
+    }
+  }
 
   render() {
     const logoutActions = [

@@ -33,8 +33,8 @@ const styles = {
 
 export default class Detail extends Component {
   state = {
-    dialogFlag: false,
     auth: firebase.auth().currentUser,
+    dialogFlag: false,
   }
 
   constructor(props) {
@@ -42,6 +42,11 @@ export default class Detail extends Component {
   }
 
   componentWillMount = () => {
+    const { auth } = this.state
+    const state = {
+      state: location.hash.slice(2),
+    }
+    firebase.database().ref('users/' + auth.uid).update(state)
     this.setState({
       id: this.props.props.id,
     })

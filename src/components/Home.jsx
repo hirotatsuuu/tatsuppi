@@ -38,6 +38,14 @@ export default class Home extends Component {
     inputFlag: null,
   }
 
+  componentWillMount = () => {
+    const { auth } = this.state
+    const state = {
+      state: location.hash.slice(2),
+    }
+    firebase.database().ref('users/' + auth.uid).update(state)
+  }
+
   componentDidMount = () => {
     const { auth } = this.state
     this.useRef = firebase.database().ref('use/' + auth.uid)

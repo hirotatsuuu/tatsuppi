@@ -40,6 +40,14 @@ export default class Match extends Component {
     createDialogFlag: false,
   }
 
+  componentWillMount = () => {
+    const { auth } = this.state
+    const state = {
+      state: location.hash.slice(2),
+    }
+    firebase.database().ref('users/' + auth.uid).update(state)
+  }
+
   componentDidMount = () => {
     this.idRef = firebase.database().ref('state/id')
     let idArray = []

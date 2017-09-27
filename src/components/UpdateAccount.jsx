@@ -41,6 +41,14 @@ export default class UpdateAccount extends Component {
     dialogFlag: false,
   }
 
+  componentWillMount = () => {
+    const { auth } = this.state
+    const state = {
+      state: location.hash.slice(2),
+    }
+    firebase.database().ref('users/' + auth.uid).update(state)
+  }
+
   componentDidMount = () => {
     const { auth } = this.state
     this.userRef = firebase.database().ref('users/' + auth.uid)

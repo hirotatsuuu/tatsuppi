@@ -15,13 +15,13 @@ import {
 import Home from 'material-ui/svg-icons/action/home'
 import Add from 'material-ui/svg-icons/content/add'
 import Todo from 'material-ui/svg-icons/action/dns'
-import Chat from 'material-ui/svg-icons/social/people'
+import People from 'material-ui/svg-icons/social/people'
 import Settings from 'material-ui/svg-icons/action/settings'
 
 const home = <Home />
 const add = <Add />
 const todo = <Todo />
-const chat = <Chat />
+const chat = <People />
 const settings = <Settings />
 
 const styles = {
@@ -49,7 +49,19 @@ const styles = {
   },
 }
 
-export default class CHAT extends Component {
+export default class Chat extends Component {
+  state =  {
+    auth: firebase.auth().currentUser,
+  }
+
+  componentWillMount = () => {
+    const { auth } = this.state
+    const state = {
+      state: location.hash.slice(2),
+    }
+    firebase.database().ref('users/' + auth.uid).update(state)
+  }
+
   render() {
     return (
       <div>

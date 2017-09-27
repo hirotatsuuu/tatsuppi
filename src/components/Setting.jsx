@@ -20,6 +20,9 @@ const styles = {
 }
 
 export default class Setting extends Component {
+  state = {
+    auth: firebase.auth().currentUser,
+  }
 
   render() {
     return (

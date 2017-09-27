@@ -82,6 +82,11 @@ export default class Main extends Component {
 
   componentWillUnmount = () => {
     this.userRef.off('value')
+    const { auth } = this.state
+    const state = {
+      state: location.hash.slice(2),
+    }
+    firebase.database().ref('users/' + auth.uid).update(state)
   }
 
   /**

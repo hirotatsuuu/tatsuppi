@@ -14,6 +14,8 @@ import {
   TableRowColumn,
 } from 'material-ui'
 
+import colors from './colors'
+
 const styles = {
   card: {
     textAlign: 'center',
@@ -24,6 +26,9 @@ const styles = {
   dialog: {
     width: '100vw',
   },
+  tertiary: {
+    color: colors.tertiaryColor,
+  }
 }
 
 export default class Detail extends Component {
@@ -114,6 +119,28 @@ export default class Detail extends Component {
               title={use.target}
               subtitle={use.date}
             />
+            <CardActions>
+              <div style={styles.card}>
+                <FlatButton
+                  label='EDIT'
+                  labelStyle={styles.tertiary}
+                  style={styles.button}
+                  onTouchTap={() => this.changeDetailFlag()}
+                />
+                <span> </span>
+                <FlatButton
+                  label='DELETE'
+                  primary={true}
+                  style={styles.button}
+                  onTouchTap={() => (
+                    this.setState({
+                      dialogFlag: true,
+                      deleteId: id,
+                    })
+                  )}
+                />
+              </div>
+            </CardActions>
             <CardText>
               <Card>
                 <Table
@@ -139,25 +166,12 @@ export default class Detail extends Component {
               </Card>
             </CardText>
             <CardActions>
-              <div style={styles.card}>
-                <FlatButton
-                  label='RETURN'
-                  secondary={true}
-                  style={styles.button}
-                  onTouchTap={() => this.changeDetailFlag()}
-                />
-                <FlatButton
-                  label='DELETE'
-                  primary={true}
-                  style={styles.button}
-                  onTouchTap={() => (
-                    this.setState({
-                      dialogFlag: true,
-                      deleteId: id,
-                    })
-                  )}
-                />
-              </div>
+              <FlatButton
+                label='RETURN'
+                secondary={true}
+                fullWidth={true}
+                onTouchTap={() => this.changeDetailFlag()}
+              />
             </CardActions>
           </Card>
         </span> : null}

@@ -26,7 +26,7 @@ const settings = <Settings />
 
 const styles = {
   root: {
-    padding: '65px 1vw 0',
+    padding: '65px 1vw 65px',
     width: '98vw',
   },
   center: {

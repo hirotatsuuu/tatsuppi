@@ -19,7 +19,7 @@ import Detail from './Detail'
 
 const styles = {
   root: {
-    padding: '65px 1vw 1vh',
+    padding: '65px 1vw 65px',
     width: '98vw',
   },
   text: {
@@ -208,6 +208,7 @@ export default class Home extends Component {
                     hintText='import date'
                     floatingLabelText='import date'
                     autoOk={true}
+                    fullWidth={true}
                     value={date}
                     onChange={(a, date) => this.changeDate(date)}
                   />

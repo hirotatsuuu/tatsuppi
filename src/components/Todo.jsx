@@ -301,7 +301,7 @@ export default class Todo extends Component {
         <Card>
           {!addFlag && !editFlag ? <div>
             <CardActions>
-                <div style={styles.card.center}>
+              <div style={styles.card.center}>
                 <this.SortButton />
                 <span> </span>
                 <RaisedButton

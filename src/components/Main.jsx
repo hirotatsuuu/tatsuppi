@@ -125,7 +125,7 @@ export default class Main extends Component {
         title = 'CHAT'
         break
       case 'setting':
-        title = 'Setting'
+        title = 'SETTINGS'
         break
       case 'updatepassword':
         title = 'PASSWORD'
@@ -191,11 +191,14 @@ export default class Main extends Component {
         />
         <Drawer
           docked={false}
-          width={'80%'}
+          width={'50%'}
           open={menuFlag}
           onRequestChange={() => this.setState({menuFlag: !menuFlag})}
         >
-          <Menu>
+          <Menu
+            autoWidth={false}
+            width={'50%'}
+          >
             <span style={styles.sub}>Main</span>
             <MenuItem
               onTouchTap={() => (
@@ -226,9 +229,9 @@ export default class Main extends Component {
             <MenuItem
               onTouchTap={() => (
                 this.setState({ menuFlag: false }),
-                location.href = '#setting'
+                location.href = 'https://line.me/R/ti/p/%40ond8714j'
               )}
-            >SNS</MenuItem>
+            >LINE</MenuItem>
             <MenuItem
               onTouchTap={() => (
                 this.setState({ menuFlag: false }),

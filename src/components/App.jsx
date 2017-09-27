@@ -13,7 +13,12 @@ export default class App extends Component {
   componentDidMount = () => {
     firebase.auth().onIdTokenChanged(auth => {
       if (auth !== null) {
-        this.loginAuth()
+        this.setState({
+          loginFlag: true,
+        })
+        firebase.database().ref('users/' + auth.uid).once('value', snapshot => {
+          location.href = snapshot.val().state !== undefined ? '#' + snapshot.val().state : '#home'
+        })
       } else {
         this.logoutAuth()
       }

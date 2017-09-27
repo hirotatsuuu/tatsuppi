@@ -43,6 +43,11 @@ export default class Input extends Component {
   }
 
   componentWillMount = () => {
+    const { auth } = this.state
+    const state = {
+      state: location.hash.slice(2),
+    }
+    firebase.database().ref('users/' + auth.uid).update(state)
     const { selectTaxValue, selectPayValue, selectTypeValue } = this.state
     this.setState({
       tax: this.getSelectTax(selectTaxValue),

@@ -38,6 +38,7 @@ const styles = {
 
 export default class Todo extends Component {
   state = {
+    auth: firebase.auth().currentUser,
     title: '',
     text: '',
     addFlag: false,
@@ -47,14 +48,16 @@ export default class Todo extends Component {
   }
 
   componentWillMount = () => {
-    this.setState({
-      authUid: firebase.auth().currentUser.uid,
-    })
+    const { auth } = this.state
+    const state = {
+      state: location.hash.slice(2),
+    }
+    firebase.database().ref('users/' + auth.uid).update(state)
   }
 
   componentDidMount = () => {
-    const { authUid } = this.state
-    this.todosRef = firebase.database().ref('todos/' + authUid)
+    const { auth } = this.state
+    this.todosRef = firebase.database().ref('todos/' + auth.uid)
     this.todosRef.on('value', snapshots => {
       this.getTodos(snapshots.val())
     })
@@ -126,14 +129,14 @@ export default class Todo extends Component {
    * Todoの編集
    */
   editTodo = () => {
-    const { title, text, authUid, editId } = this.state
+    const { title, text, auth, editId } = this.state
     const dateTime = moment().format('YYYY-MM-DD HH:mm:ss')
     const editObj = {
       title: title,
       datetime: dateTime,
       text: text,
     }
-    firebase.database().ref('todos/' + authUid + '/' + editId).update(editObj).then(() => {
+    firebase.database().ref('todos/' + auth.uid + '/' + editId).update(editObj).then(() => {
       this.clearTodoForm()
     }, err => {
       console.log(err)
@@ -147,8 +150,8 @@ export default class Todo extends Component {
    * Todoの削除
    */
   deleteTodo = () => {
-    const { authUid, deleteId } = this.state
-    firebase.database().ref('todos/' + authUid + '/' + deleteId).remove().then(() => {
+    const { auth, deleteId } = this.state
+    firebase.database().ref('todos/' + auth.uid + '/' + deleteId).remove().then(() => {
       // Todo
     }, err => {
       console.log(err)

@@ -20,6 +20,17 @@ const styles = {
 }
 
 export default class Setting extends Component {
+  state = {
+    auth: firebase.auth().currentUser,
+  }
+
+  componentWillMount = () => {
+    const { auth } = this.state
+    const state = {
+      state: location.hash.slice(2),
+    }
+    firebase.database().ref('users/' + auth.uid).update(state)
+  }
 
   render() {
     return (

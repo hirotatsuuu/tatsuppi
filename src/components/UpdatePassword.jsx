@@ -39,6 +39,14 @@ export default class UpdatePassword extends Component {
     dialogFlag: false,
   }
 
+  componentWillMount = () => {
+    const { auth } = this.state
+    const state = {
+      state: location.hash.slice(2),
+    }
+    firebase.database().ref('users/' + auth.uid).update(state)
+  }
+
   /**
    * パスワードの更新
    */

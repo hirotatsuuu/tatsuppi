@@ -11,7 +11,6 @@ import {
   SelectField,
   MenuItem,
   Card,
-  CardHeader,
   CardText,
   CardActions,
 } from 'material-ui'
@@ -227,9 +226,6 @@ export default class Input extends Component {
     return (
       <div style={styles.root}>
         <Card>
-          <CardHeader
-            title='INPUT USE MONEY'
-          />
           <CardText>
             <DatePicker
               hintText='select date'

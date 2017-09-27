@@ -7,7 +7,7 @@ import {
 
 const styles = {
   root: {
-    padding: '65px 1vw 1vh',
+    padding: '65px 1vw 65px',
     width: '98vw',
   },
   error: {
@@ -21,7 +21,7 @@ const styles = {
   },
 }
 
-export default class SNS extends Component {
+export default class Setting extends Component {
 
   render() {
     return (

@@ -8,7 +8,7 @@ import ForgotPassword from './ForgotPassword'
 import CreateAccount from './CreateAccount'
 import UpdatePassword from './UpdatePassword'
 import UpdateAccount from './UpdateAccount'
-import SNS from './SNS'
+import Setting from './Setting'
 import Chat from './Chat'
 import Match from './Match'
 
@@ -42,7 +42,7 @@ export default class Routes extends Component {
             <Route path='/todo' component={Todo} />
             <Route path='/updatepassword' component={UpdatePassword} />
             <Route path='/updateaccount' component={UpdateAccount} />
-            <Route path='/sns' component={SNS} />
+            <Route path='/setting' component={Setting} />
             <Route path='/chat' component={Chat} />
             <Route path='/match' component={Match} />
             <Route render={() => (<Link to='#' />)} />

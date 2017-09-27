@@ -15,7 +15,7 @@ import {
 
 const styles = {
   root: {
-    padding: '65px 1vw 1vh',
+    padding: '65px 1vw 65px',
     width: '98vw',
   },
   error: {

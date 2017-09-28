@@ -367,7 +367,6 @@ export default class Todo extends Component {
         <Dialog
           title='DELETE'
           actions={deleteActions}
-          modal={true}
           open={deleteFlag}
           contentStyle={styles.dialog}
           onRequestClose={() => this.setState({deleteFlag: false,})}

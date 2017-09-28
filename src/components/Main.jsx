@@ -128,6 +128,9 @@ export default class Main extends Component {
       case 'match':
         title = 'MATCH'
         break
+      case 'message':
+        title = 'MESSAGE'
+        break
       default:
         title = 'default'
         break
@@ -208,7 +211,7 @@ export default class Main extends Component {
           iconElementRight={
             <FlatButton
               label={<span>{loginUserName}</span>}
-              onTouchTap={() => location.href = location.hash.slice(2) === 'updateaccount' ? '#home' : '#updateaccount'}
+              onTouchTap={() => this.setState({logoutDialogFlag: true})}
             />}
           onLeftIconButtonTouchTap={() => this.setState({menuFlag: !menuFlag})}
         />
@@ -262,6 +265,12 @@ export default class Main extends Component {
               )}
             >PASSWORD</MenuItem>
             <MenuItem
+              onTouchTap={() => (
+                this.setState({ menuFlag: false }),
+                location.href = '#message'
+              )}
+            >MESSAGE</MenuItem>
+            <MenuItem
               onTouchTap={() => this.setState({logoutDialogFlag: true})}
             >LOGOUT</MenuItem>
           </Menu>
@@ -271,7 +280,7 @@ export default class Main extends Component {
             selectedIndex={selectedIndex}
           >
             <BottomNavigationItem
-              label='home'
+              label='HOEM'
               icon={home}
               onTouchTap={() => (
                 this.select(0),
@@ -279,7 +288,7 @@ export default class Main extends Component {
               )}
             />
             <BottomNavigationItem
-              label='add'
+              label='INPUT'
               icon={add}
               onTouchTap={() => (
                 this.select(1),
@@ -287,7 +296,7 @@ export default class Main extends Component {
               )}
             />
             <BottomNavigationItem
-              label='todo'
+              label='TODO'
               icon={todo}
               onTouchTap={() => (
                 this.select(2),
@@ -295,7 +304,7 @@ export default class Main extends Component {
               )}
             />
             <BottomNavigationItem
-              label='settings'
+              label='SETTING'
               icon={settings}
               onTouchTap={() => (
                 this.select(3),
@@ -306,7 +315,6 @@ export default class Main extends Component {
         </Paper>
         <Dialog
           title='LOGOUT'
-          modal={false}
           open={logoutDialogFlag}
           actions={logoutActions}
           contentStyle={styles.full}

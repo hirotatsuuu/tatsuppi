@@ -312,7 +312,6 @@ export default class Match extends Component {
           <Dialog
             title='CREATE'
             actions={createActions}
-            modal={true}
             open={createDialogFlag}
             contentStyle={styles.full}
             onRequestClose={() => this.setState({createDialogFlag: false})}
@@ -322,7 +321,6 @@ export default class Match extends Component {
           <Dialog
             title='SEARCH'
             actions={searchActions}
-            modal={true}
             open={searchDialogFlag}
             contentStyle={styles.full}
             onRequestClose={() => this.setState({searchDialogFlag: false})}

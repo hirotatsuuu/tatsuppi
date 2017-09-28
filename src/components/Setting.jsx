@@ -16,7 +16,10 @@ const styles = {
   },
   tertiary: {
     color: colors.tertiaryColor,
-  }
+  },
+  quaternary: {
+    color: colors.quaternaryColor,
+  },
 }
 
 export default class Setting extends Component {
@@ -62,6 +65,13 @@ export default class Setting extends Component {
               label='CHAT'
               fullWidth={true}
               onTouchTap={() => location.href='#chat'}
+            />
+            <br />
+            <FlatButton
+              label='MESSAGE'
+              fullWidth={true}
+              style={styles.quaternary}
+              onTouchTap={() => location.href='#message'}
             />
           </CardActions>
         </Card>

@@ -251,7 +251,6 @@ export default class CreateAccount extends Component {
         </Card>
         <Dialog
           title='CREATE ACCOUNT'
-          modal={true}
           open={dialogFlag}
           contentStyle={styles.dialog}
           actions={createActions}

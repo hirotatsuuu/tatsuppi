@@ -95,17 +95,34 @@ export default class Detail extends Component {
    * ホーム画面に遷移する処理
    */
   changeDetailFlag = () => {
-    this.props.props.changeDetailFlag()
+    const { props } = this.props
+    props.changeDetailFlag()
   }
 
   /**
-   * 編集画面に遷移する処理
+   * 詳細と編集を行き来する処理
    */
   changeEditFlag = () => {
     const { editFlag } = this.state
     this.setState({
       editFlag: !editFlag,
     })
+  }
+
+  /**
+   * 編集画面に遷移する処理
+   */
+  goToEdit = () => {
+    const { id } = this.state
+    const props = {
+      changeEditFlag: this.changeEditFlag,
+      changeDetailFlag: this.changeDetailFlag,
+      id: id,
+    }
+    this.setState({
+      props: props,
+    })
+    this.changeEditFlag()
   }
 
   /**
@@ -145,7 +162,7 @@ export default class Detail extends Component {
                   label='EDIT'
                   labelStyle={styles.tertiary}
                   style={styles.button}
-                  onTouchTap={() => this.changeEditFlag()}
+                  onTouchTap={() => this.goToEdit()}
                 />
                 <span> </span>
                 <FlatButton
@@ -209,11 +226,11 @@ export default class Detail extends Component {
   }
 
   render() {
-    const { editFlag, id } = this.state
+    const { editFlag, props } = this.state
 
     return (
       <div>
-        {editFlag ? <DetailEdit id={id} /> : <this.DetailInfo />}
+        {editFlag ? <DetailEdit props={props} /> : <this.DetailInfo />}
       </div>
     )
   }

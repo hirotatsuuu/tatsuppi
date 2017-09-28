@@ -165,7 +165,7 @@ export default class Home extends Component {
   /**
    * セルのタッチによる処理
    */
-  cellTouch = id => {
+  goToDetail = id => {
     const props = {
       changeDetailFlag: this.changeDetailFlag,
       id: id,
@@ -177,7 +177,7 @@ export default class Home extends Component {
   }
 
   /**
-   * 詳細画面に遷移する処理
+   * ホームと詳細画面を行き来する処理
    */
   changeDetailFlag = () => {
     const { detailFlag } = this.state
@@ -250,7 +250,7 @@ export default class Home extends Component {
                           return (
                             <TableRow
                               key={index}
-                              onTouchTap={() => this.cellTouch(row.id)}
+                              onTouchTap={() => this.goToDetail(row.id)}
                             >
                               <TableRowColumn><span style={styles.text}>{row.target}</span></TableRowColumn>
                               <TableRowColumn><span style={styles.text}>{row.money + ' 円'}</span></TableRowColumn>

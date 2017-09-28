@@ -15,6 +15,7 @@ import {
 } from 'material-ui'
 
 import colors from './colors'
+import DetailEdit from './DetailEdit'
 
 const styles = {
   card: {
@@ -35,6 +36,7 @@ export default class Detail extends Component {
   state = {
     auth: firebase.auth().currentUser,
     dialogFlag: false,
+    editFlag: false,
   }
 
   constructor(props) {
@@ -90,13 +92,26 @@ export default class Detail extends Component {
   }
 
   /**
-   * コンポーネントを切り替える処理
+   * ホーム画面に遷移する処理
    */
   changeDetailFlag = () => {
     this.props.props.changeDetailFlag()
   }
 
-  render() {
+  /**
+   * 編集画面に遷移する処理
+   */
+  changeEditFlag = () => {
+    const { editFlag } = this.state
+    this.setState({
+      editFlag: !editFlag,
+    })
+  }
+
+  /**
+   * 詳細情報画面
+   */
+  DetailInfo = () => {
     const {
       use,
       id,
@@ -130,7 +145,7 @@ export default class Detail extends Component {
                   label='EDIT'
                   labelStyle={styles.tertiary}
                   style={styles.button}
-                  onTouchTap={() => this.changeDetailFlag()}
+                  onTouchTap={() => this.changeEditFlag()}
                 />
                 <span> </span>
                 <FlatButton
@@ -183,13 +198,22 @@ export default class Detail extends Component {
         <Dialog
           title='DELETE'
           actions={deleteActions}
-          modal={true}
           open={dialogFlag}
           contentStyle={styles.dialog}
           onRequestClose={() => this.setState({dialogFlag: false})}
         >
           Are you sure you want to delete ?
         </Dialog>
+      </div>
+    )
+  }
+
+  render() {
+    const { editFlag, id } = this.state
+
+    return (
+      <div>
+        {editFlag ? <DetailEdit id={id} /> : <this.DetailInfo />}
       </div>
     )
   }

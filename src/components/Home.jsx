@@ -28,6 +28,9 @@ const styles = {
   card: {
     padding: '1vh 1vw',
   },
+  snackbar: {
+    height: '60px',
+  },
 }
 
 export default class Home extends Component {
@@ -174,12 +177,12 @@ export default class Home extends Component {
   }
 
   /**
-   * コンポーネントを切り替える処理
+   * 詳細画面に遷移する処理
    */
   changeDetailFlag = () => {
-    const { detaiFlag } = this.state
+    const { detailFlag } = this.state
     this.setState({
-      detaiFlag: !detaiFlag,
+      detailFlag: !detailFlag,
     })
   }
 
@@ -189,7 +192,7 @@ export default class Home extends Component {
       date,
       totalMoneyByMonth,
       totalMoneyByDate,
-      detaiFlag,
+      detailFlag,
       props,
       inputFlag,
       message,
@@ -210,7 +213,7 @@ export default class Home extends Component {
         <Card>
           {inputFlag !== null ?
             inputFlag ? <div>
-              {!detaiFlag ? <div>
+              {!detailFlag ? <div>
                 <CardText>
                   <DatePicker
                     hintText='import date'
@@ -268,6 +271,7 @@ export default class Home extends Component {
             open={message !== ''}
             message={message}
             autoHideDuration={3000}
+            bodyStyle={styles.snackbar}
             onRequestClose={() => this.setState({ message: '' })}
           /> : null}
       </div>

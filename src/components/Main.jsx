@@ -62,24 +62,16 @@ export default class Main extends Component {
     super(props)
   }
 
-  componentWillMount = () => {
-    const { auth } = this.state
-    this.userRef = firebase.database().ref('users/' + auth.uid)
-    this.userRef.once('value', snapshot => {
-      snapshot.val().state !== null ? this.checkState(snapshot.val().state) : null
-    })
-  }
-
   componentDidMount = () => {
     const { auth } = this.state
+    this.userRef = firebase.database().ref('users/' + auth.uid)
     this.userRef.once('value', snapshot => {
       this.setState({
         loginUserName: snapshot.val().name,
       })
     })
-    this.userRef.on('child_changed', data => {
-      this.getAccountName(data)
-    })
+    // アカウント名が変更されたときの処理
+    this.userRef.on('child_changed', data => this.getAccountName(data))
   }
 
   componentWillUnmount = () => {
@@ -89,9 +81,7 @@ export default class Main extends Component {
   /**
    * ログイン中のアカウントの名前の取得
    */
-  getAccountName = data => {
-    data.key === 'name' ? this.setState({loginUserName: data.val()}) : null
-  }
+  getAccountName = data => data.key === 'name' ? this.setState({loginUserName: data.val()}) : null
 
   /**
    * ログアウト処理
@@ -111,9 +101,9 @@ export default class Main extends Component {
   /**
    * ヘッダーのタイトル変更
    */
-  changeTitle = () => {
+  changeTitle = hash => {
     let title = ''
-    switch (location.hash.slice(2)) {
+    switch (hash) {
       case 'home':
         title = 'HOME'
         break
@@ -157,8 +147,8 @@ export default class Main extends Component {
   /**
    * アカウントの状態によるフッタメニューの制御
    */
-  checkState = state => {
-    switch (state) {
+  changeSelect = hash => {
+    switch (hash) {
       case 'home':
         this.select(0)
         break
@@ -177,12 +167,21 @@ export default class Main extends Component {
     }
   }
 
+  /**
+   * ハッシュが変更されたときの処理
+   */
+  changeHash = () => {
+    const hash = location.hash.slice(2)
+    this.changeTitle(hash)
+    this.changeSelect(hash)
+  }
+
   render() {
     const logoutActions = [
       <FlatButton
         label='CANCEL'
         secondary={true}
-        onTouchTap={() => this.setState({logoutDialogFlag: false,})}
+        onTouchTap={() => this.setState({logoutDialogFlag: false})}
       />,
       <FlatButton
         label='OK'
@@ -201,7 +200,7 @@ export default class Main extends Component {
 
     return (
       <div>
-        {window.onhashchange=this.changeTitle}
+        {window.onhashchange=this.changeHash}
         <AppBar
           style={styles.header}
           title={title}
@@ -311,7 +310,8 @@ export default class Main extends Component {
           open={logoutDialogFlag}
           actions={logoutActions}
           contentStyle={styles.full}
-        >Are you sure you want to logout ?
+        >
+          Are you sure you want to logout ?
         </Dialog>
       </div>
     )

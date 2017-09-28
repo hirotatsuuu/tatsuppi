@@ -235,7 +235,6 @@ export default class UpdateAccount extends Component {
         <Dialog
           title='UPDATE ACCOUNT'
           actions={updateActions}
-          modal={true}
           open={dialogFlag}
           contentStyle={styles.dialog}
           onRequestClose={() => this.setState({dialogFlag: false})}

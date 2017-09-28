@@ -166,7 +166,6 @@ export default class ForgotPassword extends Component {
         </Card>
         <Dialog
           title='SEND PASSWORD RESET EMAIL'
-          modal={true}
           open={dialogFlag}
           contentStyle={styles.dialog}
           actions={sendActions}

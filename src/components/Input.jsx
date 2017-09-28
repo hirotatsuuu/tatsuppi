@@ -360,7 +360,6 @@ export default class Input extends Component {
         </Card>
         <Dialog
           actions={inputActions}
-          modal={false}
           open={dialogFlag}
           contentStyle={styles.dialog}
         >

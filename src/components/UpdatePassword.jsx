@@ -200,7 +200,6 @@ export default class UpdatePassword extends Component {
         </Card>
         <Dialog
           title='UPDATE'
-          modal={true}
           open={dialogFlag}
           contentStyle={styles.dialog}
           actions={updateActions}

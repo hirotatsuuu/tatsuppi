@@ -87,14 +87,18 @@ export default class Main extends Component {
    * ログアウト処理
    */
   logout = () => {
-    firebase.auth().signOut().then(() => {
-      this.props.logoutAuth()
-    }, err => {
-      console.log(err)
-    })
-    this.setState({
+    const { auth } = this.state
+    const remove = firebase.database().ref('users/' + auth.uid + '/state').remove()
+    const changeState = this.setState({
       menuFlag: false,
       logoutDialogFlag: false,
+    })
+    Promise.all([remove, changeState]).then(() => {
+      firebase.auth().signOut().then(() => {
+        this.props.logoutAuth()
+      }, err => {
+        console.log(err)
+      })
     })
   }
 

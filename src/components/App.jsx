@@ -17,7 +17,7 @@ export default class App extends Component {
           loginFlag: true,
         })
         const hash = localStorage.getItem('hash')
-        location.href = hash !== undefined ? '#' + hash : '#home'
+        location.href = hash !== null ? '#' + hash : '#home'
       } else {
         this.logoutAuth()
       }

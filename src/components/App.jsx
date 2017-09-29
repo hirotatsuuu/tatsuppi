@@ -16,9 +16,8 @@ export default class App extends Component {
         this.setState({
           loginFlag: true,
         })
-        firebase.database().ref('users/' + auth.uid).once('value', snapshot => {
-          location.href = snapshot.val().state !== undefined ? '#' + snapshot.val().state : '#home'
-        })
+        const hash = localStorage.getItem('hash')
+        location.href = hash !== undefined ? '#' + hash : '#home'
       } else {
         this.logoutAuth()
       }
@@ -42,6 +41,7 @@ export default class App extends Component {
     this.setState({
       loginFlag: false,
     })
+    localStorage.clear()
     location.href='#'
   }
 

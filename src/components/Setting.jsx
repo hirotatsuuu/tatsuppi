@@ -28,11 +28,7 @@ export default class Setting extends Component {
   }
 
   componentWillMount = () => {
-    const { auth } = this.state
-    const state = {
-      state: location.hash.slice(2),
-    }
-    firebase.database().ref('users/' + auth.uid).update(state)
+    localStorage.setItem('hash', location.hash.slice(2))
   }
 
   render() {

@@ -21,7 +21,7 @@ const styles = {
   },
 }
 
-export default class Message extends Component {
+export default class Contact extends Component {
   state = {
     auth: firebase.auth().currentUser,
     dialogFlag: false,

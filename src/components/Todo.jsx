@@ -22,7 +22,7 @@ const styles = {
     color: 'red',
   },
   card: {
-    padding: '1vh 1vw',
+    padding: '0.5vh 1vw',
     width: '96vw',
     center: {
       textAlign: 'center',
@@ -172,19 +172,10 @@ export default class Todo extends Component {
   }
 
   /**
-   * 改行の置き換え
-   */
-  replaceStr = str => {
-    const replacedStr = str.replace('\n', '\n')
-    return replacedStr
-  }
-
-  /**
    * Todoの入力フォーム
    */
   TodoForm = () => {
     const { title, text, addFlag, editFlag } = this.state
-
     return (
       <div>
         <Card>
@@ -258,6 +249,65 @@ export default class Todo extends Component {
   }
 
   /**
+   * Todo一覧
+   */
+  TodoList = () => {
+    const {
+      todosArray,
+      editFlag,
+      deleteFlag,
+    } = this.state
+    return (
+      <div>
+        {todosArray.map((todo, index) => (
+          <div key={index} style={styles.card}>
+            <Card>
+              <CardHeader
+                title={todo.title}
+                subtitle={todo.datetime}
+                actAsExpander={true}
+                showExpandableButton={true}
+              />
+              <CardText expandable={true}>
+                <pre>{todo.text}</pre>
+              </CardText>
+              <CardActions expandable={true}>
+                <div style={styles.card.center}>
+                  <FlatButton
+                    label='DELETE'
+                    secondary={true}
+                    style={styles.button}
+                    onTouchTap={() => {
+                      this.setState({
+                        deleteFlag: !deleteFlag,
+                        deleteId: todo.id,
+                      })
+                    }}
+                  />
+                  <FlatButton
+                    label='EDIT'
+                    primary={true}
+                    style={styles.button}
+                    onTouchTap={() => {
+                      this.setState({
+                        editFlag: !editFlag,
+                        editId: todo.id,
+                        title: todo.title,
+                        text: todo.text,
+                      })
+                    }}
+                  />
+                </div>
+              </CardActions>
+            </Card>
+          </div>
+        ))}
+        <this.TodoDelete />
+      </div>
+    )
+  }
+
+  /**
    * ソートのボタン
    */
   SortButton = () => {
@@ -278,14 +328,40 @@ export default class Todo extends Component {
     )
   }
 
-  render() {
-    const {
-      todosArray,
-      addFlag,
-      editFlag,
-      deleteFlag,
-    } = this.state
+  /**
+   * Todoの追加ボタン
+   */
+  TodoAdd = () => {
+    const { addFlag } = this.state
+    return (
+      <RaisedButton
+        label='ADD TODO'
+        style={styles.button}
+        onTouchTap={() => {
+          this.clearTodoForm(),
+          this.setState({ addFlag: !addFlag, })
+        }}
+      />
+    )
+  }
 
+  /**
+   * アクション
+   */
+  TodoActions = () => {
+    return (
+      <div style={styles.card.center}>
+        <this.SortButton />
+        <span> </span>
+        <this.TodoAdd />
+      </div>
+    )
+  }
+
+  /**
+   * Todoの削除
+   */
+  TodoDelete = () => {
     const deleteActions = [
       <FlatButton
         label='CANCEL'
@@ -298,72 +374,9 @@ export default class Todo extends Component {
         onTouchTap={() => this.deleteTodo()}
       />
     ]
-
+    const { deleteFlag } = this.state
     return (
-      <div style={styles.root}>
-        <Card>
-          {!addFlag && !editFlag ? <div>
-            <CardActions>
-              <div style={styles.card.center}>
-                <this.SortButton />
-                <span> </span>
-                <RaisedButton
-                  label='ADD TODO'
-                  style={styles.button}
-                  onTouchTap={() => {
-                    this.clearTodoForm(),
-                    this.setState({ addFlag: true, })
-                  }}
-                />
-              </div>
-            </CardActions>
-            {todosArray !== undefined && todosArray.length !== 0 ? todosArray.map((row, index) => {
-              return (
-                <div key={index} style={styles.card}>
-                  <Card>
-                    <CardHeader
-                      title={row.title}
-                      subtitle={row.datetime}
-                      actAsExpander={true}
-                      showExpandableButton={true}
-                    />
-                    <CardText expandable={true}>
-                      {this.replaceStr(row.text)}
-                    </CardText>
-                    <CardActions expandable={true}>
-                      <div style={styles.card.center}>
-                        <FlatButton
-                          label='DELETE'
-                          secondary={true}
-                          style={styles.button}
-                          onTouchTap={() => {
-                            this.setState({
-                              deleteFlag: true,
-                              deleteId: row.id,
-                            })
-                          }}
-                        />
-                        <FlatButton
-                          label='EDIT'
-                          primary={true}
-                          style={styles.button}
-                          onTouchTap={() => {
-                            this.setState({
-                              editFlag: true,
-                              editId: row.id,
-                              title: row.title,
-                              text: row.text,
-                            })
-                          }}
-                        />
-                      </div>
-                    </CardActions>
-                  </Card>
-                </div>
-              )
-            }) : <CardText>There is no Todo</CardText>}
-          </div> : <div><this.TodoForm /></div>}
-        </Card>
+      <div>
         <Dialog
           title='DELETE'
           actions={deleteActions}
@@ -373,6 +386,28 @@ export default class Todo extends Component {
         >
           Can I delete it ?
         </Dialog>
+      </div>
+    )
+  }
+
+  render() {
+    const {
+      todosArray,
+      addFlag,
+      editFlag,
+      deleteFlag,
+    } = this.state
+
+    return (
+      <div style={styles.root}>
+        {addFlag || editFlag ? <Card>
+          <this.TodoForm /></Card> : <Card>
+            <CardActions>
+              <this.TodoActions />
+            </CardActions>
+            {todosArray !== undefined && todosArray.length !== 0 ?
+              <this.TodoList /> : <CardText>There is no Todo</CardText>}
+        </Card>}
       </div>
     )
   }

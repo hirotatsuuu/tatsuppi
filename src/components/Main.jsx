@@ -16,14 +16,12 @@ import {
 
 import Home from 'material-ui/svg-icons/action/home'
 import Add from 'material-ui/svg-icons/content/add'
-import Todo from 'material-ui/svg-icons/action/dns'
-import Chat from 'material-ui/svg-icons/social/people'
+import Dns from 'material-ui/svg-icons/action/dns'
 import Settings from 'material-ui/svg-icons/action/settings'
 
 const home = <Home />
 const add = <Add />
-const todo = <Todo />
-const chat = <Chat />
+const dns = <Dns />
 const settings = <Settings />
 
 const styles = {
@@ -150,7 +148,7 @@ export default class Main extends Component {
    * フッターメニューの処理
    */
   select = index => this.setState({ selectedIndex: index })
-  
+
   /**
    * アカウントの状態によるフッタメニューの制御
    */
@@ -271,9 +269,9 @@ export default class Main extends Component {
             <MenuItem
               onTouchTap={() => (
                 this.setState({ menuFlag: false }),
-                location.href = '#message'
+                location.href = '#contact'
               )}
-            >MESSAGE</MenuItem>
+            >CONTACT</MenuItem>
             <MenuItem
               onTouchTap={() => this.setState({logoutDialogFlag: true})}
             >LOGOUT</MenuItem>
@@ -301,7 +299,7 @@ export default class Main extends Component {
             />
             <BottomNavigationItem
               label='TODO'
-              icon={todo}
+              icon={dns}
               onTouchTap={() => (
                 this.select(2),
                 location.href = '#todo'

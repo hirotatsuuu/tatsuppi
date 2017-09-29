@@ -74,6 +74,7 @@ export default class Main extends Component {
 
   componentWillUnmount = () => {
     this.userRef.off('value')
+    this.userRef.off('child_changed')
   }
 
   /**
@@ -86,12 +87,11 @@ export default class Main extends Component {
    */
   logout = () => {
     const { auth } = this.state
-    const remove = firebase.database().ref('users/' + auth.uid + '/state').remove()
     const changeState = this.setState({
       menuFlag: false,
       logoutDialogFlag: false,
     })
-    Promise.all([remove, changeState]).then(() => {
+    Promise.all([changeState]).then(() => {
       firebase.auth().signOut().then(() => {
         this.props.logoutAuth()
       }, err => {
@@ -130,8 +130,8 @@ export default class Main extends Component {
       case 'match':
         title = 'MATCH'
         break
-      case 'message':
-        title = 'MESSAGE'
+      case 'contact':
+        title = 'CONTACT'
         break
       default:
         title = 'default'

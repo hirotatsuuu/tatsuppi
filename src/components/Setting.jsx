@@ -64,10 +64,10 @@ export default class Setting extends Component {
             />
             <br />
             <FlatButton
-              label='MESSAGE'
+              label='CONTACT'
               fullWidth={true}
               style={styles.quaternary}
-              onTouchTap={() => location.href='#message'}
+              onTouchTap={() => location.href='#contact'}
             />
           </CardActions>
         </Card>

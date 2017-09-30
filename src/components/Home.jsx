@@ -47,37 +47,22 @@ export default class Home extends Component {
 
   componentDidMount = () => {
     const { auth } = this.state
+    const state = JSON.parse(localStorage.getItem('state'))
+    localStorage.removeItem('state')
+    const date = new Date(state !== null ? 'date' in state ? state['date'] : moment() : moment())
+    const message = state !== null ? 'message' in state ? state['message'] : '' : ''
+    this.setState({
+      date: date,
+      message: message,
+    })
     this.useRef = firebase.database().ref('use/' + auth.uid)
-    this.stateRef = firebase.database().ref('state/' + auth.uid)
     this.useRef.on('value', use => {
       if (use.val() !== null) {
         this.setState({
           use: use,
           inputFlag: true,
         })
-        let [date, message] = [new Date(moment()), '']
-        this.stateRef.once('value', state => {
-          if (state.val() !== null) {
-            if (state.val().date !== undefined) {
-              date = new Date(state.val().date)
-              this.setState({
-                date: date,
-              })
-            }
-            if (state.val().message !== undefined) {
-              message = state.val().message
-              this.setState({
-                message: message,
-              })
-            }
-            this.stateRef.remove()
-          }
-          this.setState({
-            date: date,
-            message: message,
-          })
-          this.changeAll(date, use)
-        })
+        this.changeAll(date, use)
       } else {
         this.setState({
           inputFlag: false,

@@ -117,11 +117,8 @@ export default class UpdateAccount extends Component {
         const state = {
           message: 'UPDATE ACCOUNT',
         }
-        firebase.database().ref('state/' + auth.uid).set(state).then(() => {
+        localStorage.setItem('state', JSON.stringify(state))
         location.href = '#home'
-        }, err => {
-          console.log(err)
-        })
       }, err => {
         console.log(err)
       })

@@ -190,14 +190,11 @@ export default class Input extends Component {
       date: moment(date).format(),
       message: 'ADD INPUT',
     }
-    firebase.database().ref('state/' + auth.uid).set(state).then(() => {
-      this.setState({
-        dialogFlag: false
-      })
-      location.href = '#home'
-    }, err => {
-      console.log(err)
+    localStorage.setItem('state', JSON.stringify(state))
+    this.setState({
+      dialogFlag: false,
     })
+    location.href = '#home'
   }
 
   render() {

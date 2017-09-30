@@ -77,10 +77,9 @@ export default class Detail extends Component {
         date: use.date,
         message: 'DELETED INPUT'
       }
-      firebase.database().ref('state/' + auth.uid).set(state).then(() => {
+      const promise = 
+      Promise.all([localStorage.setItem('state', JSON.stringify(state))]).then(() => {
         this.changeDetailFlag()
-      }, err => {
-        console.log(err)
       })
     }, err => {
       console.log(err)

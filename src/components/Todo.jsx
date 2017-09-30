@@ -24,14 +24,14 @@ const styles = {
   card: {
     padding: '0.5vh 1vw',
     width: '96vw',
-    center: {
-      textAlign: 'center',
-    },
+  },
+  center: {
+    textAlign: 'center',
   },
   button: {
     width: '40vw',
   },
-  dialog: {
+  full: {
     width: '100vw',
   },
 }
@@ -207,7 +207,7 @@ export default class Todo extends Component {
             />
           </CardText>
           <CardActions>
-            <div style={styles.card.center}>
+            <div style={styles.center}>
               {addFlag ? <div>
                 <FlatButton
                   label='RETURN'
@@ -245,6 +245,38 @@ export default class Todo extends Component {
   }
 
   /**
+   * Todoの削除
+   */
+  TodoDelete = () => {
+    const deleteActions = [
+      <FlatButton
+        label='CANCEL'
+        secondary={true}
+        onTouchTap={() => this.setState({ deleteFlag: false, })}
+      />,
+      <FlatButton
+        label='OK'
+        primary={true}
+        onTouchTap={() => this.deleteTodo()}
+      />
+    ]
+    const { deleteFlag } = this.state
+    return (
+      <div>
+        <Dialog
+          title='DELETE'
+          actions={deleteActions}
+          open={deleteFlag}
+          contentStyle={styles.full}
+          onRequestClose={() => this.setState({deleteFlag: false,})}
+        >
+          Can I delete it ?
+        </Dialog>
+      </div>
+    )
+  }
+
+  /**
    * Todo一覧
    */
   TodoList = () => {
@@ -268,7 +300,7 @@ export default class Todo extends Component {
                 <pre>{todo.text}</pre>
               </CardText>
               <CardActions expandable={true}>
-                <div style={styles.card.center}>
+                <div style={styles.center}>
                   <FlatButton
                     label='DELETE'
                     secondary={true}
@@ -280,6 +312,7 @@ export default class Todo extends Component {
                       })
                     }}
                   />
+                  <span> </span>
                   <FlatButton
                     label='EDIT'
                     primary={true}
@@ -346,42 +379,10 @@ export default class Todo extends Component {
    */
   TodoActions = () => {
     return (
-      <div style={styles.card.center}>
+      <div style={styles.center}>
         <this.SortButton />
         <span> </span>
         <this.TodoAdd />
-      </div>
-    )
-  }
-
-  /**
-   * Todoの削除
-   */
-  TodoDelete = () => {
-    const deleteActions = [
-      <FlatButton
-        label='CANCEL'
-        secondary={true}
-        onTouchTap={() => this.setState({ deleteFlag: false, })}
-      />,
-      <FlatButton
-        label='OK'
-        primary={true}
-        onTouchTap={() => this.deleteTodo()}
-      />
-    ]
-    const { deleteFlag } = this.state
-    return (
-      <div>
-        <Dialog
-          title='DELETE'
-          actions={deleteActions}
-          open={deleteFlag}
-          contentStyle={styles.dialog}
-          onRequestClose={() => this.setState({deleteFlag: false,})}
-        >
-          Can I delete it ?
-        </Dialog>
       </div>
     )
   }
@@ -397,12 +398,16 @@ export default class Todo extends Component {
     return (
       <div style={styles.root}>
         {addFlag || editFlag ? <Card>
-          <this.TodoForm /></Card> : <Card>
+          <this.TodoForm />
+        </Card> : <Card>
+          {todosArray !== undefined ? <sapn>
             <CardActions>
               <this.TodoActions />
             </CardActions>
-            {todosArray !== undefined && todosArray.length !== 0 ?
-              <this.TodoList /> : <CardText>There is no Todo</CardText>}
+            {todosArray.length !== 0 ? <this.TodoList /> : <CardText>
+              There is no Todo
+            </CardText>}
+          </sapn> : null}
         </Card>}
       </div>
     )

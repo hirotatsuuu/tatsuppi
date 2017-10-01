@@ -203,52 +203,55 @@ export default class Main extends Component {
       selectedIndex,
     } = this.state
 
+    const menuFlagObj = {
+      menuFlag: !menuFlag,
+    }
+
     return (
       <div>
         {window.onhashchange=this.changeHash}
         <AppBar
           style={styles.header}
           title={title}
-          iconClassNameRight='muidocs-icon-navigation-expand-more'
           iconElementRight={
             <FlatButton
               label={<span>{loginUserName}</span>}
               onTouchTap={() => this.setState({logoutDialogFlag: true})}
             />}
-          onLeftIconButtonTouchTap={() => this.setState({menuFlag: !menuFlag})}
+          onLeftIconButtonTouchTap={() => this.setState(menuFlagObj)}
         />
         <Drawer
           docked={false}
-          width={'50%'}
+          width={200}
           open={menuFlag}
-          onRequestChange={() => this.setState({menuFlag: !menuFlag})}
+          onRequestChange={() => this.setState(menuFlagObj)}
         >
           <Menu
             autoWidth={false}
-            width={'50%'}
+            width={200}
           >
             <span style={styles.sub}>Main</span>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = '#home'
               )}
             >HOME</MenuItem>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = '#input'
               )}
             >INPUT</MenuItem>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = '#todo'
               )}
             >TODO</MenuItem>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = '#chat'
               )}
             >CHAT</MenuItem>
@@ -256,19 +259,19 @@ export default class Main extends Component {
             <span style={styles.sub}>Settings</span>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = 'https://line.me/R/ti/p/%40ond8714j'
               )}
             >LINE</MenuItem>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = '#updatepassword'
               )}
             >PASSWORD</MenuItem>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = '#contact'
               )}
             >CONTACT</MenuItem>

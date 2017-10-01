@@ -45,6 +45,7 @@ export default class Todo extends Component {
   state = {
     auth: firebase.auth().currentUser,
     group: '',
+    groups: [],
     color: '',
     title: '',
     text: '',
@@ -231,6 +232,19 @@ export default class Todo extends Component {
   }
 
   /**
+   * カラーの取得
+   */
+  getColor = value => {
+    const { groups } = this.state
+    groups.forEach(group => {
+      if (group.group === value) {
+        return group.color
+      }
+    })
+    return 'black'
+  }
+
+  /**
    * グループ化のセレクトフォーム
    */
   GroupSelect = () => {
@@ -314,28 +328,28 @@ export default class Todo extends Component {
           <CardActions>
             <div style={styles.center}>
               {addFlag ? <div>
-                <FlatButton
+                <RaisedButton
                   label='RETURN'
                   secondary={true}
                   style={styles.button}
                   onTouchTap={() => this.setState({ addFlag: false, })}
                 />
                 <span> </span>
-                <FlatButton
+                <RaisedButton
                   label='OK'
                   primary={true}
                   style={styles.button}
                   onTouchTap={() => this.addTodo()}
                 />
               </div> : editFlag ? <div>
-                <FlatButton
+                <RaisedButton
                   label='RETURN'
                   secondary={true}
                   style={styles.button}
                   onTouchTap={() => this.setState({ editFlag: false, })}
                 />
                 <span> </span>
-                <FlatButton
+                <RaisedButton
                   label='OK'
                   primary={true}
                   style={styles.button}
@@ -354,12 +368,12 @@ export default class Todo extends Component {
    */
   TodoDelete = () => {
     const deleteActions = [
-      <FlatButton
+      <RaisedButton
         label='CANCEL'
         secondary={true}
         onTouchTap={() => this.setState({ deleteFlag: false, })}
-      />,
-      <FlatButton
+      />,<span> </span>,
+      <RaisedButton
         label='OK'
         primary={true}
         onTouchTap={() => this.deleteTodo()}
@@ -392,51 +406,53 @@ export default class Todo extends Component {
     } = this.state
     return (
       <div>
-        {todosArray.map((todo, index) => (
-          <div key={index} style={styles.card}>
-            <Card>
-              <CardHeader
-                title={todo.title}
-                subtitle={todo.datetime}
-                actAsExpander={true}
-                showExpandableButton={true}
-              />
-              <CardText expandable={true}>
-                <pre>{todo.text}</pre>
-              </CardText>
-              <CardActions expandable={true}>
-                <div style={styles.center}>
-                  <FlatButton
-                    label='DELETE'
-                    secondary={true}
-                    style={styles.button}
-                    onTouchTap={() => {
-                      this.setState({
-                        deleteFlag: !deleteFlag,
-                        deleteId: todo.id,
-                      })
-                    }}
-                  />
-                  <span> </span>
-                  <FlatButton
-                    label='EDIT'
-                    primary={true}
-                    style={styles.button}
-                    onTouchTap={() => {
-                      this.setState({
-                        editFlag: !editFlag,
-                        editId: todo.id,
-                        group: todo.group,
-                        title: todo.title,
-                        text: todo.text,
-                      })
-                    }}
-                  />
-                </div>
-              </CardActions>
-            </Card>
-          </div>
-        ))}
+        {todosArray.map((todo, index) => {
+          return (
+            <div key={index} style={styles.card}>
+              <Card>
+                <CardHeader
+                  title={<span>{todo.title}</span>}
+                  subtitle={todo.datetime}
+                  actAsExpander={true}
+                  showExpandableButton={true}
+                />
+                <CardText expandable={true}>
+                  <pre>{todo.text}</pre>
+                </CardText>
+                <CardActions expandable={true}>
+                  <div style={styles.center}>
+                    <RaisedButton
+                      label='DELETE'
+                      secondary={true}
+                      style={styles.button}
+                      onTouchTap={() => {
+                        this.setState({
+                          deleteFlag: !deleteFlag,
+                          deleteId: todo.id,
+                        })
+                      }}
+                    />
+                    <span> </span>
+                    <RaisedButton
+                      label='EDIT'
+                      primary={true}
+                      style={styles.button}
+                      onTouchTap={() => {
+                        this.setState({
+                          editFlag: !editFlag,
+                          editId: todo.id,
+                          group: todo.group,
+                          title: todo.title,
+                          text: todo.text,
+                        })
+                      }}
+                    />
+                  </div>
+                </CardActions>
+              </Card>
+            </div>
+            )
+          })}
         <this.TodoDelete />
       </div>
     )

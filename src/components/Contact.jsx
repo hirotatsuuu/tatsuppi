@@ -3,8 +3,9 @@ import firebase from 'firebase'
 import moment from 'moment'
 
 import {
-  TextField,
   FlatButton,
+  RaisedButton,
+  TextField,
   Dialog,
   Card,
   CardText,
@@ -84,7 +85,7 @@ export default class Contact extends Component {
             />
           </CardText>
           <CardActions>
-            <FlatButton
+            <RaisedButton
               label='SEND'
               primary={true}
               fullWidth={true}

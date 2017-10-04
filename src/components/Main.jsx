@@ -29,7 +29,6 @@ const styles = {
     position: 'fixed',
     height: '60px',
     width: '100vw',
-    backgroundColor: 'pink',
   },
   full: {
     width: '100vw',

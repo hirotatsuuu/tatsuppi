@@ -31,7 +31,7 @@ const styles = {
     textAlign: 'center',
   },
   button: {
-    width: '40vw',
+    width: '43vw',
   },
   fullButton: {
     width: '94vw',

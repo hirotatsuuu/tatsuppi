@@ -185,36 +185,6 @@ export default class Todo extends Component {
   }
 
   /**
-   * グループの追加
-   */
-  addGroup = () => {
-    const { group, color, groupFlag } = this.state
-    const groupObj = {
-      group: group,
-      color: color,
-      enter_datetime: firebase.database.ServerValue.TIMESTAMP,
-    }
-    this.groupsRef.push(groupObj).then(() => {
-      this.clearGroupForm()
-    }, err => {
-      console.log(err)
-    })
-    this.setState({
-      groupFlag: !groupFlag,
-    })
-  }
-
-  /**
-   * グループフォームの初期化
-   */
-  clearGroupForm = () => {
-    this.setState({
-      group: '未選択',
-      color: '',
-    })
-  }
-
-  /**
    * 時間のソート処理
    */
   sortDateTime = (array, flag) => {
@@ -548,12 +518,10 @@ export default class Todo extends Component {
     }
     return (
       <RaisedButton
-        label='ADD GROUP'
+        label='GROUP SETTINGS'
         secondary={true}
         style={styles.button}
-        onTouchTap={() => {
-          this.setState(groupFlagObj)
-        }}
+        href='#todogroup'
       />
     )
   }

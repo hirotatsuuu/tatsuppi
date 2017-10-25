@@ -16,14 +16,12 @@ import {
 
 import Home from 'material-ui/svg-icons/action/home'
 import Add from 'material-ui/svg-icons/content/add'
-import Todo from 'material-ui/svg-icons/action/dns'
-import Chat from 'material-ui/svg-icons/social/people'
+import Dns from 'material-ui/svg-icons/action/dns'
 import Settings from 'material-ui/svg-icons/action/settings'
 
 const home = <Home />
 const add = <Add />
-const todo = <Todo />
-const chat = <Chat />
+const dns = <Dns />
 const settings = <Settings />
 
 const styles = {
@@ -31,7 +29,6 @@ const styles = {
     position: 'fixed',
     height: '60px',
     width: '100vw',
-    backgroundColor: 'pink',
   },
   full: {
     width: '100vw',
@@ -76,6 +73,7 @@ export default class Main extends Component {
 
   componentWillUnmount = () => {
     this.userRef.off('value')
+    this.userRef.off('child_changed')
   }
 
   /**
@@ -87,14 +85,17 @@ export default class Main extends Component {
    * ログアウト処理
    */
   logout = () => {
-    firebase.auth().signOut().then(() => {
-      this.props.logoutAuth()
-    }, err => {
-      console.log(err)
-    })
-    this.setState({
+    const { auth } = this.state
+    const changeState = this.setState({
       menuFlag: false,
       logoutDialogFlag: false,
+    })
+    Promise.all([changeState]).then(() => {
+      firebase.auth().signOut().then(() => {
+        this.props.logoutAuth()
+      }, err => {
+        console.log(err)
+      })
     })
   }
 
@@ -128,8 +129,8 @@ export default class Main extends Component {
       case 'match':
         title = 'MATCH'
         break
-      case 'message':
-        title = 'MESSAGE'
+      case 'contact':
+        title = 'CONTACT'
         break
       default:
         title = 'default'
@@ -146,7 +147,7 @@ export default class Main extends Component {
    * フッターメニューの処理
    */
   select = index => this.setState({ selectedIndex: index })
-  
+
   /**
    * アカウントの状態によるフッタメニューの制御
    */
@@ -201,52 +202,55 @@ export default class Main extends Component {
       selectedIndex,
     } = this.state
 
+    const menuFlagObj = {
+      menuFlag: !menuFlag,
+    }
+
     return (
       <div>
         {window.onhashchange=this.changeHash}
         <AppBar
           style={styles.header}
           title={title}
-          iconClassNameRight='muidocs-icon-navigation-expand-more'
           iconElementRight={
             <FlatButton
               label={<span>{loginUserName}</span>}
               onTouchTap={() => this.setState({logoutDialogFlag: true})}
             />}
-          onLeftIconButtonTouchTap={() => this.setState({menuFlag: !menuFlag})}
+          onLeftIconButtonTouchTap={() => this.setState(menuFlagObj)}
         />
         <Drawer
           docked={false}
-          width={'50%'}
+          width={200}
           open={menuFlag}
-          onRequestChange={() => this.setState({menuFlag: !menuFlag})}
+          onRequestChange={() => this.setState(menuFlagObj)}
         >
           <Menu
             autoWidth={false}
-            width={'50%'}
+            width={200}
           >
             <span style={styles.sub}>Main</span>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = '#home'
               )}
             >HOME</MenuItem>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = '#input'
               )}
             >INPUT</MenuItem>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = '#todo'
               )}
             >TODO</MenuItem>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = '#chat'
               )}
             >CHAT</MenuItem>
@@ -254,22 +258,22 @@ export default class Main extends Component {
             <span style={styles.sub}>Settings</span>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = 'https://line.me/R/ti/p/%40ond8714j'
               )}
             >LINE</MenuItem>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
+                this.setState(menuFlagObj),
                 location.href = '#updatepassword'
               )}
             >PASSWORD</MenuItem>
             <MenuItem
               onTouchTap={() => (
-                this.setState({ menuFlag: false }),
-                location.href = '#message'
+                this.setState(menuFlagObj),
+                location.href = '#contact'
               )}
-            >MESSAGE</MenuItem>
+            >CONTACT</MenuItem>
             <MenuItem
               onTouchTap={() => this.setState({logoutDialogFlag: true})}
             >LOGOUT</MenuItem>
@@ -297,7 +301,7 @@ export default class Main extends Component {
             />
             <BottomNavigationItem
               label='TODO'
-              icon={todo}
+              icon={dns}
               onTouchTap={() => (
                 this.select(2),
                 location.href = '#todo'

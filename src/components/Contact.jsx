@@ -3,8 +3,9 @@ import firebase from 'firebase'
 import moment from 'moment'
 
 import {
-  TextField,
   FlatButton,
+  RaisedButton,
+  TextField,
   Dialog,
   Card,
   CardText,
@@ -21,18 +22,14 @@ const styles = {
   },
 }
 
-export default class Message extends Component {
+export default class Contact extends Component {
   state = {
     auth: firebase.auth().currentUser,
     dialogFlag: false,
   }
 
   componentWillMount = () => {
-    const { auth } = this.state
-    const state = {
-      state: location.hash.slice(2),
-    }
-    firebase.database().ref('users/' + auth.uid).update(state)
+    localStorage.setItem('hash', location.hash.slice(2))
   }
 
   /**
@@ -88,7 +85,7 @@ export default class Message extends Component {
             />
           </CardText>
           <CardActions>
-            <FlatButton
+            <RaisedButton
               label='SEND'
               primary={true}
               fullWidth={true}

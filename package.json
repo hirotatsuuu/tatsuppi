@@ -5,10 +5,11 @@
   "main": "webpack.config.js",
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.js --progress --inline --hot",
-    "build": "webpack --colors --config webpack.config.js",
+    "build": "yarn env && webpack --colors --config webpack.config.js",
     "host": "yarn build && firebase serve",
     "deploy": "yarn build && firebase deploy",
-    "code": "cd .. && code tatsuppi && cd tatsuppi"
+    "code": "cd .. && code tatsuppi && cd tatsuppi",
+    "env": "node ./switch_env.js"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
     "file-loader": "^0.11.2",
     "html-loader": "^0.5.1",
     "html-webpack-plugin": "^2.30.1",
+    "node-fs-extra": "^0.8.2",
     "style-loader": "^0.18.2",
     "webpack": "^3.5.6",
     "webpack-dev-server": "^2.7.1"

@@ -3,6 +3,7 @@ import firebase from 'firebase'
 
 import {
   FlatButton,
+  RaisedButton,
   Card,
   CardHeader,
   CardText,
@@ -44,11 +45,7 @@ export default class Detail extends Component {
   }
 
   componentWillMount = () => {
-    const { auth } = this.state
-    const state = {
-      state: location.hash.slice(2),
-    }
-    firebase.database().ref('users/' + auth.uid).update(state)
+    localStorage.setItem('hash', location.hash.slice(2))
     this.setState({
       id: this.props.props.id,
     })
@@ -81,10 +78,9 @@ export default class Detail extends Component {
         date: use.date,
         message: 'DELETED INPUT'
       }
-      firebase.database().ref('state/' + auth.uid).set(state).then(() => {
+      const promise = 
+      Promise.all([localStorage.setItem('state', JSON.stringify(state))]).then(() => {
         this.changeDetailFlag()
-      }, err => {
-        console.log(err)
       })
     }, err => {
       console.log(err)
@@ -158,14 +154,7 @@ export default class Detail extends Component {
             />
             <CardActions>
               <div style={styles.card}>
-                <FlatButton
-                  label='EDIT'
-                  labelStyle={styles.tertiary}
-                  style={styles.button}
-                  onTouchTap={() => this.goToEdit()}
-                />
-                <span> </span>
-                <FlatButton
+                <RaisedButton
                   label='DELETE'
                   primary={true}
                   style={styles.button}
@@ -175,6 +164,14 @@ export default class Detail extends Component {
                       deleteId: id,
                     })
                   )}
+                />
+                <span> </span>
+                <RaisedButton
+                  label='EDIT'
+                  backgroundColor={colors.tertiaryColor}
+                  labelColor='white'
+                  style={styles.button}
+                  onTouchTap={() => this.goToEdit()}
                 />
               </div>
             </CardActions>
@@ -203,7 +200,7 @@ export default class Detail extends Component {
               </Card>
             </CardText>
             <CardActions>
-              <FlatButton
+              <RaisedButton
                 label='RETURN'
                 secondary={true}
                 fullWidth={true}

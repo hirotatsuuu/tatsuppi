@@ -3,9 +3,10 @@ import firebase from 'firebase'
 import moment from 'moment'
 
 import {
+  FlatButton,
+  RaisedButton,
   DatePicker,
   TextField,
-  FlatButton,
   Dialog,
   Card,
   CardHeader,
@@ -244,14 +245,14 @@ export default class DetailEdit extends Component {
           </CardText>
           <CardActions>
             <div style={styles.card}>
-              <FlatButton
+              <RaisedButton
                 label='RETURN'
                 secondary={true}
                 style={styles.button}
                 onTouchTap={() => this.changeEditFlag()}
               />
               <span> </span>
-              <FlatButton
+              <RaisedButton
                 label='ENTER'
                 primary={true}
                 style={styles.button}

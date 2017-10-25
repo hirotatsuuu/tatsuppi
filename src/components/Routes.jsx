@@ -11,7 +11,8 @@ import UpdateAccount from './UpdateAccount'
 import Setting from './Setting'
 import Chat from './Chat'
 import Match from './Match'
-import Message from './Message'
+import Contact from './Contact'
+import TodoGroup from './TodoGroup'
 
 const styles = {
   root: {
@@ -46,7 +47,8 @@ export default class Routes extends Component {
             <Route path='/setting' component={Setting} />
             <Route path='/chat' component={Chat} />
             <Route path='/match' component={Match} />
-            <Route path='/message' component={Message} />
+            <Route path='/contact' component={Contact} />
+            <Route path='/todogroup' component={TodoGroup} />
             <Route render={() => (<Link to='#' />)} />
           </Switch> :
           <Switch>

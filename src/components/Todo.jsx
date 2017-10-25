@@ -11,6 +11,8 @@ import {
   CardHeader,
   CardText,
   CardActions,
+  SelectField,
+  MenuItem,
 } from 'material-ui'
 
 const styles = {
@@ -22,16 +24,19 @@ const styles = {
     color: 'red',
   },
   card: {
-    padding: '1vh 1vw',
+    padding: '0.5vh 1vw',
     width: '96vw',
-    center: {
-      textAlign: 'center',
-    },
+  },
+  center: {
+    textAlign: 'center',
   },
   button: {
-    width: '40vw',
+    width: '43vw',
   },
-  dialog: {
+  fullButton: {
+    width: '94vw',
+  },
+  full: {
     width: '100vw',
   },
 }
@@ -39,8 +44,12 @@ const styles = {
 export default class Todo extends Component {
   state = {
     auth: firebase.auth().currentUser,
+    group: '',
+    groups: [],
+    color: '',
     title: '',
     text: '',
+    groupFlag: false,
     addFlag: false,
     editFlag: false,
     deleteFlag: false,
@@ -48,11 +57,7 @@ export default class Todo extends Component {
   }
 
   componentWillMount = () => {
-    const { auth } = this.state
-    const state = {
-      state: location.hash.slice(2),
-    }
-    firebase.database().ref('users/' + auth.uid).update(state)
+    localStorage.setItem('hash', location.hash.slice(2))
   }
 
   componentDidMount = () => {
@@ -61,10 +66,15 @@ export default class Todo extends Component {
     this.todosRef.on('value', snapshots => {
       this.getTodos(snapshots.val())
     })
+    this.groupsRef = firebase.database().ref('groups/' + auth.uid)
+    this.groupsRef.on('value', snapshots => {
+      this.getGroups(snapshots.val())
+    })
   }
 
   componentWillUnmount = () => {
     this.todosRef.off('value')
+    this.groupsRef.off('value')
   }
 
   /**
@@ -87,29 +97,13 @@ export default class Todo extends Component {
   }
 
   /**
-   * 時間のソート処理
-   */
-  sortDateTime = (array, flag) => {
-    let sortArray = []
-    sortArray = array.sort((before, after) => {
-      if (before.datetime < after.datetime) {
-        return (flag ? 1 : -1)
-      } else if (before.datetime > after.datetime) {
-        return (flag ? -1 : 1)
-      } else {
-        return 0
-      }
-    })
-    return sortArray
-  }
-
-  /**
    * Todoの追加
    */
   addTodo = () => {
-    const { title, text } = this.state
+    const { group, title, text } = this.state
     const dateTime = moment().format('YYYY-MM-DD HH:mm:ss')
     const todoObj = {
+      group: group,
       title: title,
       datetime: dateTime,
       text: text,
@@ -129,9 +123,10 @@ export default class Todo extends Component {
    * Todoの編集
    */
   editTodo = () => {
-    const { title, text, auth, editId } = this.state
+    const { group, title, text, auth, editId } = this.state
     const dateTime = moment().format('YYYY-MM-DD HH:mm:ss')
     const editObj = {
+      group: group,
       title: title,
       datetime: dateTime,
       text: text,
@@ -166,25 +161,105 @@ export default class Todo extends Component {
    */
   clearTodoForm = () => {
     this.setState({
+      group: '未選択',
       title: '',
       text: '',
     })
   }
 
   /**
-   * 改行の置き換え
+   * グループの取得
    */
-  replaceStr = str => {
-    const replacedStr = str.replace('\n', '\n')
-    return replacedStr
+  getGroups = groups => {
+    let groupsArray = []
+    if (groups) {
+      Object.keys(groups).forEach(snapshot => {
+        let group = groups[snapshot]
+        group.id = snapshot
+        groupsArray.push(group)
+      })
+    }
+    this.setState({
+      groups: groupsArray,
+    })
   }
+
+  /**
+   * 時間のソート処理
+   */
+  sortDateTime = (array, flag) => {
+    let sortArray = []
+    sortArray = array.sort((before, after) => {
+      if (before.datetime < after.datetime) {
+        return (flag ? 1 : -1)
+      } else if (before.datetime > after.datetime) {
+        return (flag ? -1 : 1)
+      } else {
+        return 0
+      }
+    })
+    return sortArray
+  }
+
+  /**
+   * カラーの取得
+   */
+  getColor = value => {
+    const { groups } = this.state
+    groups.forEach(group => {
+      if (group.group === value) {
+        return group.color
+      }
+    })
+    return 'black'
+  }
+
+  /**
+   * グループ化のセレクトフォーム
+   */
+  GroupSelect = () => {
+    const { group, groups } = this.state
+    return (
+      <div>
+        <SelectField
+          hintText='select group'
+          floatingLabelText='select group'
+          fullWidth={true}
+          value={group}
+          onChange={(e, i, group) =>
+            this.setState({
+              group: group,
+            })
+          }
+        >
+          <MenuItem
+            value='未選択'
+            primaryText='未選択'
+          />
+          {groups.map((item, index) => {
+            const color = {
+              color: item.color,
+            }
+            return (
+              <MenuItem
+                key={index}
+                value={item.group}
+                primaryText={item.group}
+                style={color}
+              />
+            )
+          })}
+        </SelectField>
+      </div>
+    )
+  }
+
 
   /**
    * Todoの入力フォーム
    */
   TodoForm = () => {
     const { title, text, addFlag, editFlag } = this.state
-
     return (
       <div>
         <Card>
@@ -192,6 +267,7 @@ export default class Todo extends Component {
             title={addFlag ? <div>ADD TODO</div> : editFlag ? <div>EDIT TODO</div> : null}
           />
           <CardText>
+            <this.GroupSelect />
             <TextField
               hintText='title'
               floatingLabelText='title'
@@ -220,30 +296,30 @@ export default class Todo extends Component {
             />
           </CardText>
           <CardActions>
-            <div style={styles.card.center}>
+            <div style={styles.center}>
               {addFlag ? <div>
-                <FlatButton
+                <RaisedButton
                   label='RETURN'
                   secondary={true}
                   style={styles.button}
                   onTouchTap={() => this.setState({ addFlag: false, })}
                 />
                 <span> </span>
-                <FlatButton
+                <RaisedButton
                   label='OK'
                   primary={true}
                   style={styles.button}
                   onTouchTap={() => this.addTodo()}
                 />
               </div> : editFlag ? <div>
-                <FlatButton
+                <RaisedButton
                   label='RETURN'
                   secondary={true}
                   style={styles.button}
                   onTouchTap={() => this.setState({ editFlag: false, })}
                 />
                 <span> </span>
-                <FlatButton
+                <RaisedButton
                   label='OK'
                   primary={true}
                   style={styles.button}
@@ -258,6 +334,160 @@ export default class Todo extends Component {
   }
 
   /**
+   * Todoの削除
+   */
+  TodoDelete = () => {
+    const deleteActions = [
+      <RaisedButton
+        label='CANCEL'
+        secondary={true}
+        onTouchTap={() => this.setState({ deleteFlag: false, })}
+      />,<span> </span>,
+      <RaisedButton
+        label='OK'
+        primary={true}
+        onTouchTap={() => this.deleteTodo()}
+      />
+    ]
+    const { deleteFlag } = this.state
+    return (
+      <div>
+        <Dialog
+          title='DELETE'
+          actions={deleteActions}
+          open={deleteFlag}
+          contentStyle={styles.full}
+          onRequestClose={() => this.setState({deleteFlag: false,})}
+        >
+          Can I delete it ?
+        </Dialog>
+      </div>
+    )
+  }
+
+  /**
+   * Todo一覧
+   */
+  TodoList = () => {
+    const {
+      todosArray,
+      editFlag,
+      deleteFlag,
+    } = this.state
+    return (
+      <div>
+        {todosArray.map((todo, index) => {
+          return (
+            <div key={index} style={styles.card}>
+              <Card>
+                <CardHeader
+                  title={<span>{todo.title}</span>}
+                  subtitle={todo.datetime}
+                  actAsExpander={true}
+                  showExpandableButton={true}
+                />
+                <CardText expandable={true}>
+                  <pre>{todo.text}</pre>
+                </CardText>
+                <CardActions expandable={true}>
+                  <div style={styles.center}>
+                    <RaisedButton
+                      label='DELETE'
+                      secondary={true}
+                      style={styles.button}
+                      onTouchTap={() => {
+                        this.setState({
+                          deleteFlag: !deleteFlag,
+                          deleteId: todo.id,
+                        })
+                      }}
+                    />
+                    <span> </span>
+                    <RaisedButton
+                      label='EDIT'
+                      primary={true}
+                      style={styles.button}
+                      onTouchTap={() => {
+                        this.setState({
+                          editFlag: !editFlag,
+                          editId: todo.id,
+                          group: todo.group,
+                          title: todo.title,
+                          text: todo.text,
+                        })
+                      }}
+                    />
+                  </div>
+                </CardActions>
+              </Card>
+            </div>
+            )
+          })}
+        <this.TodoDelete />
+      </div>
+    )
+  }
+
+  /**
+   * グループの新規作成フォーム
+   */
+  GroupForm = () => {
+    const { group, color, groupFlag } = this.state
+    const disabled = group === ''
+    return (
+      <div>
+        <CardText>
+        <TextField
+          hintText='group'
+          floatingLabelText='group'
+          fullWidth={true}
+          value={group}
+          onChange={e => {
+            const value = e.target.value
+            this.setState({
+              group: value,
+            })
+          }}
+        />
+        <br />
+        <TextField
+          hintText='color'
+          floatingLabelText='color'
+          fullWidth={true}
+          value={color}
+          onChange={e => {
+            const value = e.target.value
+            this.setState({
+              color: value,
+            })
+          }}
+        />
+        </CardText>
+        <CardActions>
+          <div style={styles.center}>
+            <div>
+              <RaisedButton
+                label='RETURN'
+                secondary={true}
+                style={styles.button}
+                onTouchTap={() => this.setState({ groupFlag: !groupFlag })}
+              />
+              <span> </span>
+              <RaisedButton
+                label='ADD'
+                primary={true}
+                disabled={disabled}
+                style={styles.button}
+                onTouchTap={() => this.addGroup()}
+              />
+            </div>
+          </div>
+        </CardActions>
+      </div>
+    )
+  }
+
+  /**
    * ソートのボタン
    */
   SortButton = () => {
@@ -267,7 +497,7 @@ export default class Todo extends Component {
         label={sortFlag ? 'ASCENDING' : 'DESCENDING'}
         primary={sortFlag}
         secondary={!sortFlag}
-        style={styles.button}
+        style={styles.fullButton}
         onTouchTap={() => {
           this.setState({
             todosArray: this.sortDateTime(todosArray, !sortFlag),
@@ -278,101 +508,85 @@ export default class Todo extends Component {
     )
   }
 
+  /**
+   * Groupの追加ボタン
+   */
+  GroupAdd = () => {
+    const { groupFlag } = this.state
+    const groupFlagObj = {
+      groupFlag: !groupFlag,
+    }
+    return (
+      <RaisedButton
+        label='GROUP SETTINGS'
+        secondary={true}
+        style={styles.button}
+        href='#todogroup'
+      />
+    )
+  }
+
+  /**
+   * Todoの追加ボタン
+   */
+  TodoAdd = () => {
+    const { addFlag } = this.state
+    return (
+      <RaisedButton
+        label='ADD TODO'
+        primary={true}
+        style={styles.button}
+        onTouchTap={() => {
+          this.clearTodoForm(),
+          this.setState({ addFlag: !addFlag, })
+        }}
+      />
+    )
+  }
+
+  /**
+   * アクション
+   */
+  TodoActions = () => {
+    return (
+      <div style={styles.center}>
+        <div>
+          <this.GroupAdd />
+          <span> </span>
+          <this.TodoAdd />
+        </div>
+        <div><br /><this.SortButton /></div>
+      </div>
+    )
+  }
+
   render() {
     const {
       todosArray,
+      groupFlag,
       addFlag,
       editFlag,
       deleteFlag,
     } = this.state
 
-    const deleteActions = [
-      <FlatButton
-        label='CANCEL'
-        secondary={true}
-        onTouchTap={() => this.setState({ deleteFlag: false, })}
-      />,
-      <FlatButton
-        label='OK'
-        primary={true}
-        onTouchTap={() => this.deleteTodo()}
-      />
-    ]
-
     return (
       <div style={styles.root}>
         <Card>
-          {!addFlag && !editFlag ? <div>
-            <CardActions>
-              <div style={styles.card.center}>
-                <this.SortButton />
-                <span> </span>
-                <RaisedButton
-                  label='ADD TODO'
-                  style={styles.button}
-                  onTouchTap={() => {
-                    this.clearTodoForm(),
-                    this.setState({ addFlag: true, })
-                  }}
-                />
-              </div>
-            </CardActions>
-            {todosArray !== undefined && todosArray.length !== 0 ? todosArray.map((row, index) => {
-              return (
-                <div key={index} style={styles.card}>
-                  <Card>
-                    <CardHeader
-                      title={row.title}
-                      subtitle={row.datetime}
-                      actAsExpander={true}
-                      showExpandableButton={true}
-                    />
-                    <CardText expandable={true}>
-                      {this.replaceStr(row.text)}
-                    </CardText>
-                    <CardActions expandable={true}>
-                      <div style={styles.card.center}>
-                        <FlatButton
-                          label='DELETE'
-                          secondary={true}
-                          style={styles.button}
-                          onTouchTap={() => {
-                            this.setState({
-                              deleteFlag: true,
-                              deleteId: row.id,
-                            })
-                          }}
-                        />
-                        <FlatButton
-                          label='EDIT'
-                          primary={true}
-                          style={styles.button}
-                          onTouchTap={() => {
-                            this.setState({
-                              editFlag: true,
-                              editId: row.id,
-                              title: row.title,
-                              text: row.text,
-                            })
-                          }}
-                        />
-                      </div>
-                    </CardActions>
-                  </Card>
-                </div>
-              )
-            }) : <CardText>There is no Todo</CardText>}
-          </div> : <div><this.TodoForm /></div>}
+          {groupFlag ? <this.GroupForm /> : <span>
+            {addFlag || editFlag ? <this.TodoForm /> : <span>
+              {todosArray !== undefined ? <span>
+                <CardActions>
+                  <this.TodoActions />
+                </CardActions>
+                {todosArray.length !== 0 ? <this.TodoList /> : <span>
+                  <CardText>
+                    There is no Todo
+                  </CardText>
+                </span>}
+              </span> : null}
+            </span>}
+          </span>}
         </Card>
-        <Dialog
-          title='DELETE'
-          actions={deleteActions}
-          open={deleteFlag}
-          contentStyle={styles.dialog}
-          onRequestClose={() => this.setState({deleteFlag: false,})}
-        >
-          Can I delete it ?
-        </Dialog>
       </div>
     )
   }

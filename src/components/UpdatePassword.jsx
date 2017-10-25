@@ -40,18 +40,14 @@ export default class UpdatePassword extends Component {
   }
 
   componentWillMount = () => {
-    const { auth } = this.state
-    const state = {
-      state: location.hash.slice(2),
-    }
-    firebase.database().ref('users/' + auth.uid).update(state)
+    localStorage.setItem('hash', location.hash.slice(2))
   }
 
   /**
    * パスワードの更新
    */
   updatePassword = () => {
-    const { password, again } = this.state
+    const { auth, password, again } = this.state
     let message = this.checkMatchPassword(password, again)
     if (message !== '') {
       this.setState({
@@ -62,16 +58,12 @@ export default class UpdatePassword extends Component {
       this.setState({
         dialogFlag: false,
       })
-      firebase.auth().currentUser.updatePassword(password).then(() => {
-        const { auth } = this.state
+      auth.updatePassword(password).then(() => {
         const state = {
           message: 'UPDATE PASSWORD',
         }
-        firebase.database().ref('state/' + auth.uid).set(state).then(() => {
-          location.href = '#home'
-          }, err => {
-            console.log(err)
-          })
+        localStorage.setItem('state', JSON.stringify(state))
+        location.href = '#home'
       }, err => {
         this.setState({
           message: this.checkErrorCode(err.code),

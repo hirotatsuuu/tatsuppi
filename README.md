@@ -17,7 +17,7 @@ npm i -g yarn
 - `firebase-tools`のインストール
 
 ```
-npm i -g firebase-tools`
+npm i -g firebase-tools
 ```
 
 ## Setup
@@ -34,10 +34,16 @@ yarn
 yarn start
 ```
 
-- `public`ディレクトリに`index.html`と`index.css`と`bundle.js`を生成する
+- 開発環境で`public`ディレクトリに`index.html`と`index.css`と`bundle.js`を生成する
 
 ```
 yarn build
+```
+
+- 本番環境で`public`ディレクトリに`index.html`と`index.css`と`bundle.js`を生成する
+
+```
+APP_ENV=production yarn build
 ```
 
 - `public`ディレクトリのファイルをホスティングして、`localhost:5000`にアクセスできるようにする
@@ -47,6 +53,7 @@ yarn host
 ```
 
 - `https://tatsuppi-417ae.firebaseapp.com`にアクセス出来るようにする
+  - `https://tatsuppi.work`にもアクセス可能
 
 ```
 yarn deploy

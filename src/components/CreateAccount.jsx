@@ -102,6 +102,17 @@ export default class CreateAccount extends Component {
   }
 
   /**
+   * 文字数制限のチェック
+   */
+  checkCount = value => {
+    let message = ''
+    if (value.length > 20) {
+      message = '20文字以内で入力して下さい'
+    }
+    return message
+  }
+
+  /**
    * 名前チェック
    */
   checkName = value => {
@@ -109,6 +120,7 @@ export default class CreateAccount extends Component {
     if (value === '') {
       message = '名前が未入力です'
     }
+    message = this.checkCount(value)
     return message
   }
 

@@ -5,7 +5,7 @@ yarn-error.log
 npm-debug.log
 firebase-debug.log
 
-config.js
-firebase-config.development.js
-firebase-config.production.js
+src/firebase/config.js
+src/firebase/firebase-config.development.js
+src/firebase/firebase-config.production.js
 

@@ -6,6 +6,6 @@ npm-debug.log
 firebase-debug.log
 
 # 設定ファイル
-./src/firebase/config.js
-./src/firebase/firebase-config.development.js
-./src/firebase/firebase-config.production.js
+config.js
+firebase-config.development.js
+firebase-config.production.js

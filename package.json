@@ -4,7 +4,7 @@
   "description": "kakeibo application",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.js --progress --inline --hot",
+    "start": "yarn env && webpack-dev-server --config webpack.config.js --progress --inline --hot",
     "build": "yarn env && webpack --colors --config webpack.config.js",
     "host": "yarn build && firebase serve",
     "deploy": "yarn build && firebase deploy",

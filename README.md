@@ -46,6 +46,12 @@ yarn build
 APP_ENV=production yarn build
 ```
 
+- `fish`シェルの場合は一時的な環境変数の指定方法が異なる
+
+```
+env APP_ENV=production yarn build
+```
+
 - `public`ディレクトリのファイルをホスティングして、`localhost:5000`にアクセスできるようにする
 
 ```

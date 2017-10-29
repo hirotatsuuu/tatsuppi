@@ -8,7 +8,7 @@
     "build": "yarn env && webpack --colors --config webpack.config.js",
     "host": "yarn build && firebase serve",
     "deploy": "yarn build && firebase deploy",
-    "code": "cd .. && code tatsuppi && cd tatsuppi",
+    "code": "code ../tatsuppi",
     "env": "node ./switch_env.js"
   },
   "repository": {

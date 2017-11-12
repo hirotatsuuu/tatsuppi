@@ -412,6 +412,7 @@ export default class Input extends Component {
       <RaisedButton
         label='ADD'
         disabled={disabled}
+        primary={true}
         fullWidth={true}
         onTouchTap={() => this.addUse()}
       />

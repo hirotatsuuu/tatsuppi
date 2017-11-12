@@ -117,7 +117,7 @@ export default class Main extends Component {
       case 'chat':
         title = 'CHAT'
         break
-      case 'setting':
+      case 'settings':
         title = 'SETTINGS'
         break
       case 'updatepassword':
@@ -162,7 +162,7 @@ export default class Main extends Component {
       case 'todo':
         this.select(2)
         break
-      case 'setting':
+      case 'settings':
         this.select(3)
         break
       default:
@@ -308,11 +308,11 @@ export default class Main extends Component {
               )}
             />
             <BottomNavigationItem
-              label='SETTING'
+              label='SETTINGS'
               icon={settings}
               onTouchTap={() => (
                 this.select(3),
-                location.href = '#setting'
+                location.href = '#settings'
               )}
             />
           </BottomNavigation>

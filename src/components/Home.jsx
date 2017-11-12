@@ -167,6 +167,56 @@ export default class Home extends Component {
     })
   }
 
+  /**
+   * 何月かを調べる処理
+   */
+  checkMonth = number => {
+    console.log('number', typeof number)
+    let month = ''
+    switch (parseInt(number)) {
+      case 1:
+        month = 'Jan.'
+        break
+      case 2:
+        month = 'Feb.'
+        break
+      case 3:
+        month = 'Mar.'
+        break
+      case 4:
+        month = 'Apr.'
+        break
+      case 5:
+        month = 'May.'
+        break
+      case 6:
+        month = 'Jun.'
+        break
+      case 7:
+        month = 'Jul.'
+        break
+      case 8:
+        month = 'Aug.'
+        break
+      case 9:
+        month = 'Sept.'
+        break
+      case 10:
+        month = 'Oct.'
+        break
+      case 11:
+        month = 'Nov.'
+        break
+      case 12:
+        month = 'Dec.'
+        break
+      default:
+        break
+    }
+    console.log('month', month)
+    return month
+  }
+
   render() {
     const {
       useArray,
@@ -205,10 +255,10 @@ export default class Home extends Component {
                     onChange={(a, date) => this.changeDate(date)}
                   />
                   <div>
-                    {todayMonth === setMonth ? '今月' : moment(date).format('M月')}の合計金額: {totalMoneyByMonth}円 / 月
+                    {todayMonth === setMonth ? 'this month' : this.checkMonth(moment(date).format('M'))} total: {totalMoneyByMonth} yen/month
                   </div>
                   <div>
-                    {todayDate === setDate ? '本日' : moment(date).format('D日')}の合計金額: {totalMoneyByDate}円 / 日
+                    {todayDate === setDate ? 'today' : moment(date).format('D')}th total: {totalMoneyByDate} yen/day
                   </div>
                 </CardText>
                 {totalMoneyByDate !== 0 ? <div style={styles.card}>
@@ -234,7 +284,7 @@ export default class Home extends Component {
                               onTouchTap={() => this.goToDetail(row.id)}
                             >
                               <TableRowColumn><span style={styles.text}>{row.target}</span></TableRowColumn>
-                              <TableRowColumn><span style={styles.text}>{row.money + ' 円'}</span></TableRowColumn>
+                              <TableRowColumn><span style={styles.text}>{row.money + ' yen'}</span></TableRowColumn>
                             </TableRow>
                           )
                         })}

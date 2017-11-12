@@ -2,10 +2,10 @@ tatsuppi
 ===========
 
 ## Requirements
-- node v8.2.0
-- npm 5.3.0
-- yarn v0.27.5
-- firebase 3.10.1
+- node v8.8.1
+- npm 5.4.2
+- yarn 1.2.1
+- firebase 3.13.0
 
 ## First
 - `yarn`のインストール

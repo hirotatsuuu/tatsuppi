@@ -26,6 +26,7 @@ export default class Contact extends Component {
   state = {
     auth: firebase.auth().currentUser,
     dialogFlag: false,
+    message: '',
   }
 
   componentWillMount = () => {
@@ -69,7 +70,7 @@ export default class Contact extends Component {
       <div style={styles.root}>
         <Card>
           <CardText>
-            <div>このアプリの作成者にメッセージを送りましょう</div>
+            <div>Let's send a message to the creator of this application.</div>
             <TextField
               hintText='message'
               floatingLabelText='message'
@@ -101,7 +102,7 @@ export default class Contact extends Component {
           contentStyle={styles.full}
           onRequestClose={() => this.setState({dialogFlag: false})}
         >
-          メッセージを送ってよろしいですか？
+          Are you sure you want to send a message?
         </Dialog>
       </div>
     )

@@ -58,12 +58,6 @@ export default class Setting extends Component {
             />
             <br />
             <FlatButton
-              label='CHAT'
-              fullWidth={true}
-              onTouchTap={() => location.href='#chat'}
-            />
-            <br />
-            <FlatButton
               label='CONTACT'
               fullWidth={true}
               style={styles.quaternary}

@@ -35,6 +35,8 @@ export default class UpdateAccount extends Component {
     emailErrorMessage: '',
     message: '',
     dialogFlag: false,
+    name: '',
+    email: '',
   }
 
   componentWillMount = () => {
@@ -188,7 +190,7 @@ export default class UpdateAccount extends Component {
       dialogFlag,
     } = this.state
 
-    const disabled = nameErrorMessage !== '' || emailErrorMessage !== '' || message !== ''
+    const disabled = nameErrorMessage !== '' || emailErrorMessage !== '' || message !== '' || name === '' || email === ''
 
     const dialogFlagObj = {
       dialogFlag: !dialogFlag,

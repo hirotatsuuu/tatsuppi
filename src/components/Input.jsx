@@ -132,10 +132,19 @@ export default class Input extends Component {
     let pay = ''
     switch (selectPayValue) {
       case 1:
-        pay = 'クレジットカード'
+        pay = 'credit card'
         break
       case 2:
-        pay = '現金'
+        pay = 'cash'
+        break
+      case 3:
+        pay = 'Suica'
+        break
+      case 4:
+        pay = 'bitcoin'
+        break
+      case 5:
+        pay = 'auto'
         break
       default:
         break
@@ -150,18 +159,21 @@ export default class Input extends Component {
     let type = ''
     switch (selectTypeValue) {
       case 1:
-        type = '交際費'
-        break
-      case 2:
-        type = '生活費'
-        break
-      case 3:
-        type = '食費'
-        break
-      case 4:
         type = '無駄遣い'
         break
+      case 2:
+        type = '食費'
+        break
+      case 3:
+        type = '交際費'
+        break
+      case 4:
+        type = '電車代'
+        break
       case 5:
+        type = '必要経費'
+        break
+      case 6:
         type = 'その他'
         break
       default:
@@ -305,11 +317,23 @@ export default class Input extends Component {
         >
           <MenuItem
             value={1}
-            primaryText='クレジットカード'
+            primaryText='credit card'
           />
           <MenuItem
             value={2}
-            primaryText='現金'
+            primaryText='cash'
+          />
+          <MenuItem
+            value={3}
+            primaryText='Suica'
+          />
+          <MenuItem
+            value={4}
+            primaryText='bitcoin'
+          />
+          <MenuItem
+            value={5}
+            primaryText='auto'
           />
         </SelectField>
       </div>
@@ -334,22 +358,26 @@ export default class Input extends Component {
         >
           <MenuItem
             value={1}
-            primaryText='交際費'
-          />
-          <MenuItem
-            value={2}
-            primaryText='生活費'
-          />
-          <MenuItem
-            value={3}
-            primaryText='食費'
-          />
-          <MenuItem
-            value={4}
             primaryText='無駄遣い'
           />
           <MenuItem
+            value={2}
+            primaryText='食費'
+          />
+          <MenuItem
+            value={3}
+            primaryText='交際費'
+          />
+          <MenuItem
+            value={4}
+            primaryText='電車代'
+          />
+          <MenuItem
             value={5}
+            primaryText='必要経費'
+          />
+          <MenuItem
+            value={6}
             primaryText='その他'
           />
         </SelectField>

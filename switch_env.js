@@ -1,4 +1,6 @@
 const ENV = process.env.APP_ENV || 'development'
-const fs = require('node-fs-extra')
+const fse = require('node-fs-extra')
 
-fs.copySync('./src/firebase/firebase-config.' + ENV + '.js', './src/firebase/config.js')
+fse.copySync('./src/firebase/firebase-config.' + ENV + '.js', './src/firebase/config.js')
+
+fse.copySync('./.firebase-' + ENV + '.firebaserc', './.firebaserc')

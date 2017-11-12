@@ -248,12 +248,6 @@ export default class Main extends Component {
                 location.href = '#todo'
               )}
             >TODO</MenuItem>
-            <MenuItem
-              onTouchTap={() => (
-                this.setState(menuFlagObj),
-                location.href = '#chat'
-              )}
-            >CHAT</MenuItem>
             <Divider />
             <span style={styles.sub}>Settings</span>
             <MenuItem
@@ -262,6 +256,12 @@ export default class Main extends Component {
                 location.href = 'https://line.me/R/ti/p/%40ond8714j'
               )}
             >LINE</MenuItem>
+            <MenuItem
+              onTouchTap={() => (
+                this.setState(menuFlagObj),
+                location.href = '#updateaccount'
+              )}
+            >ACCOUNT</MenuItem>
             <MenuItem
               onTouchTap={() => (
                 this.setState(menuFlagObj),
@@ -284,7 +284,7 @@ export default class Main extends Component {
             selectedIndex={selectedIndex}
           >
             <BottomNavigationItem
-              label='HOEM'
+              label='HOME'
               icon={home}
               onTouchTap={() => (
                 this.select(0),

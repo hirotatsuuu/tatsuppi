@@ -535,7 +535,7 @@ export default class Todo extends Component {
       <RaisedButton
         label='ADD TODO'
         primary={true}
-        style={styles.button}
+        style={styles.fullButton}
         onTouchTap={() => {
           this.clearTodoForm(),
           this.setState({ addFlag: !addFlag, })
@@ -551,8 +551,6 @@ export default class Todo extends Component {
     return (
       <div style={styles.center}>
         <div>
-          <this.GroupAdd />
-          <span> </span>
           <this.TodoAdd />
         </div>
         <div><br /><this.SortButton /></div>

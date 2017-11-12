@@ -30,6 +30,11 @@ export default class DetailEdit extends Component {
   state = {
     auth: firebase.auth().currentUser,
     dialogFlag: false,
+    date: null,
+    money: 0,
+    target: '',
+    pay: 0,
+    type: '',
   }
 
   constructor (props) {

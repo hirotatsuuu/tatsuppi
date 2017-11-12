@@ -31,6 +31,10 @@ const styles = {
   snackbar: {
     height: '60px',
   },
+  total: {
+    fontWeight: 900,
+    fontSize: 'large',
+  },
 }
 
 export default class Home extends Component {
@@ -255,10 +259,10 @@ export default class Home extends Component {
                     onChange={(a, date) => this.changeDate(date)}
                   />
                   <div>
-                    {todayMonth === setMonth ? 'this month' : this.checkMonth(moment(date).format('M'))} total: {totalMoneyByMonth} yen/month
+                    {todayMonth === setMonth ? 'this month' : this.checkMonth(moment(date).format('M'))} total: <span style={styles.total}>{totalMoneyByMonth}</span> yen/month
                   </div>
                   <div>
-                    {todayDate === setDate ? 'today' : moment(date).format('D')}th total: {totalMoneyByDate} yen/day
+                    {todayDate === setDate ? 'today' : moment(date).format('D')}th total: <span style={styles.total}>{totalMoneyByDate}</span> yen/day
                   </div>
                 </CardText>
                 {totalMoneyByDate !== 0 ? <div style={styles.card}>

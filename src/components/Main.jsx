@@ -19,6 +19,8 @@ import Add from 'material-ui/svg-icons/content/add'
 import Dns from 'material-ui/svg-icons/action/dns'
 import Settings from 'material-ui/svg-icons/action/settings'
 
+import colors from './colors'
+
 const home = <Home />
 const add = <Add />
 const dns = <Dns />
@@ -29,6 +31,7 @@ const styles = {
     position: 'fixed',
     height: '60px',
     width: '100vw',
+    backgroundColor: colors.headerColor,
   },
   full: {
     width: '100vw',

@@ -22,7 +22,7 @@ const styles = {
   },
 }
 
-export default class Setting extends Component {
+export default class Settings extends Component {
   state = {
     auth: firebase.auth().currentUser,
   }

@@ -8,7 +8,7 @@ import ForgotPassword from './ForgotPassword'
 import CreateAccount from './CreateAccount'
 import UpdatePassword from './UpdatePassword'
 import UpdateAccount from './UpdateAccount'
-import Setting from './Setting'
+import Settings from './Settings'
 import Chat from './Chat'
 import Match from './Match'
 import Contact from './Contact'
@@ -44,7 +44,7 @@ export default class Routes extends Component {
             <Route path='/todo' component={Todo} />
             <Route path='/updatepassword' component={UpdatePassword} />
             <Route path='/updateaccount' component={UpdateAccount} />
-            <Route path='/setting' component={Setting} />
+            <Route path='/settings' component={Settings} />
             <Route path='/chat' component={Chat} />
             <Route path='/match' component={Match} />
             <Route path='/contact' component={Contact} />

@@ -175,7 +175,6 @@ export default class Home extends Component {
    * 何月かを調べる処理
    */
   checkMonth = number => {
-    console.log('number', typeof number)
     let month = ''
     switch (parseInt(number)) {
       case 1:
@@ -217,7 +216,6 @@ export default class Home extends Component {
       default:
         break
     }
-    console.log('month', month)
     return month
   }
 

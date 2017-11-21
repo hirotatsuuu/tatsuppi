@@ -1,6 +1,7 @@
-const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 module.exports = {
   context: __dirname + '/src',
@@ -56,6 +57,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: __dirname + '/src/index.html',
     }),
+    new FaviconsWebpackPlugin({
+      logo: __dirname + '/src/images/icon.png',
+    })
   ],
   devtool: 'inline-source-map',
   resolve: {
@@ -67,4 +71,4 @@ module.exports = {
     inline: true,
     hot: true
   },
-};
+}

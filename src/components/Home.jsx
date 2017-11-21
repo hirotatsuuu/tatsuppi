@@ -293,10 +293,10 @@ export default class Home extends Component {
                       </TableBody>
                     </Table>
                   </Card></div> : <CardText>
-                  {todayDate === setDate ? '本日' : moment(date).format('D日')}はまだお金を使っていません
+                  {todayDate === setDate ? 'today' : moment(date).format('D')}th is no use money
                 </CardText>}
               </div> : <Detail props={props} />}
-            </div> : <CardText>家計簿を付けましょう</CardText>
+            </div> : <CardText>Let's put a KAKEIBO</CardText>
             : null}
         </Card>
         {message !== undefined ?

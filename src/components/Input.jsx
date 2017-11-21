@@ -59,7 +59,7 @@ export default class Input extends Component {
     const { date, money, target, tax, pay, type, } = this.state
     const input = {
       date: moment(date).format('YYYY-MM-DD'),
-      money: Math.round(money * tax),
+      money: Math.round((pay === 'bitcoin' ? money * 800000 :  money * tax)),
       target: target,
       pay: pay,
       type: type,
@@ -226,7 +226,7 @@ export default class Input extends Component {
   }
 
   MoneyForm = () => {
-    const { money, moneyErrorMessage, tax } = this.state
+    const { money, moneyErrorMessage, tax, pay } = this.state
     return (
       <div>
         <TextField
@@ -243,7 +243,7 @@ export default class Input extends Component {
             })
           }}
         />
-        {moneyErrorMessage === '' ? <span>{tax !== 1 ? '*' + tax : null} yen</span> : null}
+        {moneyErrorMessage === '' ? <span>{pay === 'bitcoin' ? <span> BTC</span> : <span>{tax !== 1 ? '*' + tax : null} yen</span>}</span> : null}
       </div>
     )
   }
@@ -288,11 +288,11 @@ export default class Input extends Component {
         >
           <MenuItem
             value={1}
-            primaryText='税込み'
+            primaryText='YES'
           />
           <MenuItem
             value={2}
-            primaryText='税抜き'
+            primaryText='NO'
           />
         </SelectField>
       </div>
@@ -393,14 +393,14 @@ export default class Input extends Component {
         onTouchTap={() => this.goHome()}
       />
     ]
-    const { dialogFlag, money, tax } = this.state
+    const { dialogFlag, money, tax, pay } = this.state
     return (
       <Dialog
         actions={inputActions}
         open={dialogFlag}
         contentStyle={styles.dialog}
       >
-        You have enterd using {Math.round(money * tax)} yen
+        You have enterd using {Math.round(pay === 'bitcoin' ? money * 800000 :  money * tax)} yen
       </Dialog>
     )
   }

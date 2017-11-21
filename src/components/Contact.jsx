@@ -44,6 +44,10 @@ export default class Contact extends Component {
       sender_uid: auth.uid,
     }
     firebase.database().ref('message').push(messageObj).then(() => {
+      const state = {
+        message: 'SEND MESSAGE',
+      }
+      localStorage.setItem('state', JSON.stringify(state))
       location.href='#home'
     }, err => {
       console.log(err)

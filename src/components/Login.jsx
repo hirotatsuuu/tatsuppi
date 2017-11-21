@@ -154,14 +154,14 @@ export default class Login extends Component {
                 />
                 <br />
                 <FlatButton
-                  label='パスワードを忘れた方はこちら'
+                  label='FORGOT PASSWROD'
                   fullWidth={true}
                   secondary={true}
                   onTouchTap={() => location.href='#forgotpassword'}
                 />
                 <br />
                 <FlatButton
-                  label='はじめての方はこちら'
+                  label='SIGN UP'
                   fullWidth={true}
                   primary={true}
                   onTouchTap={() => location.href='#createaccount'}

@@ -267,7 +267,7 @@ export default class Todo extends Component {
             title={addFlag ? <div>ADD TODO</div> : editFlag ? <div>EDIT TODO</div> : null}
           />
           <CardText>
-            <this.GroupSelect />
+            {/* <this.GroupSelect /> */}
             <TextField
               hintText='title'
               floatingLabelText='title'

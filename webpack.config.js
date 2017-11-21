@@ -58,7 +58,7 @@ module.exports = {
       template: __dirname + '/src/index.html',
     }),
     new FaviconsWebpackPlugin({
-      logo: __dirname + '/src/images/icon.png',
+      logo: __dirname + '/src/images/tatsuppi.png',
     })
   ],
   devtool: 'inline-source-map',

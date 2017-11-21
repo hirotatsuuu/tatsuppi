@@ -260,7 +260,7 @@ export default class Home extends Component {
                     {todayMonth === setMonth ? 'this month' : this.checkMonth(moment(date).format('M'))} total: <span style={styles.total}>{totalMoneyByMonth}</span> yen/month
                   </div>
                   <div>
-                    {todayDate === setDate ? 'today' : moment(date).format('D')}th total: <span style={styles.total}>{totalMoneyByDate}</span> yen/day
+                    {todayDate === setDate ? 'today' : moment(date).format('D') + 'th'} total: <span style={styles.total}>{totalMoneyByDate}</span> yen/day
                   </div>
                 </CardText>
                 {totalMoneyByDate !== 0 ? <div style={styles.card}>

@@ -1,7 +1,7 @@
 {
   "projects": {
-    "default": "tatsuppi-a0744"
+    "default": "tatsuppi-417ae"
   }
 }
 
-// 開発環境のfirebaseの設定ファイル
+// 本番環境のfirebaseの設定ファイル

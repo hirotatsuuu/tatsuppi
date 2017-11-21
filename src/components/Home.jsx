@@ -293,7 +293,7 @@ export default class Home extends Component {
                       </TableBody>
                     </Table>
                   </Card></div> : <CardText>
-                  {todayDate === setDate ? 'today' : moment(date).format('D')}th is no use money
+                  {todayDate === setDate ? 'today' : moment(date).format('D') + 'th'} is no use money
                 </CardText>}
               </div> : <Detail props={props} />}
             </div> : <CardText>Let's put a KAKEIBO</CardText>

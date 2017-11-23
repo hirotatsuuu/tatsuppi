@@ -21,6 +21,12 @@ const styles = {
   quaternary: {
     color: colors.quaternaryColor,
   },
+  quinary: {
+    color: colors.quinaryColor,
+  },
+  senary: {
+    color: colors.senaryColor,
+  },
   full: {
     width: '100vw',
   },
@@ -69,6 +75,7 @@ export default class Settings extends Component {
         <FlatButton
           label='LOGOUT'
           fullWidth={true}
+          style={styles.quinary}
           onTouchTap={() => this.setState({ logoutDialogFlag: true })}
         />
         <Dialog
@@ -128,7 +135,6 @@ export default class Settings extends Component {
       <div style={styles.root}>
         <Card>
           <CardActions>
-            <this.Line />
             <FlatButton
               label='UPDATE ACCOUNT'
               primary={true}
@@ -150,6 +156,13 @@ export default class Settings extends Component {
               onTouchTap={() => location.href='#contact'}
             />
             <br />
+            <FlatButton
+              label='TATSUPPI IMAGE'
+              fullWidth={true}
+              style={styles.senary}
+              onTouchTap={() => location.href='#image'}
+            />
+            <this.Line />
             <this.Logout />
           </CardActions>
         </Card>

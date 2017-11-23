@@ -5,6 +5,7 @@ import {
   FlatButton,
   Card,
   CardActions,
+  Dialog,
 } from 'material-ui'
 
 import colors from './colors'
@@ -20,15 +21,113 @@ const styles = {
   quaternary: {
     color: colors.quaternaryColor,
   },
+  quinary: {
+    color: colors.quinaryColor,
+  },
+  senary: {
+    color: colors.senaryColor,
+  },
+  full: {
+    width: '100vw',
+  },
 }
 
 export default class Settings extends Component {
   state = {
     auth: firebase.auth().currentUser,
+    logoutDialogFlag: false,
+    lineDialogFlag: false,
   }
 
   componentWillMount = () => {
     localStorage.setItem('hash', location.hash.slice(2))
+  }
+
+  /**
+   * ログアウトの処理
+   */
+  logout = () => {
+    firebase.auth().signOut()
+  }
+
+  /**
+   * ログアウトフォーム
+   */
+  Logout = () => {
+    const logoutActions = [
+      <FlatButton
+        label='CANCEL'
+        secondary={true}
+        onTouchTap={() => this.setState({ logoutDialogFlag: false })}
+      />,
+      <FlatButton
+        label='OK'
+        primary={true}
+        onTouchTap={() => this.logout()}
+      />
+    ]
+    const {
+      logoutDialogFlag,
+    } = this.state
+
+    return (
+      <div>
+        <FlatButton
+          label='LOGOUT'
+          fullWidth={true}
+          style={styles.quinary}
+          onTouchTap={() => this.setState({ logoutDialogFlag: true })}
+        />
+        <Dialog
+          title='LOGOUT'
+          open={logoutDialogFlag}
+          actions={logoutActions}
+          contentStyle={styles.full}
+        >
+          Are you sure you want to logout ?
+        </Dialog>
+      </div>
+    )
+  }
+
+  /**
+   * LINE遷移
+   */
+  Line = () => {
+    const lineActions = [
+      <FlatButton
+        label='CANCEL'
+        secondary={true}
+        onTouchTap={() => this.setState({ lineDialogFlag: false })}
+      />,
+      <FlatButton
+        label='OK'
+        primary={true}
+        href='https://line.me/R/ti/p/%40ond8714j'
+      />
+    ]
+    const {
+      lineDialogFlag,
+    } = this.state
+
+    return (
+      <div>
+        <FlatButton
+          label='GO TO LINE'
+          labelStyle={styles.tertiary}
+          fullWidth={true}
+          onTouchTap={() => this.setState({ lineDialogFlag: true })}
+        />
+        <Dialog
+          title='Go to LINE'
+          open={lineDialogFlag}
+          actions={lineActions}
+          contentStyle={styles.full}
+        >
+          Are you sure you want to go to LINE ?
+        </Dialog>
+      </div>
+    )
   }
 
   render() {
@@ -36,13 +135,6 @@ export default class Settings extends Component {
       <div style={styles.root}>
         <Card>
           <CardActions>
-            <FlatButton
-              label='GO TO LINE'
-              labelStyle={styles.tertiary}
-              fullWidth={true}
-              href='https://line.me/R/ti/p/%40ond8714j'
-            />
-            <br />
             <FlatButton
               label='UPDATE ACCOUNT'
               primary={true}
@@ -63,6 +155,15 @@ export default class Settings extends Component {
               style={styles.quaternary}
               onTouchTap={() => location.href='#contact'}
             />
+            <br />
+            <FlatButton
+              label='TATSUPPI IMAGE'
+              fullWidth={true}
+              style={styles.senary}
+              onTouchTap={() => location.href='#image'}
+            />
+            <this.Line />
+            <this.Logout />
           </CardActions>
         </Card>
       </div>

@@ -13,6 +13,7 @@ import Chat from './Chat'
 import Match from './Match'
 import Contact from './Contact'
 import TodoGroup from './TodoGroup'
+import Image from './Image'
 
 const styles = {
   root: {
@@ -49,6 +50,7 @@ export default class Routes extends Component {
             <Route path='/match' component={Match} />
             <Route path='/contact' component={Contact} />
             <Route path='/todogroup' component={TodoGroup} />
+            <Route path='/image' component={Image} />
             <Route render={() => (<Link to='#' />)} />
           </Switch> :
           <Switch>

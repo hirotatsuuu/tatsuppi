@@ -317,23 +317,23 @@ export default class Input extends Component {
         >
           <MenuItem
             value={1}
-            primaryText='credit card'
+            primaryText='CREDIT CARD'
           />
           <MenuItem
             value={2}
-            primaryText='cash'
+            primaryText='CASH'
           />
           <MenuItem
             value={3}
-            primaryText='Suica'
+            primaryText='SUICA'
           />
           <MenuItem
             value={4}
-            primaryText='bitcoin'
+            primaryText='BITCOIN'
           />
           <MenuItem
             value={5}
-            primaryText='auto'
+            primaryText='DIRECT DEBIT'
           />
         </SelectField>
       </div>
